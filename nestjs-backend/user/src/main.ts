@@ -13,6 +13,7 @@ async function bootstrap() {
     transport: Transport.TCP,
     options: {
       port: 3003,
+      host: '127.0.0.1',
     },
   } as TcpOptions);
 
