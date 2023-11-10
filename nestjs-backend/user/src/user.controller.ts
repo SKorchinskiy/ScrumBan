@@ -1,20 +1,24 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Inject } from '@nestjs/common';
 import { UserService } from './user.service';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { ClientProxy, MessagePattern, Payload } from '@nestjs/microservices';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
 import { UserEntity } from './entities/user.entity';
-import { UserMessagePattern } from '../../utils/user-message-pattern.util';
+import { UserMessagePattern } from './utils/user-message-pattern.util';
 
 @Controller()
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    @Inject('AUTH') private authMicroservice: ClientProxy,
+  ) {}
 
   @MessagePattern({ cmd: UserMessagePattern.create_user })
   async createUser(
-    @Payload() { createUserDto }: { createUserDto: CreateUserDto },
+    @Payload() createUserDto: CreateUserDto,
   ): Promise<UserEntity> {
-    return await this.userService.createUser(createUserDto);
+    const created_user = await this.userService.createUser(createUserDto);
+    return created_user;
   }
 
   @MessagePattern({ cmd: UserMessagePattern.update_user })
