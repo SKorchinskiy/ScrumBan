@@ -7,6 +7,19 @@ import { CreateUserDto } from 'src/dto/createUser.dto';
 export class AuthService {
   constructor(@Inject('AUTH') private readonly authMicroservice: ClientProxy) {}
 
+  async verifyRegisteredAccount(verificationToken: string) {
+    return await lastValueFrom(
+      this.authMicroservice.send(
+        {
+          cmd: 'verify_account',
+        },
+        {
+          verificationToken,
+        },
+      ),
+    );
+  }
+
   async signIn(payload: { email: string; password: string }) {
     return await lastValueFrom(
       this.authMicroservice.send({ cmd: 'sign_in' }, payload),

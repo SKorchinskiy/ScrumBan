@@ -13,6 +13,18 @@ export class UserController {
     @Inject('AUTH') private authMicroservice: ClientProxy,
   ) {}
 
+  @MessagePattern({ cmd: 'confirm_user_verified' })
+  async confirmUserVerified(
+    @Payload()
+    payload: {
+      user_id: number;
+      display_name: string;
+      email: string;
+    },
+  ) {
+    return this.userService.confirmUserVerified(payload);
+  }
+
   @MessagePattern({ cmd: UserMessagePattern.create_user })
   async createUser(
     @Payload() createUserDto: CreateUserDto,
