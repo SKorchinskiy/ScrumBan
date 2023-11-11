@@ -11,6 +11,16 @@ export class UserService {
     @Inject('USER_REPOSITORY') private userRepository: Repository<UserEntity>,
   ) {}
 
+  async confirmUserVerified(criteria: {
+    user_id: number;
+    display_name: string;
+    email: string;
+  }) {
+    return await this.userRepository.update(criteria, {
+      is_verified: true,
+    });
+  }
+
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
     const user = Object.assign(new UserEntity(), createUserDto, {
