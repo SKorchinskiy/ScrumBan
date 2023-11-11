@@ -22,4 +22,7 @@ export class UserEntity {
 
   @Column('char', { length: 2, default: 'UA' })
   timezone: string;
+
+  @Column('bool', { default: false })
+  is_verified: boolean;
 }
