@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/createUser.dto';
 import { JwtService } from '@nestjs/jwt';
 import { MailerService } from './mailer/mailer.service';
+import { ConfigService } from '@nestjs/config';
 
 export type Payload = {
   user_id: string | number;
@@ -23,13 +24,14 @@ export class AuthService {
     @Inject('USER') private userMicroservice: ClientProxy,
     private jwtService: JwtService,
     private mailerService: MailerService,
+    private configService: ConfigService,
   ) {}
 
   async verifyRegisteredAccount(verificationToken: string): Promise<boolean> {
     try {
       const { user_id, display_name, email } =
         await this.jwtService.verifyAsync(verificationToken, {
-          secret: 'email+token+secret',
+          secret: this.configService.get<string>('EMAIL_SECRET_SIGNATURE'),
         });
       await lastValueFrom(
         this.userMicroservice.send(
@@ -101,7 +103,7 @@ export class AuthService {
   async jwtAuthTokenIssuer(payload: Payload): Promise<Token> {
     const expiresIn = '15m';
     const accessToken = await this.jwtService.signAsync(payload, {
-      secret: 'this+is+a+secret+value',
+      secret: this.configService.get<string>('AUTH_SECRET_SIGNATURE'),
       expiresIn,
     });
     return {
@@ -113,7 +115,7 @@ export class AuthService {
   async jwtEmailVerificationToken(payload: Payload): Promise<Token> {
     const expiresIn = '24h';
     const accessToken = await this.jwtService.signAsync(payload, {
-      secret: 'email+token+secret',
+      secret: this.configService.get<string>('EMAIL_SECRET_SIGNATURE'),
       expiresIn,
     });
     return {
