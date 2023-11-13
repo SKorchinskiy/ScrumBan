@@ -3,8 +3,7 @@ import {
   Column,
   PrimaryGeneratedColumn,
   OneToMany,
-  ManyToMany,
-  JoinTable,
+  ManyToOne,
 } from 'typeorm';
 import { SprintEntity } from './sprint.entity';
 import { LabelEntity } from './label.entity';
@@ -28,6 +27,9 @@ export class ProjectEntity {
   })
   project_description: string;
 
+  @ManyToOne(() => MemberEntity)
+  project_owner: MemberEntity;
+
   @Column({ enum: ['public', 'private'], default: 'private' })
   project_access: string;
 
@@ -39,8 +41,4 @@ export class ProjectEntity {
 
   @OneToMany(() => StateEntity, (state) => state.project)
   states: StateEntity[];
-
-  @ManyToMany(() => MemberEntity, (member) => member.projects)
-  @JoinTable()
-  members: MemberEntity[];
 }

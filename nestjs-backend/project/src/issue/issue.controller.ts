@@ -1,35 +1,86 @@
 import { Controller } from '@nestjs/common';
 import { IssueService } from './issue.service';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import { CreateIssueDto } from 'src/dto/create-issue.dto';
+import { UpdateIssueDto } from 'src/dto/update-issue.dto';
+import { IssueEntity } from 'src/entities/issue.entity';
 
 @Controller('issue')
 export class IssueController {
   constructor(private issueService: IssueService) {}
 
-  async createProjectIssue(): Promise<any> {
-    return this.issueService.addIssueAssignee();
+  @MessagePattern({
+    cmd: 'create_project_issue',
+  })
+  async createProjectIssue(
+    @Payload() payload: { projectId: number; createIssueDto: CreateIssueDto },
+  ): Promise<IssueEntity> {
+    return await this.issueService.createProjectIssue(
+      payload.projectId,
+      payload.createIssueDto,
+    );
   }
 
-  async updateProjectIssue(): Promise<any> {
-    return this.issueService.updateProjectIssue();
+  @MessagePattern({
+    cmd: 'update_project_issue',
+  })
+  async updateProjectIssue(
+    @Payload() payload: { issueId: number; updateIssueDto: UpdateIssueDto },
+  ): Promise<IssueEntity> {
+    return await this.issueService.updateProjectIssue(
+      payload.issueId,
+      payload.updateIssueDto,
+    );
   }
 
-  async removeProjectIssue(): Promise<any> {
-    return this.issueService.removeProjectIssue();
+  @MessagePattern({
+    cmd: 'remove_project_issue',
+  })
+  async removeProjectIssue(
+    @Payload() payload: { issueId: number },
+  ): Promise<IssueEntity> {
+    return this.issueService.removeProjectIssue(payload.issueId);
   }
 
-  async findProjectIssues(): Promise<any> {
-    return this.issueService.findProjectIssues();
+  @MessagePattern({
+    cmd: 'find_project_issues',
+  })
+  async findProjectIssues(
+    @Payload() payload: { projectId: number },
+  ): Promise<IssueEntity[]> {
+    return this.issueService.findProjectIssues(payload.projectId);
   }
 
-  async findProjectIssuesByCriteria(): Promise<any> {
-    return this.issueService.findProjectIssuesByCriteria();
+  @MessagePattern({
+    cmd: 'find_project_issue_by',
+  })
+  async findProjectIssueByCriteria(
+    @Payload() payload: { issueId: number },
+  ): Promise<IssueEntity> {
+    return this.issueService.findProjectIssueByCriteria(payload.issueId);
   }
 
-  async addIssueAssignee(): Promise<any> {
-    return this.issueService.addIssueAssignee();
+  @MessagePattern({
+    cmd: 'add_issue_assignee',
+  })
+  async addIssueAssignee(
+    @Payload() payload: { issueId: number; memberId: number },
+  ): Promise<IssueEntity> {
+    return this.issueService.addIssueAssignee(
+      payload.issueId,
+      payload.memberId,
+    );
   }
 
-  async removeIssueAssignee(): Promise<any> {
-    return this.issueService.removeIssueAssignee();
+  @MessagePattern({
+    cmd: 'remove_issue_assignee',
+  })
+  async removeIssueAssignee(
+    @Payload() payload: { issueId: number; memberId: number },
+  ): Promise<IssueEntity> {
+    return this.issueService.removeIssueAssignee(
+      payload.issueId,
+      payload.memberId,
+    );
   }
 }

@@ -1,18 +1,29 @@
-import { Column, Entity, JoinColumn, ManyToMany, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { ProjectEntity } from './project.entity';
 
 @Entity()
 export class MemberEntity {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({
+    nullable: false,
+  })
   user_id: number;
 
-  @Column('varchar', { length: 127, unique: true, nullable: false })
-  email: string;
-
-  @Column('varchar', { length: 127, nullable: false })
-  display_name: string;
-
   @ManyToMany(() => ProjectEntity)
-  @JoinColumn()
-  projects: ProjectEntity[];
+  @JoinTable()
+  project: ProjectEntity;
+
+  @Column({
+    enum: ['user', 'admin'],
+    default: 'user',
+  })
+  role: string;
 }
