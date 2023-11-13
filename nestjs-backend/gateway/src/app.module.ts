@@ -6,6 +6,8 @@ import { UserController } from './user/user.controller';
 import { UserService } from './user/user.service';
 import { AuthController } from './auth/auth.controller';
 import { AuthService } from './auth/auth.service';
+import { ProjectController } from './project/project.controller';
+import { ProjectService } from './project/project.service';
 
 @Module({
   imports: [
@@ -44,7 +46,12 @@ import { AuthService } from './auth/auth.service';
       },
     ]),
   ],
-  controllers: [AppController, UserController, AuthController],
-  providers: [AppService, UserService, AuthService],
+  controllers: [
+    AppController,
+    UserController,
+    AuthController,
+    ProjectController,
+  ],
+  providers: [AppService, UserService, AuthService, ProjectService],
 })
 export class AppModule {}
