@@ -43,6 +43,14 @@ export class WorkspaceService {
   }
 
   async findUserWorkspaceByCriteria(workspaceId: number) {
+    return await this.workspaceRepository.findOne({
+      where: {
+        workspace_id: workspaceId,
+      },
+    });
+  }
+
+  async removeUserWorkspace(workspaceId: number) {
     const workspace = await this.workspaceRepository.findOne({
       where: {
         workspace_id: workspaceId,
