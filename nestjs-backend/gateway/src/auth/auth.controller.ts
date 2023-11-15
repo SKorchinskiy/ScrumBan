@@ -33,4 +33,12 @@ export class AuthController {
   async signUp(@Body() payload: CreateUserDto) {
     return await this.authService.signUp(payload);
   }
+
+  @Post('sign-out')
+  async signOut(@Res({ passthrough: true }) response: Response) {
+    response.clearCookie('Authentication');
+    return {
+      message: 'You were signed out!',
+    };
+  }
 }
