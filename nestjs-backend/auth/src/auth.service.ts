@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy, RpcException } from '@nestjs/microservices';
+import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
-import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/createUser.dto';
 import { JwtService } from '@nestjs/jwt';
 import { MailerService } from './mailer/mailer.service';
@@ -56,14 +55,9 @@ export class AuthService {
     email: string;
     password: string;
   }): Promise<Token> {
-    const [user] = await lastValueFrom(
-      this.userMicroservice.send({ cmd: 'find_users' }, { email }),
+    const user = await lastValueFrom(
+      this.userMicroservice.send({ cmd: 'validate_user' }, { email, password }),
     );
-
-    const arePasswordsEqual = await bcrypt.compare(user.password, password);
-    if (arePasswordsEqual) {
-      throw new RpcException('Credentials does not match!');
-    }
 
     const tokenPayload: Payload = {
       user_id: user.user_id,
