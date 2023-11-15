@@ -3,37 +3,28 @@ import { Repository } from 'typeorm';
 import { ProjectEntity } from './entities/project.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
-import { MemberEntity } from './entities/member.entity';
 
 @Injectable()
 export class ProjectService {
   constructor(
     @Inject('PROJECT_REPOSITORY')
     private projectRepository: Repository<ProjectEntity>,
-    @Inject('MEMBER_REPOSITORY')
-    private memberRepository: Repository<MemberEntity>,
   ) {}
 
   async createProject(
+    workspaceId: number,
     createProjectDto: CreateProjectDto,
   ): Promise<ProjectEntity> {
-    const { project_owner_id, ...restParams } = createProjectDto;
-    const owner = this.memberRepository.create({
-      user_id: project_owner_id,
-      role: 'admin',
-    });
     const projectEntity = this.projectRepository.create({
-      ...restParams,
-      project_owner: owner,
+      ...createProjectDto,
+      workspace_id: workspaceId,
     });
-    const project = await this.projectRepository.save(projectEntity);
 
-    owner.project = project;
-    await this.memberRepository.save(owner);
-    return project;
+    return await this.projectRepository.save(projectEntity);
   }
 
   async updateProject(
+    workspaceId: number,
     projectId: number,
     updateProjectDto: UpdateProjectDto,
   ): Promise<ProjectEntity> {
@@ -41,21 +32,43 @@ export class ProjectService {
       { project_id: projectId },
       updateProjectDto,
     );
-    return await this.findProjectByCriteria(projectId);
+
+    return await this.projectRepository.findOne({
+      where: {
+        workspace_id: workspaceId,
+        project_id: projectId,
+      },
+    });
   }
 
-  async removeProject(projectId: number): Promise<ProjectEntity> {
-    const project = await this.findProjectByCriteria(projectId);
+  async removeProject(
+    workspaceId: number,
+    projectId: number,
+  ): Promise<ProjectEntity> {
+    const project = await this.projectRepository.findOne({
+      where: {
+        workspace_id: workspaceId,
+        project_id: projectId,
+      },
+    });
     return await this.projectRepository.remove(project);
   }
 
-  async findProjects(): Promise<ProjectEntity[]> {
-    return await this.projectRepository.find();
+  async findWorkspaceProjects(workspaceId: number): Promise<ProjectEntity[]> {
+    return await this.projectRepository.find({
+      where: {
+        workspace_id: workspaceId,
+      },
+    });
   }
 
-  async findProjectByCriteria(projectId: number): Promise<ProjectEntity> {
+  async findWorkspaceProjectByCriteria(
+    workspaceId: number,
+    projectId: number,
+  ): Promise<ProjectEntity> {
     return await this.projectRepository.findOne({
       where: {
+        workspace_id: workspaceId,
         project_id: projectId,
       },
     });

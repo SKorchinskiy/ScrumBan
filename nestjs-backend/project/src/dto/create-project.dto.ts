@@ -7,5 +7,4 @@ export type CreateProjectDto = {
   project_name: string;
   project_description: string;
   project_access: Access;
-  project_owner_id: number;
 };

@@ -1,14 +1,7 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  OneToMany,
-  ManyToOne,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { SprintEntity } from './sprint.entity';
 import { LabelEntity } from './label.entity';
 import { StateEntity } from './state.entity';
-import { MemberEntity } from './member.entity';
 
 @Entity()
 export class ProjectEntity {
@@ -27,8 +20,8 @@ export class ProjectEntity {
   })
   project_description: string;
 
-  @ManyToOne(() => MemberEntity)
-  project_owner: MemberEntity;
+  @Column()
+  workspace_id: number;
 
   @Column({ enum: ['public', 'private'], default: 'private' })
   project_access: string;

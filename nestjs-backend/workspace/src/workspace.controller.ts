@@ -44,4 +44,9 @@ export class WorkspaceController {
       payload.workspaceId,
     );
   }
+
+  @MessagePattern({ cmd: 'remove_workspace' })
+  async removeUserWorkspace(@Payload() payload: { workspaceId: number }) {
+    return await this.workspaceService.removeUserWorkspace(payload.workspaceId);
+  }
 }

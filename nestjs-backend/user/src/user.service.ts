@@ -21,28 +21,37 @@ export class UserService {
     });
   }
 
-  async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
+  async createUser(createUserDto: CreateUserDto): Promise<Partial<UserEntity>> {
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
     const user = Object.assign(new UserEntity(), createUserDto, {
       password: hashedPassword,
     });
-    return await this.userRepository.save(user);
+
+    const savedUser = await this.userRepository.save(user);
+    return this.getPartialUserData(savedUser);
   }
 
   async updateUser(
     id: number,
     updateUserDto: UpdateUserDto,
-  ): Promise<UserEntity> {
+  ): Promise<Partial<UserEntity>> {
     await this.userRepository.update(id, updateUserDto);
-    return await this.findUser(id);
-  }
-
-  async findUser(id: number): Promise<UserEntity> {
-    return await this.userRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: {
         user_id: id,
       },
     });
+    return this.getPartialUserData(user);
+  }
+
+  async findUser(id: number): Promise<Partial<UserEntity>> {
+    const user = await this.userRepository.findOne({
+      where: {
+        user_id: id,
+      },
+    });
+
+    return this.getPartialUserData(user);
   }
 
   async findUsers(
@@ -50,17 +59,53 @@ export class UserService {
       email: string;
       display_name: string;
     }>,
-  ): Promise<UserEntity[]> {
-    return await this.userRepository.find({
+  ): Promise<Partial<UserEntity>[]> {
+    const users = await this.userRepository.find({
       where: {
         ...searchParams,
       },
     });
+
+    return users.map(this.getPartialUserData);
   }
 
-  async removeUser(id: number): Promise<UserEntity> {
-    const user = await this.findUser(id);
-    await this.userRepository.delete(user);
-    return user;
+  async removeUser(id: number): Promise<Partial<UserEntity>> {
+    const user = await this.userRepository.findOne({
+      where: {
+        user_id: id,
+      },
+    });
+    await this.userRepository.remove(user);
+
+    return this.getPartialUserData(user);
+  }
+
+  async validateUser(
+    email: string,
+    password: string,
+  ): Promise<Partial<UserEntity>> {
+    const user = await this.userRepository.findOne({
+      where: {
+        email,
+      },
+    });
+
+    const arePasswordsEqual = await bcrypt.compare(password, user.password);
+
+    if (!arePasswordsEqual) {
+      throw new Error('credentials doesn`t match');
+    }
+
+    return this.getPartialUserData(user);
+  }
+
+  getPartialUserData(user: UserEntity): Partial<UserEntity> {
+    return {
+      user_id: user.user_id,
+      display_name: user.display_name,
+      email: user.email,
+      timezone: user.timezone,
+      is_verified: user.is_verified,
+    };
   }
 }

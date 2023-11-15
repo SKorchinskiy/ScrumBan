@@ -8,6 +8,8 @@ import { AuthController } from './auth/auth.controller';
 import { AuthService } from './auth/auth.service';
 import { ProjectController } from './project/project.controller';
 import { ProjectService } from './project/project.service';
+import { WorkspaceController } from './workspace/workspace.controller';
+import { WorkspaceService } from './workspace/workspace.service';
 
 @Module({
   imports: [
@@ -51,7 +53,14 @@ import { ProjectService } from './project/project.service';
     UserController,
     AuthController,
     ProjectController,
+    WorkspaceController,
   ],
-  providers: [AppService, UserService, AuthService, ProjectService],
+  providers: [
+    AppService,
+    UserService,
+    AuthService,
+    ProjectService,
+    WorkspaceService,
+  ],
 })
 export class AppModule {}

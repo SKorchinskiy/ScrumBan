@@ -11,20 +11,29 @@ export class ProjectController {
 
   @MessagePattern({ cmd: 'create_project' })
   async createProject(
-    @Payload() payload: CreateProjectDto,
+    @Payload()
+    payload: {
+      workspaceId: number;
+      createProjectDto: CreateProjectDto;
+    },
   ): Promise<ProjectEntity> {
-    return await this.projectService.createProject(payload);
+    return await this.projectService.createProject(
+      payload.workspaceId,
+      payload.createProjectDto,
+    );
   }
 
   @MessagePattern({ cmd: 'update_project' })
   async updateProject(
     @Payload()
     payload: {
+      workspaceId: number;
       projectId: number;
       updateProjectDto: UpdateProjectDto;
     },
   ): Promise<ProjectEntity> {
     return await this.projectService.updateProject(
+      payload.workspaceId,
       payload.projectId,
       payload.updateProjectDto,
     );
@@ -32,20 +41,28 @@ export class ProjectController {
 
   @MessagePattern({ cmd: 'remove_project' })
   async removeProject(
-    @Payload() payload: { projectId: number },
+    @Payload() payload: { workspaceId: number; projectId: number },
   ): Promise<ProjectEntity> {
-    return await this.projectService.removeProject(payload.projectId);
+    return await this.projectService.removeProject(
+      payload.workspaceId,
+      payload.projectId,
+    );
   }
 
   @MessagePattern({ cmd: 'find_projects' })
-  async findProjects(): Promise<ProjectEntity[]> {
-    return await this.projectService.findProjects();
+  async findWorkspaceProjects(
+    @Payload() payload: { workspaceId: number },
+  ): Promise<ProjectEntity[]> {
+    return await this.projectService.findWorkspaceProjects(payload.workspaceId);
   }
 
   @MessagePattern({ cmd: 'find_project_by' })
-  async findProjectByCriteria(
-    @Payload() payload: { projectId: number },
+  async findWorkspaceProjectByCriteria(
+    @Payload() payload: { workspaceId: number; projectId: number },
   ): Promise<ProjectEntity> {
-    return await this.projectService.findProjectByCriteria(payload.projectId);
+    return await this.projectService.findWorkspaceProjectByCriteria(
+      payload.workspaceId,
+      payload.projectId,
+    );
   }
 }
