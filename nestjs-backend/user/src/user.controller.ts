@@ -28,7 +28,7 @@ export class UserController {
   @MessagePattern({ cmd: UserMessagePattern.create_user })
   async createUser(
     @Payload() createUserDto: CreateUserDto,
-  ): Promise<UserEntity> {
+  ): Promise<Partial<UserEntity>> {
     const created_user = await this.userService.createUser(createUserDto);
     return created_user;
   }
@@ -37,24 +37,33 @@ export class UserController {
   async updateUser(
     @Payload()
     { id, updateUserDto }: { id: number; updateUserDto: UpdateUserDto },
-  ): Promise<UserEntity> {
+  ): Promise<Partial<UserEntity>> {
     return await this.userService.updateUser(id, updateUserDto);
   }
 
   @MessagePattern({ cmd: UserMessagePattern.find_user })
-  async findUser(@Payload() { id }: { id: number }): Promise<UserEntity> {
+  async findUser(
+    @Payload() { id }: { id: number },
+  ): Promise<Partial<UserEntity>> {
     return await this.userService.findUser(id);
   }
 
   @MessagePattern({ cmd: UserMessagePattern.find_users })
   async findUsers(
     @Payload() searchParams: Partial<{ email: string; display_name: string }>,
-  ): Promise<UserEntity[]> {
+  ): Promise<Partial<UserEntity>[]> {
     return await this.userService.findUsers(searchParams);
   }
 
   @MessagePattern({ cmd: UserMessagePattern.remove_user })
-  async removeUser(@Payload() { id }: { id: number }): Promise<UserEntity> {
+  async removeUser(
+    @Payload() { id }: { id: number },
+  ): Promise<Partial<UserEntity>> {
     return await this.userService.removeUser(id);
+  }
+
+  @MessagePattern({ cmd: 'validate_user' })
+  async validateUser(@Payload() payload: { email: string; password: string }) {
+    return await this.userService.validateUser(payload.email, payload.password);
   }
 }
