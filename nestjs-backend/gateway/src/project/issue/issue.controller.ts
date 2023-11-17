@@ -31,15 +31,27 @@ export class IssueController {
     return await this.issueService.removeIssueAssignee(issueId, memberId);
   }
 
+  @Post(':issueId/labels/:labelId')
+  async addIssueLabel(
+    @Param('issueId') issueId: number,
+    @Param('labelId') labelId: number,
+  ) {
+    return await this.issueService.addIssueLabel(issueId, labelId);
+  }
+
+  @Delete(':issueId/labels/:labelId')
+  async removeIssueLabel(
+    @Param('issueId') issueId: number,
+    @Param('labelId') labelId: number,
+  ) {
+    return await this.issueService.removeIssueLabel(issueId, labelId);
+  }
+
   @Post()
   async createProjectIssue(
     @Param('projectId') projectId: number,
     @Body() createIssueDto: CreateIssueDto,
   ) {
-    console.log({
-      projectId,
-      createIssueDto,
-    });
     return await this.issueService.createProjectIssue(
       projectId,
       createIssueDto,

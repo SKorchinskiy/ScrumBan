@@ -102,4 +102,32 @@ export class IssueService {
       ),
     );
   }
+
+  async addIssueLabel(issueId: number, labelId: number) {
+    return await lastValueFrom(
+      this.projectMicroservice.send(
+        {
+          cmd: 'add_issue_label',
+        },
+        {
+          issueId,
+          labelId,
+        },
+      ),
+    );
+  }
+
+  async removeIssueLabel(issueId: number, labelId: number) {
+    return await lastValueFrom(
+      this.projectMicroservice.send(
+        {
+          cmd: 'remove_issue_label',
+        },
+        {
+          issueId,
+          labelId,
+        },
+      ),
+    );
+  }
 }
