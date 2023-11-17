@@ -10,6 +10,14 @@ import { ProjectController } from './project/project.controller';
 import { ProjectService } from './project/project.service';
 import { WorkspaceController } from './workspace/workspace.controller';
 import { WorkspaceService } from './workspace/workspace.service';
+import { IssueController } from './project/issue/issue.controller';
+import { IssueService } from './project/issue/issue.service';
+import { StateController } from './project/state/state.controller';
+import { StateService } from './project/state/state.service';
+import { LabelController } from './project/label/label.controller';
+import { LabelService } from './project/label/label.service';
+import { SprintController } from './project/sprint/sprint.controller';
+import { SprintService } from './project/sprint/sprint.service';
 
 @Module({
   imports: [
@@ -54,6 +62,10 @@ import { WorkspaceService } from './workspace/workspace.service';
     AuthController,
     ProjectController,
     WorkspaceController,
+    IssueController,
+    StateController,
+    LabelController,
+    SprintController,
   ],
   providers: [
     AppService,
@@ -61,6 +73,10 @@ import { WorkspaceService } from './workspace/workspace.service';
     AuthService,
     ProjectService,
     WorkspaceService,
+    IssueService,
+    StateService,
+    LabelService,
+    SprintService,
   ],
 })
 export class AppModule {}
