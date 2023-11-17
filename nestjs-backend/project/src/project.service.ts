@@ -59,6 +59,12 @@ export class ProjectService {
       where: {
         workspace_id: workspaceId,
       },
+      relations: {
+        sprints: true,
+        labels: true,
+        states: true,
+        issues: true,
+      },
     });
   }
 
@@ -70,6 +76,9 @@ export class ProjectService {
       where: {
         workspace_id: workspaceId,
         project_id: projectId,
+      },
+      relations: {
+        sprints: true,
       },
     });
   }

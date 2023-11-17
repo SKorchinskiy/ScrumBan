@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { CreateIssueDto } from 'src/dto/create-issue.dto';
 import { UpdateIssueDto } from 'src/dto/update-issue.dto';
 import { IssueEntity } from 'src/entities/issue.entity';
+import { LabelEntity } from 'src/entities/label.entity';
 import { MemberEntity } from 'src/entities/member.entity';
 import { ProjectEntity } from 'src/entities/project.entity';
 import { StateEntity } from 'src/entities/state.entity';
@@ -18,6 +19,8 @@ export class IssueService {
     private stateRepository: Repository<StateEntity>,
     @Inject('MEMBER_REPOSITORY')
     private memberRepository: Repository<MemberEntity>,
+    @Inject('LABEL_REPOSITORY')
+    private labelRepository: Repository<LabelEntity>,
   ) {}
 
   async createProjectIssue(
@@ -51,12 +54,30 @@ export class IssueService {
     issueId: number,
     updateIssueDto: UpdateIssueDto,
   ): Promise<IssueEntity> {
-    await this.issueRepository.update(
-      {
-        issue_id: issueId,
-      },
-      updateIssueDto,
-    );
+    if (updateIssueDto.issue_state_id) {
+      const { issue_state_id, ...restParams } = updateIssueDto;
+      const issue_state = await this.stateRepository.findOne({
+        where: {
+          state_id: issue_state_id,
+        },
+      });
+      await this.issueRepository.update(
+        {
+          issue_id: issueId,
+        },
+        {
+          issue_state,
+          ...restParams,
+        },
+      );
+    } else {
+      await this.issueRepository.update(
+        {
+          issue_id: issueId,
+        },
+        updateIssueDto,
+      );
+    }
 
     return await this.issueRepository.findOne({
       where: {
@@ -86,6 +107,10 @@ export class IssueService {
       where: {
         project,
       },
+      relations: {
+        issue_state: true,
+        issue_labels: true,
+      },
     });
   }
 
@@ -93,6 +118,10 @@ export class IssueService {
     return await this.issueRepository.findOne({
       where: {
         issue_id: issueId,
+      },
+      relations: {
+        issue_state: true,
+        issue_labels: true,
       },
     });
   }
@@ -134,6 +163,41 @@ export class IssueService {
 
     issue.assignees = issue.assignees.filter(
       (issueMember) => issueMember.id !== member.id,
+    );
+
+    return await this.issueRepository.save(issue);
+  }
+
+  async addIssueLabel(issueId: number, labelId: number) {
+    const issue = await this.issueRepository.findOne({
+      where: {
+        issue_id: issueId,
+      },
+    });
+
+    const label = await this.labelRepository.findOne({
+      where: {
+        label_id: labelId,
+      },
+    });
+
+    if (!issue.issue_labels) {
+      issue.issue_labels = [];
+    }
+    issue.issue_labels.push(label);
+
+    return await this.issueRepository.save(issue);
+  }
+
+  async removeIssueLabel(issueId: number, labelId: number) {
+    const issue = await this.issueRepository.findOne({
+      where: {
+        issue_id: issueId,
+      },
+    });
+
+    issue.issue_labels = issue.issue_labels.filter(
+      (label) => label.label_id !== labelId,
     );
 
     return await this.issueRepository.save(issue);
