@@ -77,6 +77,9 @@ export class ProjectService {
         workspace_id: workspaceId,
         project_id: projectId,
       },
+      relations: {
+        sprints: true,
+      },
     });
   }
 }
