@@ -83,4 +83,22 @@ export class IssueController {
       payload.memberId,
     );
   }
+
+  @MessagePattern({
+    cmd: 'add_issue_label',
+  })
+  async addIssueLabel(
+    @Payload() payload: { issueId: number; labelId: number },
+  ) {
+    return this.issueService.addIssueLabel(payload.issueId, payload.labelId);
+  }
+
+  @MessagePattern({
+    cmd: 'remove_issue_label',
+  })
+  async removeIssueLabel(
+    @Payload() payload: { issueId: number; labelId: number },
+  ) {
+    return this.issueService.removeIssueLabel(payload.issueId, payload.labelId);
+  }
 }
