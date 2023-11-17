@@ -1,6 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { RpcException } from '@nestjs/microservices';
 import { CreateSprintDto } from 'src/dto/create-sprint.dto';
 import { UpdateSprintDto } from 'src/dto/update-sprint.dto';
+import { IssueEntity } from 'src/entities/issue.entity';
 import { ProjectEntity } from 'src/entities/project.entity';
 import { SprintEntity } from 'src/entities/sprint.entity';
 import { Repository } from 'typeorm';
@@ -12,6 +14,8 @@ export class SprintService {
     private sprintRepository: Repository<SprintEntity>,
     @Inject('PROJECT_REPOSITORY')
     private projectRepository: Repository<ProjectEntity>,
+    @Inject('ISSUE_REPOSITORY')
+    private issueRepository: Repository<IssueEntity>,
   ) {}
 
   async createProjectSprint(
@@ -69,6 +73,9 @@ export class SprintService {
       where: {
         project,
       },
+      relations: {
+        issues: true,
+      },
     });
   }
 
@@ -77,6 +84,48 @@ export class SprintService {
       where: {
         sprint_id: sprintId,
       },
+      relations: {
+        issues: true,
+      },
     });
+  }
+
+  async addIssueToProjectSprint(
+    issueId: number,
+    sprintId: number,
+  ): Promise<SprintEntity> {
+    const sprint = await this.sprintRepository.findOne({
+      where: {
+        sprint_id: sprintId,
+      },
+    });
+
+    const issue = await this.issueRepository.findOne({
+      where: {
+        issue_id: issueId,
+      },
+    });
+
+    if (sprint.project?.project_id !== issue.project?.project_id) {
+      throw new RpcException('Access denied!');
+    }
+
+    const sprintIssues = sprint.issues || [];
+    sprintIssues.push(issue);
+    sprint.issues = sprintIssues;
+
+    return await this.sprintRepository.save(sprint);
+  }
+
+  async removeIssueFromProjectSprint(issueId: number, sprintId: number) {
+    const sprint = await this.sprintRepository.findOne({
+      where: {
+        sprint_id: sprintId,
+      },
+    });
+
+    sprint.issues = sprint.issues.filter((issue) => issue.issue_id !== issueId);
+
+    return await this.sprintRepository.save(sprint);
   }
 }

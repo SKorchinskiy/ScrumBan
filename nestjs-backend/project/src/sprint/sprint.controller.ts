@@ -49,4 +49,24 @@ export class SprintController {
   ): Promise<SprintEntity> {
     return this.sprintService.findProjectSprintByCriteria(payload.sprintId);
   }
+
+  @MessagePattern({ cmd: 'add_issue_to_project_sprint' })
+  async addIssueToProjectSprint(
+    @Payload() payload: { issueId: number; sprintId: number },
+  ): Promise<SprintEntity> {
+    return this.sprintService.addIssueToProjectSprint(
+      payload.issueId,
+      payload.sprintId,
+    );
+  }
+
+  @MessagePattern({ cmd: 'remove_issue_from_project_sprint' })
+  async removeIssueFromProjectSprint(
+    @Payload() payload: { issueId: number; sprintId: number },
+  ): Promise<SprintEntity> {
+    return this.sprintService.removeIssueFromProjectSprint(
+      payload.issueId,
+      payload.sprintId,
+    );
+  }
 }
