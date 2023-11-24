@@ -1,0 +1,48 @@
+.form-frame {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.form-frame-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.box-container-top,
+.box-container-right,
+.box-container-bottom,
+.box-container-left {
+  position: absolute;
+  display: flex;
+  justify-content: space-around;
+}
+
+.box-container-top {
+  top: 0;
+  width: 100%;
+  height: 25px;
+}
+
+.box-container-right {
+  flex-direction: column;
+  right: 0;
+  width: 25px;
+  height: 100%;
+}
+
+.box-container-bottom {
+  bottom: 0;
+  width: 100%;
+  height: 25px;
+}
+
+.box-container-left {
+  flex-direction: column;
+  left: 0;
+  width: 25px;
+  height: 100%;
+}
