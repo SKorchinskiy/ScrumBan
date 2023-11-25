@@ -1,0 +1,10 @@
+.workspace {
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  cursor: pointer;
+  color: whitesmoke;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 14px;
+}
