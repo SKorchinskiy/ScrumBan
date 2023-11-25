@@ -44,6 +44,7 @@ export default function SignUpForm({ toggleIsSignInHidden }: SignUpFormProps) {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({
         ...userInfo,
       }),

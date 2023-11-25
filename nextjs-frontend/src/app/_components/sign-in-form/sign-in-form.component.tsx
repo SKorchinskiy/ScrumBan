@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { FormFrame } from "../form-frame/form-frame.component";
 import styles from "./sign-in-form.module.css";
 import { ChangeEvent, MouseEvent, useState } from "react";
@@ -23,6 +24,8 @@ export default function SignInForm({ toggleIsSignInHidden }: UserSignInProps) {
     initialUserSignInData
   );
 
+  const router = useRouter();
+
   const setUserInputData = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setUserInfo((prev) => ({
@@ -33,15 +36,36 @@ export default function SignInForm({ toggleIsSignInHidden }: UserSignInProps) {
 
   const signUserIn = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    fetch("http://localhost:3000/auth/sign-in", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ...userInfo,
-      }),
-    });
+    const fetchUser = async (data: UserSignInData) => {
+      const response = await fetch("http://localhost:3000/auth/sign-in", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          ...data,
+        }),
+      });
+
+      const user = await response.json();
+      if (user.accessToken) {
+        const workspaces = await (
+          await fetch("http://localhost:3000/workspaces", {
+            method: "GET",
+            credentials: "include",
+          })
+        ).json();
+        if (!workspaces?.length) {
+          router.push("/workspaces");
+        } else {
+          console.log(workspaces);
+          router.push(`/workspaces/${workspaces[0].workspace_id}`);
+        }
+      }
+    };
+
+    fetchUser(userInfo);
   };
 
   return (
