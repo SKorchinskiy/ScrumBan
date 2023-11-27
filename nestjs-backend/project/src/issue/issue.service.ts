@@ -23,6 +23,14 @@ export class IssueService {
     private labelRepository: Repository<LabelEntity>,
   ) {}
 
+  async getWorkspaceIssues(workspaceId: number): Promise<IssueEntity[]> {
+    return await this.issueRepository
+      .createQueryBuilder('I')
+      .innerJoin('I.project', 'P')
+      .where(`P.workspace_id = ${workspaceId}`)
+      .getMany();
+  }
+
   async createProjectIssue(
     projectId: number,
     createIssueDto: CreateIssueDto,
