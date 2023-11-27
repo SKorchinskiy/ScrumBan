@@ -8,6 +8,19 @@ import { CreateIssueDto } from './dto/create-issue.dto';
 export class IssueService {
   constructor(@Inject('PROJECT') private projectMicroservice: ClientProxy) {}
 
+  async getWorkspaceIssues(workspaceId: number) {
+    return await lastValueFrom(
+      this.projectMicroservice.send(
+        {
+          cmd: 'get_workspace_issues',
+        },
+        {
+          workspaceId,
+        },
+      ),
+    );
+  }
+
   async createProjectIssue(projectId: number, createIssueDto: CreateIssueDto) {
     return await lastValueFrom(
       this.projectMicroservice.send(

@@ -10,6 +10,15 @@ export class IssueController {
   constructor(private issueService: IssueService) {}
 
   @MessagePattern({
+    cmd: 'get_workspace_issues',
+  })
+  async getWorkspaceIssues(
+    @Payload() payload: { workspaceId: number },
+  ): Promise<IssueEntity[]> {
+    return await this.issueService.getWorkspaceIssues(payload.workspaceId);
+  }
+
+  @MessagePattern({
     cmd: 'create_project_issue',
   })
   async createProjectIssue(
@@ -39,7 +48,7 @@ export class IssueController {
   async removeProjectIssue(
     @Payload() payload: { issueId: number },
   ): Promise<IssueEntity> {
-    return this.issueService.removeProjectIssue(payload.issueId);
+    return await this.issueService.removeProjectIssue(payload.issueId);
   }
 
   @MessagePattern({
@@ -48,7 +57,7 @@ export class IssueController {
   async findProjectIssues(
     @Payload() payload: { projectId: number },
   ): Promise<IssueEntity[]> {
-    return this.issueService.findProjectIssues(payload.projectId);
+    return await this.issueService.findProjectIssues(payload.projectId);
   }
 
   @MessagePattern({
@@ -57,7 +66,7 @@ export class IssueController {
   async findProjectIssueByCriteria(
     @Payload() payload: { issueId: number },
   ): Promise<IssueEntity> {
-    return this.issueService.findProjectIssueByCriteria(payload.issueId);
+    return await this.issueService.findProjectIssueByCriteria(payload.issueId);
   }
 
   @MessagePattern({
@@ -66,7 +75,7 @@ export class IssueController {
   async addIssueAssignee(
     @Payload() payload: { issueId: number; memberId: number },
   ): Promise<IssueEntity> {
-    return this.issueService.addIssueAssignee(
+    return await this.issueService.addIssueAssignee(
       payload.issueId,
       payload.memberId,
     );
@@ -78,7 +87,7 @@ export class IssueController {
   async removeIssueAssignee(
     @Payload() payload: { issueId: number; memberId: number },
   ): Promise<IssueEntity> {
-    return this.issueService.removeIssueAssignee(
+    return await this.issueService.removeIssueAssignee(
       payload.issueId,
       payload.memberId,
     );
@@ -90,7 +99,10 @@ export class IssueController {
   async addIssueLabel(
     @Payload() payload: { issueId: number; labelId: number },
   ) {
-    return this.issueService.addIssueLabel(payload.issueId, payload.labelId);
+    return await this.issueService.addIssueLabel(
+      payload.issueId,
+      payload.labelId,
+    );
   }
 
   @MessagePattern({
@@ -99,6 +111,9 @@ export class IssueController {
   async removeIssueLabel(
     @Payload() payload: { issueId: number; labelId: number },
   ) {
-    return this.issueService.removeIssueLabel(payload.issueId, payload.labelId);
+    return await this.issueService.removeIssueLabel(
+      payload.issueId,
+      payload.labelId,
+    );
   }
 }

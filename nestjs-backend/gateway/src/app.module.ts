@@ -18,9 +18,21 @@ import { LabelController } from './project/label/label.controller';
 import { LabelService } from './project/label/label.service';
 import { SprintController } from './project/sprint/sprint.controller';
 import { SprintService } from './project/sprint/sprint.service';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        return {
+          secret: configService.get<string>('AUTH_SECRET_SIGNATURE'),
+        };
+      },
+    }),
     ClientsModule.register([
       {
         name: 'AUTH',
@@ -77,6 +89,7 @@ import { SprintService } from './project/sprint/sprint.service';
     StateService,
     LabelService,
     SprintService,
+    ConfigService,
   ],
 })
 export class AppModule {}
