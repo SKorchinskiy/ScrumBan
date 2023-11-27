@@ -6,12 +6,15 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { StateService } from './state.service';
 import { UpdateStateDto } from './dto/update-state.dto';
 import { CreateStateDto } from './dto/create-state.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('workspaces/:workspaceId/projects/:projectId/states')
+@UseGuards(AuthGuard)
 export class StateController {
   constructor(private stateService: StateService) {}
 
