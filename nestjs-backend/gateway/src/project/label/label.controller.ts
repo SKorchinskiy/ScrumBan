@@ -6,12 +6,15 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { LabelService } from './label.service';
 import { CreateLabelDto } from './dto/create-label.dto';
 import { UpdateLabelDto } from './dto/update-label.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('workspaces/:workspaceId/projects/:projectId/labels')
+@UseGuards(AuthGuard)
 export class LabelController {
   constructor(private labelService: LabelService) {}
 

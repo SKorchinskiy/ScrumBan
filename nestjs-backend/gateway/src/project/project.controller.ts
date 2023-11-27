@@ -6,12 +6,15 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from 'src/dto/create-project.dto';
 import { UpdateProjectDto } from 'src/dto/update-project.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('workspaces/:workspaceId/projects')
+@UseGuards(AuthGuard)
 export class ProjectController {
   constructor(private projectService: ProjectService) {}
 

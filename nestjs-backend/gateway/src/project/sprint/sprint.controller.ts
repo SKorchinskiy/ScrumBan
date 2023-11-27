@@ -6,12 +6,15 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { SprintService } from './sprint.service';
 import { CreateSprintDto } from './dto/create-sprint.dto';
 import { UpdateSprintDto } from './dto/update-sprint.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('workspaces/:workspaceId/projects/:projectId/sprints')
+@UseGuards(AuthGuard)
 export class SprintController {
   constructor(private sprintService: SprintService) {}
 
