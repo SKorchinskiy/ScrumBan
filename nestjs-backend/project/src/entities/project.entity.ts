@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { SprintEntity } from './sprint.entity';
 import { LabelEntity } from './label.entity';
-import { StateEntity } from './state.entity';
+
 import { IssueEntity } from './issue.entity';
 
 @Entity()
@@ -32,9 +32,6 @@ export class ProjectEntity {
 
   @OneToMany(() => LabelEntity, (label) => label.project)
   labels: LabelEntity[];
-
-  @OneToMany(() => StateEntity, (state) => state.project)
-  states: StateEntity[];
 
   @OneToMany(() => IssueEntity, (issue) => issue.project)
   issues: IssueEntity[];
