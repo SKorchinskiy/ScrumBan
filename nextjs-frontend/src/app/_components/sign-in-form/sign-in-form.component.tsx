@@ -59,7 +59,6 @@ export default function SignInForm({ toggleIsSignInHidden }: UserSignInProps) {
         if (!workspaces?.length) {
           router.push("/workspaces");
         } else {
-          console.log(workspaces);
           router.push(`/workspaces/${workspaces[0].workspace_id}`);
         }
       }
