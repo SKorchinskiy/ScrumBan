@@ -8,6 +8,7 @@
 
 .projects-container {
   display: flex;
+  flex-direction: column;
   background-color: #392f53;
   width: 95%;
   height: 95%;
