@@ -12,7 +12,11 @@ const initialWorkspaceData: WorkspaceParams = {
   workspace_name: "",
 };
 
-export default function CreationalModal() {
+export default function CreationalModal({
+  onCancelHandler,
+}: {
+  onCancelHandler: Function;
+}) {
   const router = useRouter();
   const [workspaceInfo, setWorkspaceInfo] =
     useState<WorkspaceParams>(initialWorkspaceData);
@@ -46,7 +50,38 @@ export default function CreationalModal() {
   };
 
   return (
-    <div className={styles["modal-container"]}>
+    <div
+      className={styles["modal-container"]}
+      style={{
+        position: "relative",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          position: "absolute",
+          top: 20,
+          right: 20,
+          width: "10px",
+          height: "10px",
+          background: "rgba(24, 18, 41, 0.3)",
+          borderRadius: "5px",
+          padding: "10px",
+          cursor: "pointer",
+          userSelect: "none",
+        }}
+        onClick={() => onCancelHandler()}
+      >
+        <p
+          style={{
+            color: "white",
+          }}
+        >
+          &#x2715;
+        </p>
+      </div>
       <h1 className={styles["heading"]}>Create Workspace</h1>
       <div className={styles["input-container"]}>
         <input
