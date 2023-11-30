@@ -1,31 +1,60 @@
 "use client";
 
 import styles from "./page.module.css";
-import { Fragment, useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { WorkspaceProject } from "../page";
-import { useRouter } from "next/navigation";
-import CreationalModal from "./_components/creational-modal/creational-modal.component";
+import { WorkspaceState } from "../../_components/sidebar/sidebar.component";
+import IssueCreationalModal from "../../_components/creational-modal/issue-creational-modal.component";
 
-export default function Projects({
-  params,
-}: {
-  params: { workspaceId: number };
-}) {
-  const [isCreationalModalOpen, setIsCreationalModalOpen] = useState(false);
+type IssueProps = {
+  issue_id: string;
+  issue_title: string;
+  issue_description: string;
+  issue_priority: string;
+};
+
+export default function Issues() {
   const router = useRouter();
+  const pathname = usePathname();
+  const workspaceId = useMemo(() => {
+    const workspacePos = pathname.split("/").indexOf("workspaces");
+    return pathname.split("/")[workspacePos + 1];
+  }, [pathname]);
+
+  const [isIssueModalOpen, setIsIssueModalOpen] = useState(false);
   const [workspaceProjects, setWorkspaceProjects] = useState<
     WorkspaceProject[]
   >([]);
-  const [filteredProjects, setFilteredProjects] =
-    useState<WorkspaceProject[]>(workspaceProjects);
-
-  const toggleCreationalModal = () =>
-    setIsCreationalModalOpen(!isCreationalModalOpen);
+  const [workspaceIssues, setWorkspaceIssues] = useState<IssueProps[]>([]);
+  const [filteredIssues, setFilteredIssues] =
+    useState<IssueProps[]>(workspaceIssues);
+  const [workspaceStates, setWorkspaceStates] = useState<WorkspaceState[]>([]);
 
   useEffect(() => {
-    const fetchWorkspaceProjects = async () => {
+    const fetchWorkspaceIssues = async () => {
       const response = await fetch(
-        `http://localhost:3000/workspaces/${params.workspaceId}/projects`,
+        `http://localhost:3000/workspaces/${workspaceId}/issues`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        const issues = await response.json();
+        setWorkspaceIssues(issues);
+        setFilteredIssues(issues);
+      }
+    };
+
+    fetchWorkspaceIssues();
+  }, []);
+
+  useEffect(() => {
+    const fetchWorkspaceProject = async () => {
+      const response = await fetch(
+        `http://localhost:3000/workspaces/${workspaceId}/projects`,
         {
           method: "GET",
           credentials: "include",
@@ -35,17 +64,35 @@ export default function Projects({
       if (response.ok) {
         const projects = await response.json();
         setWorkspaceProjects(projects);
-        setFilteredProjects(projects);
       }
     };
 
-    fetchWorkspaceProjects();
-  }, [params.workspaceId]);
+    fetchWorkspaceProject();
+  }, []);
+
+  useEffect(() => {
+    const fetchWorkspaceStates = async () => {
+      const response = await fetch(
+        `http://localhost:3000/workspaces/${workspaceId}/states`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        const states = await response.json();
+        setWorkspaceStates(states);
+      }
+    };
+
+    fetchWorkspaceStates();
+  }, []);
 
   return (
     <Fragment>
-      <div className={styles["projects"]}>
-        <div className={styles["projects-container"]}>
+      <div className={styles["issues"]}>
+        <div className={styles["issues-container"]}>
           <div
             style={{
               display: "flex",
@@ -98,9 +145,9 @@ export default function Projects({
                 placeholder="Type to filter projects..."
                 type="text"
                 onChange={(event) => {
-                  setFilteredProjects(
-                    workspaceProjects.filter((project) =>
-                      project.project_name
+                  setFilteredIssues(
+                    workspaceIssues.filter((issue) =>
+                      issue.issue_title
                         .toLowerCase()
                         .includes(event.target.value)
                     )
@@ -125,56 +172,47 @@ export default function Projects({
                   userSelect: "none",
                   cursor: "pointer",
                 }}
-                onClick={() => toggleCreationalModal()}
+                onClick={() => setIsIssueModalOpen(true)}
               >
-                Create Project
+                Create Issue
               </div>
             </div>
           </div>
           <div
             style={{
-              display: "flex",
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr 1fr",
               width: "100%",
               height: "100%",
             }}
           >
-            {filteredProjects.map((project) => (
-              <div
-                key={project.project_id}
-                className={styles["specific-project"]}
-                onClick={() =>
-                  router.push(
-                    `/workspaces/${params.workspaceId}/projects/${project.project_id}`
-                  )
-                }
-              >
-                <div className={styles["specific-project-details"]}>
-                  <span style={{ color: "white" }}>{project.project_name}</span>
+            {filteredIssues.map((issue) => (
+              <div key={issue.issue_id} className={styles["specific-issue"]}>
+                <div className={styles["specific-issue-details"]}>
+                  <span style={{ color: "white" }}>{issue.issue_title}</span>
                 </div>
                 <div>
                   <p style={{ color: "whitesmoke" }}>
-                    {project.project_description}
+                    {issue.issue_description}
                   </p>
                 </div>
                 <div>
-                  <p style={{ color: "whitesmoke" }}>
-                    {project.project_access}
-                  </p>
+                  <p style={{ color: "whitesmoke" }}>{issue.issue_priority}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
       </div>
-      {isCreationalModalOpen ? (
+      {isIssueModalOpen ? (
         <Fragment>
           <div
             style={{
               position: "absolute",
-              top: "0",
-              left: "0",
-              right: "0",
-              bottom: "0",
+              top: 0,
+              left: 0,
+              bottom: 0,
+              right: 0,
               backgroundColor: "rgba(0, 0, 0, 0.7)",
             }}
           />
@@ -183,10 +221,14 @@ export default function Projects({
               position: "absolute",
               top: "50%",
               left: "50%",
-              translate: "-50% -50%",
+              transform: "translate(-50%, -50%)",
             }}
           >
-            <CreationalModal workspace_id={params.workspaceId} />
+            <IssueCreationalModal
+              onCancelHandler={() => setIsIssueModalOpen(false)}
+              projects={workspaceProjects}
+              states={workspaceStates}
+            />
           </div>
         </Fragment>
       ) : null}

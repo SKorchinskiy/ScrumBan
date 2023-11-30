@@ -1,79 +1,157 @@
 "use client";
 
 import styles from "./sidebar.module.css";
-import { useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import WorkspaceList from "../workspace-list/workspace-list.component";
 import { WorkspaceProject } from "../../[workspaceId]/page";
 import { usePathname, useRouter } from "next/navigation";
+import IssueCreationalModal from "../creational-modal/issue-creational-modal.component";
+import ProjectRepresentation from "../project-representation/project-representation.component";
 
-export default function SideBar({
-  projects,
-}: {
-  projects: WorkspaceProject[];
-}) {
+export type WorkspaceState = {
+  state_id: number;
+  workspace_id: number | string;
+  state_name: string;
+  state_color: string;
+};
+
+export default function SideBar({ workspace_id }: { workspace_id: number }) {
   const pathname = usePathname();
   const router = useRouter();
 
+  const [isIssueCreationalModalOpen, setIsIssueCreationalModalOpen] =
+    useState(false);
+  const [workspaceProjects, setWorkspaceProjects] = useState<
+    WorkspaceProject[]
+  >([]);
+  const [workspaceStates, setWorkspaceStates] = useState<WorkspaceState[]>([]);
+
+  const toggleIssueCreationalModalOpen = () =>
+    setIsIssueCreationalModalOpen(!isIssueCreationalModalOpen);
+
   useEffect(() => {
     const fetchUserProjects = async () => {
-      await fetch("http://localhost:3000/");
+      const response = await fetch(
+        `http://localhost:3000/workspaces/${workspace_id}/projects`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        const projects = await response.json();
+        setWorkspaceProjects(projects);
+      }
     };
 
     fetchUserProjects();
   }, []);
 
+  useEffect(() => {
+    const fetchWorkspaceStates = async () => {
+      const response = await fetch(
+        `http://localhost:3000/workspaces/${workspace_id}/states`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        const states = await response.json();
+        setWorkspaceStates(states);
+      }
+    };
+
+    fetchWorkspaceStates();
+  }, []);
+
   return (
-    <div className={styles["sidebar-container"]}>
-      <div className={styles["sidebar"]}>
-        <WorkspaceList />
-        <div className={styles["general"]}>
-          <div className={styles["general-option"]}>
-            <p>Create new Issue</p>
-          </div>
-          <div className={styles["general-option"]}>
-            <p>Dashboard</p>
-          </div>
-          <div
-            className={styles["general-option"]}
-            onClick={() => {
-              const pathChunks = pathname.split("/");
-              const workspaceChunkIndex = pathChunks.findIndex(
-                (value) => value === "workspaces"
-              );
-              if (workspaceChunkIndex !== pathChunks.length - 1) {
-                router.push(
-                  `/workspaces/${pathChunks[workspaceChunkIndex + 1]}/projects`
+    <Fragment>
+      <div className={styles["sidebar-container"]}>
+        <div className={styles["sidebar"]}>
+          <WorkspaceList workspace_id={workspace_id} />
+          <div className={styles["general"]}>
+            <div
+              className={styles["general-option"]}
+              onClick={() => toggleIssueCreationalModalOpen()}
+            >
+              <p>Create new Issue</p>
+            </div>
+            <div className={styles["general-option"]}>
+              <p>Dashboard</p>
+            </div>
+            <div
+              className={styles["general-option"]}
+              onClick={() => {
+                const pathChunks = pathname.split("/");
+                const workspaceChunkIndex = pathChunks.findIndex(
+                  (value) => value === "workspaces"
                 );
-              }
-            }}
-          >
-            <p>Projects</p>
+                if (workspaceChunkIndex !== pathChunks.length - 1) {
+                  router.push(
+                    `/workspaces/${
+                      pathChunks[workspaceChunkIndex + 1]
+                    }/projects`
+                  );
+                }
+              }}
+            >
+              <p>Projects</p>
+            </div>
+            <div
+              className={styles["general-option"]}
+              onClick={() => router.push(`/workspaces/${workspace_id}/issues`)}
+            >
+              <p>All Issues</p>
+            </div>
           </div>
-          <div className={styles["general-option"]}>
-            <p>All Issues</p>
-          </div>
-        </div>
-        <div className={styles["projects-container"]}>
-          <h3 style={{ margin: "0px" }}>Projects</h3>
-          <div className={styles["projects-list"]} style={{ padding: "10px" }}>
-            {projects?.length
-              ? projects.map((project) => (
-                  <div
-                    key={project.project_id}
-                    className={styles["project-representation"]}
-                    onClick={() =>
-                      router.push(
-                        `/workspaces/${project.workspace_id}/projects/${project.project_id}`
-                      )
-                    }
-                  >
-                    <p>{project.project_name}</p>
-                  </div>
-                ))
-              : null}
+          <div className={styles["projects-container"]}>
+            <h3 style={{ margin: "0px" }}>Projects</h3>
+            <div
+              className={styles["projects-list"]}
+              style={{ padding: "10px" }}
+            >
+              {workspaceProjects.map((project) => (
+                <ProjectRepresentation
+                  key={project.project_id}
+                  project={project}
+                  workspaceId={workspace_id}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      {isIssueCreationalModalOpen ? (
+        <Fragment>
+          <div
+            style={{
+              position: "absolute",
+              top: "0",
+              bottom: "0",
+              left: "0",
+              right: "0",
+              backgroundColor: "rgba(0, 0, 0, 0.7)",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              translate: "-50% -50%",
+            }}
+          >
+            <IssueCreationalModal
+              projects={workspaceProjects}
+              states={workspaceStates}
+              onCancelHandler={() => setIsIssueCreationalModalOpen(false)}
+            />
+          </div>
+        </Fragment>
+      ) : null}
+    </Fragment>
   );
 }

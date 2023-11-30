@@ -1,4 +1,4 @@
-.projects {
+.issues {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -6,7 +6,7 @@
   height: 100%;
 }
 
-.projects-container {
+.issues-container {
   display: flex;
   flex-direction: column;
   background-color: #392f53;
@@ -15,7 +15,7 @@
   border-radius: 10px;
 }
 
-.specific-project {
+.specific-issue {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -30,7 +30,7 @@
   cursor: pointer;
 }
 
-.specific-project-details {
+.specific-issue-details {
   textalign: center;
   backgroundcolor: #4d3c77;
   borderradius: 3px;

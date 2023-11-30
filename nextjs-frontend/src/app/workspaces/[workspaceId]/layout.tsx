@@ -19,11 +19,6 @@ export default async function RootLayout({
     workspaceId: number;
   };
 }) {
-  const response = await fetch(
-    `http://localhost:3000/workspaces/${params.workspaceId}/projects`
-  );
-  const workspaceProjects = await response.json();
-
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -47,7 +42,7 @@ export default async function RootLayout({
               justifyContent: "space-between",
             }}
           >
-            <SideBar projects={workspaceProjects || []} />
+            <SideBar workspace_id={params.workspaceId} />
             {children}
           </div>
         </div>

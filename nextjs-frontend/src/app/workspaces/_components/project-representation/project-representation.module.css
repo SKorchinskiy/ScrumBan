@@ -1,0 +1,9 @@
+.project-representation {
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 1px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: whitesmoke;
+  margin-bottom: 10px;
+}
