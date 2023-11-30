@@ -8,25 +8,28 @@ import { UpdateStateDto } from './dto/update-state.dto';
 export class StateService {
   constructor(@Inject('PROJECT') private projectMicroservice: ClientProxy) {}
 
-  async createProjectState(projectId: number, createStateDto: CreateStateDto) {
+  async createWorkspaceState(
+    workspaceId: number,
+    createStateDto: CreateStateDto,
+  ) {
     return await lastValueFrom(
       this.projectMicroservice.send(
         {
-          cmd: 'create_project_state',
+          cmd: 'create_workspace_state',
         },
         {
-          projectId,
+          workspaceId,
           createStateDto,
         },
       ),
     );
   }
 
-  async updateProjectState(stateId: number, updateStateDto: UpdateStateDto) {
+  async updateWorkspaceState(stateId: number, updateStateDto: UpdateStateDto) {
     return await lastValueFrom(
       this.projectMicroservice.send(
         {
-          cmd: 'update_project_state',
+          cmd: 'update_workspace_state',
         },
         {
           stateId,
@@ -36,11 +39,11 @@ export class StateService {
     );
   }
 
-  async removeProjectState(stateId: number) {
+  async removeWorkspaceState(stateId: number) {
     return await lastValueFrom(
       this.projectMicroservice.send(
         {
-          cmd: 'remove_project_state',
+          cmd: 'remove_workspace_state',
         },
         {
           stateId,
@@ -49,24 +52,24 @@ export class StateService {
     );
   }
 
-  async findProjectStates(projectId: number) {
+  async findWorkspaceStates(workspaceId: number) {
     return await lastValueFrom(
       this.projectMicroservice.send(
         {
-          cmd: 'find_project_states',
+          cmd: 'find_workspace_states',
         },
         {
-          projectId,
+          workspaceId,
         },
       ),
     );
   }
 
-  async findProjectStateByCriteria(stateId: number) {
+  async findWorkspaceStateByCriteria(stateId: number) {
     return await lastValueFrom(
       this.projectMicroservice.send(
         {
-          cmd: 'find_project_state_by',
+          cmd: 'find_workspace_state_by',
         },
         {
           stateId,

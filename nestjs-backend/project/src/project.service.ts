@@ -62,7 +62,6 @@ export class ProjectService {
       relations: {
         sprints: true,
         labels: true,
-        states: true,
         issues: true,
       },
     });

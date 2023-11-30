@@ -9,44 +9,44 @@ import { StateEntity } from 'src/entities/state.entity';
 export class StateController {
   constructor(private stateService: StateService) {}
 
-  @MessagePattern({ cmd: 'create_project_state' })
-  async createProjectState(
-    @Payload() payload: { projectId: number; createStateDto: CreateStateDto },
+  @MessagePattern({ cmd: 'create_workspace_state' })
+  async createWorkspaceState(
+    @Payload() payload: { workspaceId: number; createStateDto: CreateStateDto },
   ): Promise<StateEntity> {
-    return this.stateService.createProjectState(
-      payload.projectId,
+    return this.stateService.createWorkspaceState(
+      payload.workspaceId,
       payload.createStateDto,
     );
   }
 
-  @MessagePattern({ cmd: 'update_project_state' })
-  async updateProjectState(
+  @MessagePattern({ cmd: 'update_workspace_state' })
+  async updateWorkspaceState(
     @Payload() payload: { stateId: number; updateStateDto: UpdateStateDto },
   ): Promise<StateEntity> {
-    return this.stateService.updateProjectState(
+    return this.stateService.updateWorkspaceState(
       payload.stateId,
       payload.updateStateDto,
     );
   }
 
-  @MessagePattern({ cmd: 'remove_project_state' })
-  async removeProjectState(
+  @MessagePattern({ cmd: 'remove_workspace_state' })
+  async removeWorkspaceState(
     @Payload() payload: { stateId: number },
   ): Promise<StateEntity> {
-    return this.stateService.removeProjectState(payload.stateId);
+    return this.stateService.removeWorkspaceState(payload.stateId);
   }
 
-  @MessagePattern({ cmd: 'find_project_states' })
-  async findProjectStates(
-    @Payload() payload: { projectId: number },
+  @MessagePattern({ cmd: 'find_workspace_states' })
+  async findWorkspaceStates(
+    @Payload() payload: { workspaceId: number },
   ): Promise<StateEntity[]> {
-    return this.stateService.findProjectStates(payload.projectId);
+    return this.stateService.findWorkspaceStates(payload.workspaceId);
   }
 
-  @MessagePattern({ cmd: 'find_project_state_by' })
-  async findProjectStateByCriteria(
+  @MessagePattern({ cmd: 'find_workspace_state_by' })
+  async findWorkspaceStateByCriteria(
     @Payload() payload: { stateId: number },
   ): Promise<StateEntity> {
-    return this.stateService.findProjectStateByCriteria(payload.stateId);
+    return this.stateService.findWorkspaceStateByCriteria(payload.stateId);
   }
 }

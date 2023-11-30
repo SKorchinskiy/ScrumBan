@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { ProjectEntity } from './project.entity';
+import { IssueEntity } from './issue.entity';
 
 @Entity()
 export class StateEntity {
@@ -18,6 +18,9 @@ export class StateEntity {
   })
   state_color: string;
 
-  @ManyToOne(() => ProjectEntity, (project) => project.states)
-  project: ProjectEntity;
+  @ManyToOne(() => IssueEntity)
+  issues: IssueEntity[];
+
+  @Column('integer', { nullable: false })
+  workspaceId: number;
 }

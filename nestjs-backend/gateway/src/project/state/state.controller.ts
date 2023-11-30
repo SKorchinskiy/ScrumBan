@@ -13,42 +13,45 @@ import { UpdateStateDto } from './dto/update-state.dto';
 import { CreateStateDto } from './dto/create-state.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 
-@Controller('workspaces/:workspaceId/projects/:projectId/states')
+@Controller('workspaces/:workspaceId/states')
 @UseGuards(AuthGuard)
 export class StateController {
   constructor(private stateService: StateService) {}
 
   @Post()
-  async createProjectState(
-    @Param('projectId') projectId: number,
+  async createWorkspaceState(
+    @Param('workspaceId') workspaceId: number,
     @Body() createStateDto: CreateStateDto,
   ) {
-    return await this.stateService.createProjectState(
-      projectId,
+    return await this.stateService.createWorkspaceState(
+      workspaceId,
       createStateDto,
     );
   }
 
   @Put(':stateId')
-  async updateProjectState(
+  async updateWorkspaceState(
     @Param('stateId') stateId: number,
     @Body() updateStateDto: UpdateStateDto,
   ) {
-    return await this.stateService.updateProjectState(stateId, updateStateDto);
+    return await this.stateService.updateWorkspaceState(
+      stateId,
+      updateStateDto,
+    );
   }
 
   @Delete(':stateId')
-  async removeProjectState(@Param('stateId') stateId: number) {
-    return await this.stateService.removeProjectState(stateId);
+  async removeWorkspaceState(@Param('stateId') stateId: number) {
+    return await this.stateService.removeWorkspaceState(stateId);
   }
 
   @Get(':stateId')
-  async findProjectStateByCriteria(@Param('stateId') stateId: number) {
-    return await this.stateService.findProjectStateByCriteria(stateId);
+  async findWorkspaceStateByCriteria(@Param('stateId') stateId: number) {
+    return await this.stateService.findWorkspaceStateByCriteria(stateId);
   }
 
   @Get()
-  async findProjectStates(@Param('projectId') projectId: number) {
-    return await this.stateService.findProjectStates(projectId);
+  async findWorkspaceStates(@Param('workspaceId') workspaceId: number) {
+    return await this.stateService.findWorkspaceStates(workspaceId);
   }
 }

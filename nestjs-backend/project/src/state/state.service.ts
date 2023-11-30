@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateStateDto } from 'src/dto/create-state.dto';
 import { UpdateStateDto } from 'src/dto/update-state.dto';
-import { ProjectEntity } from 'src/entities/project.entity';
 import { StateEntity } from 'src/entities/state.entity';
 import { Repository } from 'typeorm';
 
@@ -10,29 +9,21 @@ export class StateService {
   constructor(
     @Inject('STATE_REPOSITORY')
     private stateRepository: Repository<StateEntity>,
-    @Inject('PROJECT_REPOSITORY')
-    private projectRepository: Repository<ProjectEntity>,
   ) {}
 
-  async createProjectState(
-    projectId: number,
+  async createWorkspaceState(
+    workspaceId: number,
     createStateDto: CreateStateDto,
   ): Promise<StateEntity> {
-    const project = await this.projectRepository.findOne({
-      where: {
-        project_id: projectId,
-      },
-    });
-
     const state = await this.stateRepository.create({
       ...createStateDto,
-      project,
+      workspaceId,
     });
 
     return await this.stateRepository.save(state);
   }
 
-  async updateProjectState(
+  async updateWorkspaceState(
     stateId: number,
     updateStateDto: UpdateStateDto,
   ): Promise<StateEntity> {
@@ -45,7 +36,7 @@ export class StateService {
     });
   }
 
-  async removeProjectState(stateId: number): Promise<StateEntity> {
+  async removeWorkspaceState(stateId: number): Promise<StateEntity> {
     const state = await this.stateRepository.findOne({
       where: {
         state_id: stateId,
@@ -55,21 +46,15 @@ export class StateService {
     return await this.stateRepository.remove(state);
   }
 
-  async findProjectStates(projectId: number): Promise<StateEntity[]> {
-    const project = await this.projectRepository.findOne({
-      where: {
-        project_id: projectId,
-      },
-    });
-
+  async findWorkspaceStates(workspaceId: number): Promise<StateEntity[]> {
     return await this.stateRepository.find({
       where: {
-        project,
+        workspaceId,
       },
     });
   }
 
-  async findProjectStateByCriteria(stateId: number): Promise<StateEntity> {
+  async findWorkspaceStateByCriteria(stateId: number): Promise<StateEntity> {
     return await this.stateRepository.findOne({
       where: {
         state_id: stateId,
