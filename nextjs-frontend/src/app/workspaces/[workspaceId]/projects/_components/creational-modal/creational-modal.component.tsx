@@ -18,8 +18,10 @@ const initialProjectData: ProjectParams = {
 
 export default function CreationalModal({
   workspace_id,
+  onCancelHandler,
 }: {
   workspace_id: number;
+  onCancelHandler: Function;
 }) {
   const router = useRouter();
   const [projectData, setProjectData] =
@@ -57,6 +59,32 @@ export default function CreationalModal({
 
   return (
     <div className={styles["modal-container"]}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          position: "absolute",
+          top: 20,
+          right: 20,
+          width: "10px",
+          height: "10px",
+          background: "rgba(24, 18, 41, 0.3)",
+          borderRadius: "5px",
+          padding: "10px",
+          cursor: "pointer",
+          userSelect: "none",
+        }}
+        onClick={() => onCancelHandler()}
+      >
+        <p
+          style={{
+            color: "white",
+          }}
+        >
+          &#x2715;
+        </p>
+      </div>
       <h1 className={styles["heading"]}>Create Project</h1>
       <div className={styles["input-container"]}>
         <input
@@ -73,13 +101,22 @@ export default function CreationalModal({
           onChange={setWorkspaceInputData}
           placeholder="Enter your project description..."
         ></input>
-        <input
-          type="text"
-          name="project_access"
+        <select
           className={styles["modal-input"]}
-          onChange={setWorkspaceInputData}
-          placeholder="Enter your project access..."
-        ></input>
+          onChange={(e) => {
+            const value = e.currentTarget.value as "public" | "private";
+            setProjectData((prev) => ({
+              ...prev,
+              project_access: value,
+            }));
+          }}
+        >
+          <option selected disabled>
+            Enter your project access...
+          </option>
+          <option value="public">public</option>
+          <option value="private">private</option>
+        </select>
         <button
           className={styles["default-button"]}
           onClick={(e) => createNewProject(e)}
