@@ -1,11 +1,10 @@
 "use client";
 
 import styles from "./page.module.css";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Fragment, useEffect, useMemo, useState } from "react";
-import { WorkspaceProject } from "../page";
-import { WorkspaceState } from "../../_components/sidebar/sidebar.component";
 import IssueCreationalModal from "../../_components/creational-modal/issue-creational-modal.component";
+import PanelHeader from "../../_components/panel-header/panel-header.component";
 
 type IssueProps = {
   issue_id: string;
@@ -15,21 +14,16 @@ type IssueProps = {
 };
 
 export default function Issues() {
-  const router = useRouter();
   const pathname = usePathname();
   const workspaceId = useMemo(() => {
     const workspacePos = pathname.split("/").indexOf("workspaces");
-    return pathname.split("/")[workspacePos + 1];
+    return parseInt(pathname.split("/")[workspacePos + 1]);
   }, [pathname]);
 
   const [isIssueModalOpen, setIsIssueModalOpen] = useState(false);
-  const [workspaceProjects, setWorkspaceProjects] = useState<
-    WorkspaceProject[]
-  >([]);
   const [workspaceIssues, setWorkspaceIssues] = useState<IssueProps[]>([]);
   const [filteredIssues, setFilteredIssues] =
     useState<IssueProps[]>(workspaceIssues);
-  const [workspaceStates, setWorkspaceStates] = useState<WorkspaceState[]>([]);
 
   useEffect(() => {
     const fetchWorkspaceIssues = async () => {
@@ -51,133 +45,22 @@ export default function Issues() {
     fetchWorkspaceIssues();
   }, []);
 
-  useEffect(() => {
-    const fetchWorkspaceProject = async () => {
-      const response = await fetch(
-        `http://localhost:3000/workspaces/${workspaceId}/projects`,
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      );
-
-      if (response.ok) {
-        const projects = await response.json();
-        setWorkspaceProjects(projects);
-      }
-    };
-
-    fetchWorkspaceProject();
-  }, []);
-
-  useEffect(() => {
-    const fetchWorkspaceStates = async () => {
-      const response = await fetch(
-        `http://localhost:3000/workspaces/${workspaceId}/states`,
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      );
-
-      if (response.ok) {
-        const states = await response.json();
-        setWorkspaceStates(states);
-      }
-    };
-
-    fetchWorkspaceStates();
-  }, []);
-
   return (
     <Fragment>
       <div className={styles["issues"]}>
         <div className={styles["issues-container"]}>
-          <div
-            style={{
-              display: "flex",
-              backgroundColor: "#2D2643",
-              width: "100%",
-              borderRadius: "10px 10px 0 0",
-              padding: "10px",
-              boxSizing: "border-box",
+          <PanelHeader
+            inputPlaceholder="Type to filter issues..."
+            creationalButtonText="Create Issue"
+            onInputChangeHandler={(event) => {
+              setFilteredIssues(
+                workspaceIssues.filter((issue) =>
+                  issue.issue_title.toLowerCase().includes(event.target.value)
+                )
+              );
             }}
-          >
-            <div style={{ width: "50%" }}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "flex-start",
-                  width: "50%",
-                  color: "whitesmoke",
-                }}
-              >
-                <div
-                  style={{
-                    marginRight: "50px",
-                    backgroundColor: "#443C68",
-                    padding: "10px",
-                    borderRadius: "10px",
-                    userSelect: "none",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => router.back()}
-                >
-                  Back
-                </div>
-              </div>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <input
-                style={{
-                  width: "300px",
-                  height: "30px",
-                  color: "white",
-                  background: "#443C68",
-                  border: "none",
-                  borderRadius: "5px",
-                }}
-                placeholder="Type to filter projects..."
-                type="text"
-                onChange={(event) => {
-                  setFilteredIssues(
-                    workspaceIssues.filter((issue) =>
-                      issue.issue_title
-                        .toLowerCase()
-                        .includes(event.target.value)
-                    )
-                  );
-                }}
-              />
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                width: "50%",
-                color: "whitesmoke",
-              }}
-            >
-              <div
-                style={{
-                  marginRight: "50px",
-                  backgroundColor: "#443C68",
-                  padding: "10px",
-                  borderRadius: "10px",
-                  userSelect: "none",
-                  cursor: "pointer",
-                }}
-                onClick={() => setIsIssueModalOpen(true)}
-              >
-                Create Issue
-              </div>
-            </div>
-          </div>
+            creationalButtonHandler={() => setIsIssueModalOpen(true)}
+          />
           <div
             style={{
               display: "grid",
@@ -225,9 +108,8 @@ export default function Issues() {
             }}
           >
             <IssueCreationalModal
+              workspaceId={workspaceId}
               onCancelHandler={() => setIsIssueModalOpen(false)}
-              projects={workspaceProjects}
-              states={workspaceStates}
             />
           </div>
         </Fragment>

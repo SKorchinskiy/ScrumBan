@@ -1,8 +1,7 @@
 "use client";
 
-import { ChangeEvent, Fragment, MouseEvent, useState } from "react";
+import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import styles from "./issue-creational-modal.module.css";
-import { usePathname, useRouter } from "next/navigation";
 import { WorkspaceProject } from "../../[workspaceId]/page";
 import { WorkspaceState } from "../sidebar/sidebar.component";
 
@@ -21,17 +20,55 @@ const initialIssueData: IssueParams = {
 };
 
 export default function IssueCreationalModal({
-  projects,
-  states,
+  workspaceId,
   onCancelHandler,
+  project_id,
 }: {
-  projects: WorkspaceProject[];
-  states: WorkspaceState[];
+  workspaceId: number;
   onCancelHandler: Function;
-}) {
-  const pathname = usePathname();
-  const [projectId, setProjectId] = useState<number>();
+} & { project_id?: number }) {
+  const [projects, setProjects] = useState<WorkspaceProject[]>([]);
+  const [states, setStates] = useState<WorkspaceState[]>([]);
+  const [projectId, setProjectId] = useState<number>(project_id || 0);
   const [issueInfo, setIssueInfo] = useState<IssueParams>(initialIssueData);
+
+  useEffect(() => {
+    const fetchWorkspaceProject = async () => {
+      const response = await fetch(
+        `http://localhost:3000/workspaces/${workspaceId}/projects`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        const projects = await response.json();
+        setProjects(projects);
+      }
+    };
+
+    fetchWorkspaceProject();
+  }, []);
+
+  useEffect(() => {
+    const fetchWorkspaceStates = async () => {
+      const response = await fetch(
+        `http://localhost:3000/workspaces/${workspaceId}/states`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        const states = await response.json();
+        setStates(states);
+      }
+    };
+
+    fetchWorkspaceStates();
+  }, []);
 
   const setIssueInputData = (
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -44,15 +81,9 @@ export default function IssueCreationalModal({
     }));
   };
 
-  const createNewIssue = (event: MouseEvent<HTMLButtonElement>) => {
-    const pathChunks = pathname.split("/");
-    const workspaceChunkIndex = pathChunks.findIndex(
-      (value) => value === "workspaces"
-    );
-    fetch(
-      `http://localhost:3000/workspaces/${
-        pathChunks[workspaceChunkIndex + 1]
-      }/projects/${projectId}/issues`,
+  const createNewIssue = async (event: MouseEvent<HTMLButtonElement>) => {
+    await fetch(
+      `http://localhost:3000/workspaces/${workspaceId}/projects/${projectId}/issues`,
       {
         method: "POST",
         headers: {
@@ -64,7 +95,7 @@ export default function IssueCreationalModal({
         }),
       }
     );
-    onCancelHandler();
+    onCancelHandler(false);
   };
 
   return (
@@ -90,7 +121,7 @@ export default function IssueCreationalModal({
           cursor: "pointer",
           userSelect: "none",
         }}
-        onClick={() => onCancelHandler()}
+        onClick={() => onCancelHandler(false)}
       >
         <p
           style={{
@@ -133,12 +164,14 @@ export default function IssueCreationalModal({
         <select
           name="issue_state"
           className={styles["modal-input"]}
-          onChange={(event) =>
+          onChange={(event) => {
+            if (event.target.selectedOptions[0].value == "create")
+              onCancelHandler(true);
             setIssueInfo((prev) => ({
               ...prev,
               issue_state_id: parseInt(event.target.selectedOptions[0].value),
-            }))
-          }
+            }));
+          }}
         >
           <option value="" disabled selected>
             Select issue state
@@ -148,6 +181,7 @@ export default function IssueCreationalModal({
               {state.state_name}
             </option>
           ))}
+          <option value="create">+ Create new issue state</option>
         </select>
         <select
           name="project_id"
@@ -160,7 +194,11 @@ export default function IssueCreationalModal({
             Select project
           </option>
           {projects.map((project) => (
-            <option key={project.project_id} value={project.project_id}>
+            <option
+              key={project.project_id}
+              value={project.project_id}
+              selected={projectId === project.project_id}
+            >
               {project.project_name}
             </option>
           ))}
