@@ -1,8 +1,6 @@
 .sprints-container {
-  display: flex;
-  /* flex-direction: column; */
-  align-items: center;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   background-color: #443c68;
   width: "80%";
   height: 100px;
@@ -15,7 +13,9 @@
 }
 
 .sprint-details {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: #4d3c77;
   border-radius: 3px;
   box-sizing: border-box;
