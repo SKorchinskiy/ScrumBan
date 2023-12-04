@@ -17,7 +17,7 @@ export class StateService {
   ): Promise<StateEntity> {
     const state = await this.stateRepository.create({
       ...createStateDto,
-      workspaceId,
+      workspace_id: workspaceId,
     });
 
     return await this.stateRepository.save(state);
@@ -49,7 +49,7 @@ export class StateService {
   async findWorkspaceStates(workspaceId: number): Promise<StateEntity[]> {
     return await this.stateRepository.find({
       where: {
-        workspaceId,
+        workspace_id: workspaceId,
       },
     });
   }

@@ -22,5 +22,5 @@ export class StateEntity {
   issues: IssueEntity[];
 
   @Column('integer', { nullable: false })
-  workspaceId: number;
+  workspace_id: number;
 }
