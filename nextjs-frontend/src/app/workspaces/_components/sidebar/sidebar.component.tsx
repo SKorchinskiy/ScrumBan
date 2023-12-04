@@ -7,6 +7,7 @@ import { WorkspaceProject } from "../../[workspaceId]/page";
 import { usePathname, useRouter } from "next/navigation";
 import IssueCreationalModal from "../creational-modal/issue-creational-modal.component";
 import ProjectRepresentation from "../project-representation/project-representation.component";
+import StateCreationalModal from "../creational-modal/state-creational-modal.component";
 
 export type WorkspaceState = {
   state_id: number;
@@ -21,10 +22,10 @@ export default function SideBar({ workspace_id }: { workspace_id: number }) {
 
   const [isIssueCreationalModalOpen, setIsIssueCreationalModalOpen] =
     useState(false);
+  const [isStateModalOpen, setIsStateModalOpen] = useState(false);
   const [workspaceProjects, setWorkspaceProjects] = useState<
     WorkspaceProject[]
   >([]);
-  const [workspaceStates, setWorkspaceStates] = useState<WorkspaceState[]>([]);
 
   const toggleIssueCreationalModalOpen = () =>
     setIsIssueCreationalModalOpen(!isIssueCreationalModalOpen);
@@ -46,25 +47,6 @@ export default function SideBar({ workspace_id }: { workspace_id: number }) {
     };
 
     fetchUserProjects();
-  }, []);
-
-  useEffect(() => {
-    const fetchWorkspaceStates = async () => {
-      const response = await fetch(
-        `http://localhost:3000/workspaces/${workspace_id}/states`,
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      );
-
-      if (response.ok) {
-        const states = await response.json();
-        setWorkspaceStates(states);
-      }
-    };
-
-    fetchWorkspaceStates();
   }, []);
 
   return (
@@ -108,7 +90,7 @@ export default function SideBar({ workspace_id }: { workspace_id: number }) {
             </div>
           </div>
           <div className={styles["projects-container"]}>
-            <h3 style={{ margin: "0px" }}>Projects</h3>
+            <h3 style={{ margin: "0px", color: "white" }}>Projects</h3>
             <div
               className={styles["projects-list"]}
               style={{ padding: "10px" }}
@@ -145,9 +127,40 @@ export default function SideBar({ workspace_id }: { workspace_id: number }) {
             }}
           >
             <IssueCreationalModal
-              projects={workspaceProjects}
-              states={workspaceStates}
-              onCancelHandler={() => setIsIssueCreationalModalOpen(false)}
+              workspaceId={workspace_id}
+              onCancelHandler={(openStateModal: boolean) => {
+                setIsStateModalOpen(openStateModal);
+                setIsIssueCreationalModalOpen(false);
+              }}
+            />
+          </div>
+        </Fragment>
+      ) : null}
+      {isStateModalOpen ? (
+        <Fragment>
+          <div
+            style={{
+              position: "absolute",
+              top: "0",
+              bottom: "0",
+              left: "0",
+              right: "0",
+              backgroundColor: "rgba(0, 0, 0, 0.7)",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              translate: "-50% -50%",
+            }}
+          >
+            <StateCreationalModal
+              workspaceId={workspace_id}
+              onCancelHandler={() => {
+                setIsStateModalOpen(false);
+              }}
             />
           </div>
         </Fragment>
