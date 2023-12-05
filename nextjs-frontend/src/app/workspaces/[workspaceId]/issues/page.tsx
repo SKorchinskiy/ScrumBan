@@ -5,12 +5,30 @@ import { usePathname } from "next/navigation";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import IssueCreationalModal from "../../_components/creational-modal/issue-creational-modal.component";
 import PanelHeader from "../../_components/panel-header/panel-header.component";
+import IssuesBoard from "@/app/_components/issues-board/issues-board.component";
+
+type StateProps = {
+  state_id: number;
+  state_name: string;
+  state_color: string;
+  workspace_id: number;
+};
+
+type ProjectProps = {
+  project_id: number;
+  project_name: string;
+  project_description: string;
+  workspace_id: number;
+  project_access: string;
+};
 
 type IssueProps = {
-  issue_id: string;
+  issue_id: number;
   issue_title: string;
   issue_description: string;
-  issue_priority: string;
+  issue_priority: "None" | "Low" | "Medium" | "High" | "Urgent";
+  project: ProjectProps;
+  issue_state: StateProps;
 };
 
 export default function Issues() {
@@ -61,30 +79,7 @@ export default function Issues() {
             }}
             creationalButtonHandler={() => setIsIssueModalOpen(true)}
           />
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr 1fr 1fr",
-              width: "100%",
-              height: "100%",
-            }}
-          >
-            {filteredIssues.map((issue) => (
-              <div key={issue.issue_id} className={styles["specific-issue"]}>
-                <div className={styles["specific-issue-details"]}>
-                  <span style={{ color: "white" }}>{issue.issue_title}</span>
-                </div>
-                <div>
-                  <p style={{ color: "whitesmoke" }}>
-                    {issue.issue_description}
-                  </p>
-                </div>
-                <div>
-                  <p style={{ color: "whitesmoke" }}>{issue.issue_priority}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <IssuesBoard issues={filteredIssues} />
         </div>
       </div>
       {isIssueModalOpen ? (
