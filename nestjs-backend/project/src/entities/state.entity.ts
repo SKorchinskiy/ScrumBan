@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { IssueEntity } from './issue.entity';
 
 @Entity()
@@ -18,7 +18,7 @@ export class StateEntity {
   })
   state_color: string;
 
-  @ManyToOne(() => IssueEntity)
+  @OneToMany(() => IssueEntity, (issue) => issue.issue_state)
   issues: IssueEntity[];
 
   @Column('integer', { nullable: false })

@@ -24,11 +24,13 @@ export class IssueService {
   ) {}
 
   async getWorkspaceIssues(workspaceId: number): Promise<IssueEntity[]> {
-    return await this.issueRepository
+    const issues = await this.issueRepository
       .createQueryBuilder('I')
-      .innerJoin('I.project', 'P')
+      .innerJoinAndSelect('I.project', 'P')
+      .innerJoinAndSelect('I.issue_state', 'S')
       .where(`P.workspace_id = ${workspaceId}`)
       .getMany();
+    return issues;
   }
 
   async createProjectIssue(

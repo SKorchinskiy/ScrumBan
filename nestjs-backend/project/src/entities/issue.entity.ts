@@ -3,10 +3,8 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
-  JoinColumn,
   ManyToMany,
   JoinTable,
-  OneToMany,
 } from 'typeorm';
 import { SprintEntity } from './sprint.entity';
 import { StateEntity } from './state.entity';
@@ -37,8 +35,7 @@ export class IssueEntity {
   })
   issue_priority: string;
 
-  @OneToMany(() => StateEntity, (issue) => issue.issues)
-  @JoinColumn()
+  @ManyToOne(() => StateEntity, (state) => state.issues)
   issue_state: StateEntity;
 
   @ManyToMany(() => LabelEntity)
