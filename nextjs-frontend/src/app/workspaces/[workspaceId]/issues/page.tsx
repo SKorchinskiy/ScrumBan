@@ -63,6 +63,40 @@ export default function Issues() {
     fetchWorkspaceIssues();
   }, []);
 
+  const handleIssueChange = async (
+    issueId: number,
+    newStateColumnId: number
+  ) => {
+    const targetIssue = workspaceIssues.find(
+      (issue) => issue.issue_id === issueId
+    );
+    if (!targetIssue || !newStateColumnId) return;
+    const updateIssueDto = {
+      issue_title: targetIssue.issue_title,
+      issue_description: targetIssue.issue_description,
+      issue_priority: targetIssue.issue_priority,
+      issue_state_id: newStateColumnId,
+    };
+    const response = await fetch(
+      `http://localhost:3000/workspaces/${workspaceId}/projects/${targetIssue.project.project_id}/issues/${issueId}`,
+      {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...updateIssueDto }),
+      }
+    );
+    const updatedIssue = (await response.json()) as IssueProps;
+    const updatedIssues: IssueProps[] = workspaceIssues.filter(
+      (issue) => issue.issue_id !== updatedIssue.issue_id
+    );
+    updatedIssues.push(updatedIssue);
+    setWorkspaceIssues(updatedIssues);
+    setFilteredIssues(updatedIssues);
+  };
+
   return (
     <Fragment>
       <div className={styles["issues"]}>
@@ -79,7 +113,10 @@ export default function Issues() {
             }}
             creationalButtonHandler={() => setIsIssueModalOpen(true)}
           />
-          <IssuesBoard issues={filteredIssues} />
+          <IssuesBoard
+            issues={filteredIssues}
+            handleIssueChange={handleIssueChange}
+          />
         </div>
       </div>
       {isIssueModalOpen ? (
