@@ -8,6 +8,19 @@ import { UpdateSprintDto } from './dto/update-sprint.dto';
 export class SprintService {
   constructor(@Inject('PROJECT') private projectMicroservice: ClientProxy) {}
 
+  async getSprintIssues(sprintId: number) {
+    return await lastValueFrom(
+      this.projectMicroservice.send(
+        {
+          cmd: 'get_sprint_issues',
+        },
+        {
+          sprintId,
+        },
+      ),
+    );
+  }
+
   async createProjectSprint(
     projectId: number,
     createSprintDto: CreateSprintDto,

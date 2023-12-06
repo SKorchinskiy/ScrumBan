@@ -18,6 +18,11 @@ import { AuthGuard } from 'src/guards/auth.guard';
 export class SprintController {
   constructor(private sprintService: SprintService) {}
 
+  @Get(':sprintId/issues')
+  async getSprintIssues(@Param('sprintId') sprintId: number) {
+    return await this.sprintService.getSprintIssues(sprintId);
+  }
+
   @Post(':sprintId/issues/:issueId')
   async addIssueToProjectSprint(
     @Param('issueId') issueId: number,
