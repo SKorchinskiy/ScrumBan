@@ -93,6 +93,11 @@ export class IssueService {
       where: {
         issue_id: issueId,
       },
+      relations: {
+        project: true,
+        sprint: true,
+        issue_state: true,
+      },
     });
   }
 
@@ -100,6 +105,11 @@ export class IssueService {
     const issue = await this.issueRepository.findOne({
       where: {
         issue_id: issueId,
+      },
+      relations: {
+        project: true,
+        sprint: true,
+        issue_state: true,
       },
     });
 
@@ -118,8 +128,9 @@ export class IssueService {
         project,
       },
       relations: {
+        project: true,
+        sprint: true,
         issue_state: true,
-        issue_labels: true,
       },
     });
   }
@@ -130,8 +141,9 @@ export class IssueService {
         issue_id: issueId,
       },
       relations: {
+        project: true,
+        sprint: true,
         issue_state: true,
-        issue_labels: true,
       },
     });
   }
