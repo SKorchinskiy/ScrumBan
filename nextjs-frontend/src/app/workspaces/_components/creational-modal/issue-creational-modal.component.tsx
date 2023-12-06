@@ -5,7 +5,7 @@ import styles from "./issue-creational-modal.module.css";
 import { WorkspaceProject } from "../../[workspaceId]/page";
 import { WorkspaceState } from "../sidebar/sidebar.component";
 
-type IssueParams = {
+export type IssueParams = {
   issue_title: string;
   issue_description: string;
   issue_priority: "None" | "Low" | "Medium" | "High" | "Urgent";

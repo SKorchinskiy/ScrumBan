@@ -1,4 +1,6 @@
-import { useMemo } from "react";
+"use client";
+
+import { DragEvent, useMemo, useState } from "react";
 
 type StateProps = {
   state_id: number;
@@ -26,9 +28,16 @@ type IssueProps = {
 
 type IssuesBoardProps = {
   issues: IssueProps[];
+  handleIssueChange: (issueId: number, newStateColumnId: number) => void;
 };
 
-export default function IssuesBoard({ issues }: IssuesBoardProps) {
+export default function IssuesBoard({
+  issues,
+  handleIssueChange,
+}: IssuesBoardProps) {
+  const [draggedIssueId, setDraggedIssueId] = useState<number>(0);
+  const [lastEnteredColumnId, setLastEnteredColumnId] = useState<number>(0);
+
   const states: StateProps[] = useMemo(() => {
     const getUniqueIssueStates = () => {
       const duplicateStates = issues.map((issue) => issue.issue_state);
@@ -46,18 +55,52 @@ export default function IssuesBoard({ issues }: IssuesBoardProps) {
     return getUniqueIssueStates();
   }, [issues]);
 
+  function dragStartHandler(event: DragEvent<HTMLDivElement>) {
+    const idText = (event.target as HTMLDivElement).id;
+    setDraggedIssueId(parseInt(idText.split("-")[2]));
+  }
+
+  function dragOverHandler(event: DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    const targetColumnTextId = (event.target as HTMLDivElement).id;
+    if (!targetColumnTextId.includes("droppable-state")) return;
+    const columnId = parseInt(targetColumnTextId.split("-")[2]);
+    setLastEnteredColumnId(columnId);
+  }
+
+  async function dropHandler(event: DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    handleIssueChange(draggedIssueId, lastEnteredColumnId);
+  }
+
   return (
-    <div className="main">
+    <div
+      className="main"
+      style={{
+        overflow: "scroll",
+      }}
+    >
       <div
         className="header"
         style={{
           display: "grid",
           gridTemplateColumns: `repeat(${states.length}, 1fr)`,
-          overflow: "scroll",
         }}
       >
         {states.map((state) => (
-          <div key={state.state_id}>{state.state_name}</div>
+          <div
+            key={state.state_id}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              minWidth: "300px",
+              margin: "10px",
+              color: "whitesmoke",
+              fontWeight: "bold",
+            }}
+          >
+            {state.state_name.toUpperCase()}
+          </div>
         ))}
       </div>
       <div
@@ -70,6 +113,8 @@ export default function IssuesBoard({ issues }: IssuesBoardProps) {
         {states.map((state) => (
           <div
             key={state.state_id}
+            id={`droppable-state-${state.state_id}`}
+            className="issue-column"
             style={{
               display: "flex",
               flexDirection: "column",
@@ -78,13 +123,18 @@ export default function IssuesBoard({ issues }: IssuesBoardProps) {
               margin: "10px",
               borderRadius: "10px",
               overflow: "scroll",
+              minWidth: "300px",
             }}
+            onDragOver={dragOverHandler}
+            onDrop={dropHandler}
           >
             {issues
               .filter((issue) => issue.issue_state.state_id === state.state_id)
               .map((issue) => (
                 <div
                   key={issue.issue_id}
+                  id={`draggable-issue-${issue.issue_id}`}
+                  className="draggable-issue"
                   style={{
                     display: "flex",
                     flexDirection: "column",
@@ -92,7 +142,6 @@ export default function IssuesBoard({ issues }: IssuesBoardProps) {
                     justifyContent: "space-around",
                     backgroundColor: "#443c68",
                     width: "200px",
-                    // height: "200px",
                     margin: "15px",
                     borderRadius: "10px",
                     padding: "5px",
@@ -101,6 +150,7 @@ export default function IssuesBoard({ issues }: IssuesBoardProps) {
                     overflow: "scroll",
                   }}
                   draggable
+                  onDragStart={dragStartHandler}
                 >
                   <div>
                     <span style={{ color: "white" }}>{issue.issue_title}</span>

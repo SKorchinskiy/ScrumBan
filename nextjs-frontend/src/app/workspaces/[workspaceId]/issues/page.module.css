@@ -10,9 +10,10 @@
   display: flex;
   flex-direction: column;
   background-color: #392f53;
-  width: 95%;
+  width: 950px;
   height: 95%;
   border-radius: 10px;
+  overflow-y: scroll;
 }
 
 .specific-issue {
