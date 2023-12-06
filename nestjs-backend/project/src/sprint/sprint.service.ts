@@ -18,6 +18,28 @@ export class SprintService {
     private issueRepository: Repository<IssueEntity>,
   ) {}
 
+  async getSprintIssues(sprintId: number): Promise<IssueEntity[]> {
+    const sprint = await this.sprintRepository.findOne({
+      where: {
+        sprint_id: sprintId,
+      },
+    });
+
+    const issues = await this.issueRepository.find({
+      where: {
+        sprint: sprint,
+      },
+      relations: {
+        sprint: true,
+        project: true,
+        issue_labels: true,
+        issue_state: true,
+      },
+    });
+
+    return issues;
+  }
+
   async createProjectSprint(
     projectId: number,
     createSprintDto: CreateSprintDto,
@@ -98,19 +120,27 @@ export class SprintService {
       where: {
         sprint_id: sprintId,
       },
+      relations: {
+        project: true,
+        issues: true,
+      },
     });
 
     const issue = await this.issueRepository.findOne({
       where: {
         issue_id: issueId,
       },
+      relations: {
+        project: true,
+        sprint: true,
+        issue_state: true,
+      },
     });
 
     if (sprint.project?.project_id !== issue.project?.project_id) {
       throw new RpcException('Access denied!');
     }
-
-    const sprintIssues = sprint.issues || [];
+    const sprintIssues = sprint.issues ? [...sprint.issues] : [];
     sprintIssues.push(issue);
     sprint.issues = sprintIssues;
 
@@ -122,9 +152,14 @@ export class SprintService {
       where: {
         sprint_id: sprintId,
       },
+      relations: {
+        issues: true,
+      },
     });
 
-    sprint.issues = sprint.issues.filter((issue) => issue.issue_id !== issueId);
+    sprint.issues = sprint.issues
+      ? sprint.issues.filter((issue) => +issue.issue_id !== +issueId)
+      : [];
 
     return await this.sprintRepository.save(sprint);
   }

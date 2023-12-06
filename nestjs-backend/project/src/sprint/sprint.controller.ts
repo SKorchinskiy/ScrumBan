@@ -4,16 +4,24 @@ import { SprintService } from './sprint.service';
 import { CreateSprintDto } from 'src/dto/create-sprint.dto';
 import { UpdateSprintDto } from 'src/dto/update-sprint.dto';
 import { SprintEntity } from 'src/entities/sprint.entity';
+import { IssueEntity } from 'src/entities/issue.entity';
 
 @Controller('sprint')
 export class SprintController {
   constructor(private sprintService: SprintService) {}
 
+  @MessagePattern({ cmd: 'get_sprint_issues' })
+  async getSprintIssues(
+    @Payload() payload: { sprintId: number },
+  ): Promise<IssueEntity[]> {
+    return await this.sprintService.getSprintIssues(payload.sprintId);
+  }
+
   @MessagePattern({ cmd: 'create_project_sprint' })
   async createProjectSprint(
     @Payload() payload: { projectId: number; createSprintDto: CreateSprintDto },
   ): Promise<SprintEntity> {
-    return this.sprintService.createProjectSprint(
+    return await this.sprintService.createProjectSprint(
       payload.projectId,
       payload.createSprintDto,
     );
@@ -23,7 +31,7 @@ export class SprintController {
   async updateProjectSprint(
     @Payload() payload: { sprintId: number; updateSprintDto: UpdateSprintDto },
   ): Promise<SprintEntity> {
-    return this.sprintService.updateProjectSprint(
+    return await this.sprintService.updateProjectSprint(
       payload.sprintId,
       payload.updateSprintDto,
     );
@@ -33,28 +41,30 @@ export class SprintController {
   async removeProjectSprint(
     @Payload() payload: { sprintId: number },
   ): Promise<SprintEntity> {
-    return this.sprintService.removeProjectSprint(payload.sprintId);
+    return await this.sprintService.removeProjectSprint(payload.sprintId);
   }
 
   @MessagePattern({ cmd: 'find_project_sprints' })
   async findProjectSprints(
     @Payload() payload: { projectId: number },
   ): Promise<SprintEntity[]> {
-    return this.sprintService.findProjectSprints(payload.projectId);
+    return await this.sprintService.findProjectSprints(payload.projectId);
   }
 
   @MessagePattern({ cmd: 'find_project_sprint_by' })
   async findProjectSprintByCriteria(
     @Payload() payload: { sprintId: number },
   ): Promise<SprintEntity> {
-    return this.sprintService.findProjectSprintByCriteria(payload.sprintId);
+    return await this.sprintService.findProjectSprintByCriteria(
+      payload.sprintId,
+    );
   }
 
   @MessagePattern({ cmd: 'add_issue_to_project_sprint' })
   async addIssueToProjectSprint(
     @Payload() payload: { issueId: number; sprintId: number },
   ): Promise<SprintEntity> {
-    return this.sprintService.addIssueToProjectSprint(
+    return await this.sprintService.addIssueToProjectSprint(
       payload.issueId,
       payload.sprintId,
     );
@@ -64,7 +74,7 @@ export class SprintController {
   async removeIssueFromProjectSprint(
     @Payload() payload: { issueId: number; sprintId: number },
   ): Promise<SprintEntity> {
-    return this.sprintService.removeIssueFromProjectSprint(
+    return await this.sprintService.removeIssueFromProjectSprint(
       payload.issueId,
       payload.sprintId,
     );
