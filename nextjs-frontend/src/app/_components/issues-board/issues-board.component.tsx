@@ -1,6 +1,7 @@
 "use client";
 
-import { DragEvent, useMemo, useState } from "react";
+import { DragEvent, useEffect, useState } from "react";
+import IssueUpdateModal from "../issue-update-modal/issue-update-modal.component";
 
 type StateProps = {
   state_id: number;
@@ -27,33 +28,24 @@ type IssueProps = {
 };
 
 type IssuesBoardProps = {
+  workspaceId: number;
   issues: IssueProps[];
+  states: StateProps[];
   handleIssueChange: (issueId: number, newStateColumnId: number) => void;
+  issueRemovalHandler: (issueId: number) => void;
 };
 
 export default function IssuesBoard({
+  workspaceId,
   issues,
+  states,
   handleIssueChange,
+  issueRemovalHandler,
 }: IssuesBoardProps) {
   const [draggedIssueId, setDraggedIssueId] = useState<number>(0);
   const [lastEnteredColumnId, setLastEnteredColumnId] = useState<number>(0);
-
-  const states: StateProps[] = useMemo(() => {
-    const getUniqueIssueStates = () => {
-      const duplicateStates = issues.map((issue) => issue.issue_state);
-      duplicateStates.sort(
-        (stateA, stateB) => stateA.state_id - stateB.state_id
-      );
-      let prevState = {} as StateProps;
-      return duplicateStates.filter((state) => {
-        const flag = prevState?.state_id !== state.state_id;
-        prevState = state;
-        return flag;
-      });
-    };
-
-    return getUniqueIssueStates();
-  }, [issues]);
+  const [isIssueUpdateOpen, setIsIssueUpdateOpen] = useState(false);
+  const [issueToUpdate, setIssueToUpdate] = useState<IssueProps>();
 
   function dragStartHandler(event: DragEvent<HTMLDivElement>) {
     const idText = (event.target as HTMLDivElement).id;
@@ -72,6 +64,10 @@ export default function IssuesBoard({
     event.preventDefault();
     handleIssueChange(draggedIssueId, lastEnteredColumnId);
   }
+
+  const onCancelHandler = () => {
+    setIsIssueUpdateOpen(false);
+  };
 
   return (
     <div
@@ -152,6 +148,40 @@ export default function IssuesBoard({
                   draggable
                   onDragStart={dragStartHandler}
                 >
+                  <div
+                    className="issue-header"
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      width: "100%",
+                    }}
+                  >
+                    <span
+                      style={{
+                        backgroundColor: "#CAA8F5",
+                        margin: "5px",
+                        padding: "5px",
+                        borderRadius: "5px",
+                      }}
+                      onClick={() => {
+                        setIsIssueUpdateOpen((prev) => !prev);
+                        setIssueToUpdate(issue);
+                      }}
+                    >
+                      &#9998;
+                    </span>
+                    <span
+                      style={{
+                        backgroundColor: "#CAA8F5",
+                        margin: "5px",
+                        padding: "5px",
+                        borderRadius: "5px",
+                      }}
+                      onClick={() => issueRemovalHandler(issue.issue_id)}
+                    >
+                      &#x2715;
+                    </span>
+                  </div>
                   <div>
                     <span style={{ color: "white" }}>{issue.issue_title}</span>
                   </div>
@@ -170,30 +200,34 @@ export default function IssuesBoard({
           </div>
         ))}
       </div>
+      {isIssueUpdateOpen && issueToUpdate ? (
+        <div>
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              backgroundColor: "rgba(0, 0, 0, 0.7)",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            <IssueUpdateModal
+              workspaceId={workspaceId}
+              issue={issueToUpdate}
+              onCancelHandler={onCancelHandler}
+            />
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
-
-// .specific-issue {
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   justify-content: space-around;
-//   background-color: #443c68;
-//   width: 200px;
-//   height: 200px;
-//   margin: 15px;
-//   border-radius: 10px;
-//   padding: 5px;
-//   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
-//   cursor: pointer;
-// }
-
-// .specific-issue-details {
-//   textalign: center;
-//   backgroundcolor: #4d3c77;
-//   borderradius: 3px;
-//   width: 90%;
-//   boxshadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
-//   padding: 3px;
-// }
