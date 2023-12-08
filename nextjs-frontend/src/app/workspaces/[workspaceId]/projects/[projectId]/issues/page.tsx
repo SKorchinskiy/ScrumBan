@@ -57,6 +57,28 @@ export default function Issues() {
   const [projectIssues, setProjectIssues] = useState<IssueProps[]>([]);
   const [filteredIssues, setFilteredIssues] =
     useState<IssueProps[]>(projectIssues);
+  const [states, setStates] = useState<StateProps[]>([]);
+
+  useEffect(() => {
+    const getWorkspaceStates = async () => {
+      const response = await fetch(
+        `http://localhost:3000/workspaces/${workspaceId}/states`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+
+      const workspaceStates = await response.json();
+      setStates(workspaceStates);
+    };
+
+    getWorkspaceStates();
+  }, []);
+
+  useEffect(() => {
+    setFilteredIssues(projectIssues);
+  }, [projectIssues]);
 
   useEffect(() => {
     const fetchProjectIssues = async () => {
@@ -77,6 +99,19 @@ export default function Issues() {
 
     fetchProjectIssues();
   }, []);
+
+  const issueRemovalHandler = async (issueId: number) => {
+    await fetch(
+      `http://localhost:3000/workspaces/${workspaceId}/projects/${projectId}/issues/${issueId}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+      }
+    );
+    setProjectIssues(
+      projectIssues.filter((issue) => issue.issue_id !== issueId)
+    );
+  };
 
   const handleIssueChange = async (
     issueId: number,
@@ -146,8 +181,11 @@ export default function Issues() {
           creationalButtonHandler={() => setIsIssueModalOpen(true)}
         />
         <IssuesBoard
+          workspaceId={workspaceId}
           issues={filteredIssues}
+          states={states}
           handleIssueChange={handleIssueChange}
+          issueRemovalHandler={issueRemovalHandler}
         />
       </div>
       {isIssueModalOpen ? (

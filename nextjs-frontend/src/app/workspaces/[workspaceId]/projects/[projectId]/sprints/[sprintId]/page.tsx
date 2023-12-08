@@ -37,7 +37,7 @@ export type IssueProps = {
   issue_priority: "None" | "Low" | "Medium" | "High" | "Urgent";
   project: ProjectProps;
   issue_state: StateProps;
-  sprint?: SprintProps;
+  sprint: SprintProps | null;
 };
 
 export default function Sprint() {
@@ -70,6 +70,32 @@ export default function Sprint() {
     useState<IssueProps[]>(sprintIssues);
   useState<IssueProps[]>(sprintIssues);
   const [isIssueModalOpen, setIsIssueModalOpen] = useState(false);
+  const [states, setStates] = useState<StateProps[]>([]);
+
+  useEffect(() => {
+    const getWorkspaceStates = async () => {
+      const response = await fetch(
+        `http://localhost:3000/workspaces/${workspaceId}/states`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+
+      const workspaceStates = await response.json();
+      setStates(workspaceStates);
+    };
+
+    getWorkspaceStates();
+  }, []);
+
+  useEffect(() => {
+    setFilteredIssues(
+      projectIssues.filter(
+        (issue) => issue.sprint && issue.sprint.sprint_id === sprintId
+      )
+    );
+  }, [projectIssues, sprintId]);
 
   useEffect(() => {
     const fetchSprintIssues = async () => {
@@ -86,16 +112,30 @@ export default function Sprint() {
       if (response.ok) {
         const issues: IssueProps[] = await response.json();
         setProjectIssues(issues);
-        setFilteredIssues(
-          issues.filter(
-            (issue) => issue.sprint && issue.sprint.sprint_id === sprintId
-          )
-        );
       }
     };
 
     fetchSprintIssues();
   }, []);
+
+  const issueRemovalHandler = async (issueId: number) => {
+    await fetch(
+      `http://localhost:3000/workspaces/${workspaceId}/projects/${projectId}/sprints/${sprintId}/issues/${issueId}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+      }
+    );
+    setProjectIssues(
+      projectIssues.map((issue) => {
+        if (issue.issue_id !== issueId) return issue;
+        return {
+          ...issue,
+          sprint: null,
+        };
+      })
+    );
+  };
 
   const handleIssueChange = async (
     issueId: number,
@@ -202,8 +242,11 @@ export default function Sprint() {
           creationalButtonHandler={() => setIsIssueModalOpen(true)}
         />
         <IssuesBoard
+          workspaceId={workspaceId}
           issues={filteredIssues}
+          states={states}
           handleIssueChange={handleIssueChange}
+          issueRemovalHandler={issueRemovalHandler}
         />
       </div>
       {isIssueModalOpen ? (
