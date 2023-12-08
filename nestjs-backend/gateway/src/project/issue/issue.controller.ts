@@ -66,6 +66,14 @@ export class IssueController {
     );
   }
 
+  @Put('issues/:issueId')
+  async updateIssue(
+    @Param('issueId') issueId: number,
+    @Body() updateIssueDto: UpdateIssueDto,
+  ) {
+    return await this.issueService.updateProjectIssue(issueId, updateIssueDto);
+  }
+
   @Put('projects/:projectId/issues/:issueId')
   async updateProjectIssue(
     @Param('issueId') issueId: number,
@@ -82,6 +90,11 @@ export class IssueController {
   @Get('projects/:projectId/issues')
   async findProjectIssues(@Param('projectId') projectId: number) {
     return await this.issueService.findProjectIssues(projectId);
+  }
+
+  @Delete('issues/:issueId')
+  async removeIssue(@Param('issueId') issueId: number) {
+    return await this.issueService.removeProjectIssue(issueId);
   }
 
   @Delete('projects/:projectId/issues/:issueId')
