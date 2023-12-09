@@ -1,3 +1,5 @@
+import styles from "./page.module.css";
+
 export type WorkspaceProject = {
   project_id: number;
   project_name: string;
@@ -12,23 +14,8 @@ export type WorkspaceProject = {
 
 export default function Workspace() {
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      <div
-        style={{
-          backgroundColor: "#392F53",
-          width: "95%",
-          height: "95%",
-          borderRadius: "10px",
-        }}
-      />
+    <div className={styles["specific-workspace-container"]}>
+      <div className={styles["specific-workspace-board"]} />
     </div>
   );
 }

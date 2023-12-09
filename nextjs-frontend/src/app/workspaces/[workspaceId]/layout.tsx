@@ -22,29 +22,9 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div
-          className="workspace-page"
-          style={{
-            width: "100%",
-            height: "100%",
-            backgroundColor: "#18122A",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <div
-            className="workspace-page"
-            style={{
-              width: "100%",
-              height: "100%",
-              backgroundColor: "#18122A",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <SideBar workspace_id={params.workspaceId} />
-            {children}
-          </div>
+        <div className="workspace-page">
+          <SideBar workspace_id={params.workspaceId} />
+          {children}
         </div>
       </body>
     </html>
