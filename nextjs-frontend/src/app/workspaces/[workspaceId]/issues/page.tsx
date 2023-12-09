@@ -3,7 +3,7 @@
 import styles from "./page.module.css";
 import { usePathname } from "next/navigation";
 import { Fragment, useEffect, useMemo, useState } from "react";
-import IssueCreationalModal from "../../_components/creational-modal/issue-creational-modal.component";
+import IssueCreationalModal from "../../_components/issue-creational-modal/issue-creational-modal.component";
 import PanelHeader from "../../_components/panel-header/panel-header.component";
 import IssuesBoard from "@/app/_components/issues-board/issues-board.component";
 
@@ -159,24 +159,8 @@ export default function Issues() {
       </div>
       {isIssueModalOpen ? (
         <Fragment>
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              bottom: 0,
-              right: 0,
-              backgroundColor: "rgba(0, 0, 0, 0.7)",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-            }}
-          >
+          <div className={styles["dark-overlay"]} />
+          <div className={styles["creational-modal-container"]}>
             <IssueCreationalModal
               workspaceId={workspaceId}
               onCancelHandler={() => setIsIssueModalOpen(false)}
