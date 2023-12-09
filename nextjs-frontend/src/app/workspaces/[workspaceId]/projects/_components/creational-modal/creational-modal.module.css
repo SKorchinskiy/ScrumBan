@@ -43,3 +43,23 @@
   font-size: 18px;
   cursor: pointer;
 }
+
+.modal-container-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 10px;
+  height: 10px;
+  background: rgba(24, 18, 41, 0.3);
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.modal-container-close {
+  color: white;
+}
