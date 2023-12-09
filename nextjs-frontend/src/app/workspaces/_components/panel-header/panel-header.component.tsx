@@ -1,4 +1,6 @@
 "use client";
+
+import styles from "./panel-header.module.css";
 import { useRouter } from "next/navigation";
 import { ChangeEvent } from "react";
 
@@ -18,77 +20,26 @@ export default function PanelHeader({
   const router = useRouter();
 
   return (
-    <div
-      style={{
-        display: "flex",
-        backgroundColor: "#2D2643",
-        width: "100%",
-        borderRadius: "10px 10px 0 0",
-        padding: "10px",
-        boxSizing: "border-box",
-      }}
-    >
-      <div style={{ width: "50%" }}>
+    <div className={styles["panel-header"]}>
+      <div className={styles["panel-header-left-side"]}>
         <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-start",
-            width: "50%",
-            color: "whitesmoke",
-          }}
+          className={styles["panel-back-button"]}
+          onClick={() => router.back()}
         >
-          <div
-            style={{
-              marginRight: "50px",
-              backgroundColor: "#443C68",
-              padding: "10px",
-              borderRadius: "10px",
-              userSelect: "none",
-              cursor: "pointer",
-            }}
-            onClick={() => router.back()}
-          >
-            Back
-          </div>
+          Back
         </div>
       </div>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
+      <div className={styles["panel-header-center"]}>
         <input
-          style={{
-            width: "300px",
-            height: "30px",
-            color: "white",
-            background: "#443C68",
-            border: "none",
-            borderRadius: "5px",
-          }}
+          className={styles["search-bar"]}
           placeholder={inputPlaceholder}
           type="text"
           onChange={onInputChangeHandler}
         />
       </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          width: "50%",
-          color: "whitesmoke",
-        }}
-      >
+      <div className={styles["panel-header-right-side"]}>
         <div
-          style={{
-            marginRight: "50px",
-            backgroundColor: "#443C68",
-            padding: "10px",
-            borderRadius: "10px",
-            userSelect: "none",
-            cursor: "pointer",
-          }}
+          className={styles["issue-creational-button"]}
           onClick={() => creationalButtonHandler()}
         >
           {creationalButtonText}
