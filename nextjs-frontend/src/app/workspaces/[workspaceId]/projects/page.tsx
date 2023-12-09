@@ -61,13 +61,7 @@ export default function Projects({
             }}
             creationalButtonHandler={() => toggleCreationalModal()}
           />
-          <div
-            style={{
-              display: "flex",
-              width: "100%",
-              height: "100%",
-            }}
-          >
+          <div className={styles["projects-list"]}>
             {filteredProjects.map((project) => (
               <div
                 key={project.project_id}
@@ -79,15 +73,17 @@ export default function Projects({
                 }
               >
                 <div className={styles["specific-project-details"]}>
-                  <span style={{ color: "white" }}>{project.project_name}</span>
+                  <span className={styles["project-data"]}>
+                    {project.project_name}
+                  </span>
                 </div>
                 <div>
-                  <p style={{ color: "whitesmoke" }}>
+                  <p className={styles["project-data"]}>
                     {project.project_description}
                   </p>
                 </div>
                 <div>
-                  <p style={{ color: "whitesmoke" }}>
+                  <p className={styles["project-data"]}>
                     {project.project_access}
                   </p>
                 </div>
@@ -98,24 +94,8 @@ export default function Projects({
       </div>
       {isCreationalModalOpen ? (
         <Fragment>
-          <div
-            style={{
-              position: "absolute",
-              top: "0",
-              left: "0",
-              right: "0",
-              bottom: "0",
-              backgroundColor: "rgba(0, 0, 0, 0.7)",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              translate: "-50% -50%",
-            }}
-          >
+          <div className={styles["dark-overlay"]} />
+          <div className={styles["creational-modal-container"]}>
             <CreationalModal
               workspace_id={params.workspaceId}
               onCancelHandler={() => setIsCreationalModalOpen(false)}

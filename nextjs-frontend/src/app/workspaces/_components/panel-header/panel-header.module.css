@@ -1,0 +1,55 @@
+.panel-header {
+  display: flex;
+  background-color: #2d2643;
+  width: 100%;
+  border-radius: 10px 10px 0 0;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.panel-header-left-side,
+.panel-header-right-side {
+  display: flex;
+  width: 50%;
+  color: whitesmoke;
+}
+
+.panel-header-left-side {
+  justify-content: flex-start;
+}
+
+.panel-header-right-side {
+  justify-content: flex-end;
+}
+
+.panel-header-center {
+  display: flex;
+  alignitems: center;
+}
+
+.panel-back-button {
+  margin-right: 50px;
+  background-color: #443c68;
+  padding: 10px;
+  border-radius: 10px;
+  user-select: none;
+  cursor: pointer;
+}
+
+.issue-creational-button {
+  margin-right: 50px;
+  background-color: #443c68;
+  padding: 10px;
+  border-radius: 10px;
+  user-select: none;
+  cursor: pointer;
+}
+
+.search-bar {
+  width: 300px;
+  height: 30px;
+  color: white;
+  background: #443c68;
+  border: none;
+  border-radius: 5p;
+}

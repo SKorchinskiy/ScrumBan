@@ -1,4 +1,5 @@
 .modal-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -8,6 +9,26 @@
   width: 500px;
   border-radius: 10px;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.issue-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 10px;
+  height: 10px;
+  background: rgba(24, 18, 41, 0.3);
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.issue-close-sign {
+  color: white;
 }
 
 .heading {

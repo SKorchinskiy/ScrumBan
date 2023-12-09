@@ -1,6 +1,7 @@
 "use client";
 
-import { DragEvent, useEffect, useState } from "react";
+import styles from "./issue-board.module.css";
+import { DragEvent, useState } from "react";
 import IssueUpdateModal from "../issue-update-modal/issue-update-modal.component";
 
 type StateProps = {
@@ -70,57 +71,26 @@ export default function IssuesBoard({
   };
 
   return (
-    <div
-      className="main"
-      style={{
-        overflow: "scroll",
-      }}
-    >
+    <div className={styles["issue-board"]}>
       <div
-        className="header"
-        style={{
-          display: "grid",
-          gridTemplateColumns: `repeat(${states.length}, 1fr)`,
-        }}
+        className={styles["issue-board-header"]}
+        style={{ gridTemplateColumns: `repeat(${states.length}, 1fr)` }}
       >
         {states.map((state) => (
-          <div
-            key={state.state_id}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              minWidth: "300px",
-              margin: "10px",
-              color: "whitesmoke",
-              fontWeight: "bold",
-            }}
-          >
+          <div key={state.state_id} className={styles["state-column"]}>
             {state.state_name.toUpperCase()}
           </div>
         ))}
       </div>
       <div
-        className="body"
-        style={{
-          display: "grid",
-          gridTemplateColumns: `repeat(${states.length}, 1fr)`,
-        }}
+        className={styles["issue-board-body"]}
+        style={{ gridTemplateColumns: `repeat(${states.length}, 1fr)` }}
       >
         {states.map((state) => (
           <div
             key={state.state_id}
             id={`droppable-state-${state.state_id}`}
-            className="issue-column"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              backgroundColor: "#443C68",
-              margin: "10px",
-              borderRadius: "10px",
-              overflow: "scroll",
-              minWidth: "300px",
-            }}
+            className={styles["droppable-state-column"]}
             onDragOver={dragOverHandler}
             onDrop={dropHandler}
           >
@@ -130,39 +100,13 @@ export default function IssuesBoard({
                 <div
                   key={issue.issue_id}
                   id={`draggable-issue-${issue.issue_id}`}
-                  className="draggable-issue"
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "space-around",
-                    backgroundColor: "#443c68",
-                    width: "200px",
-                    margin: "15px",
-                    borderRadius: "10px",
-                    padding: "5px",
-                    boxShadow: "2px 2px 10px rgba(0, 0, 0, 0.5)",
-                    cursor: "pointer",
-                    overflow: "scroll",
-                  }}
+                  className={styles["draggable-issue"]}
                   draggable
                   onDragStart={dragStartHandler}
                 >
-                  <div
-                    className="issue-header"
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      width: "100%",
-                    }}
-                  >
+                  <div className={styles["issue-header"]}>
                     <span
-                      style={{
-                        backgroundColor: "#CAA8F5",
-                        margin: "5px",
-                        padding: "5px",
-                        borderRadius: "5px",
-                      }}
+                      className={styles["issue-modal-update"]}
                       onClick={() => {
                         setIsIssueUpdateOpen((prev) => !prev);
                         setIssueToUpdate(issue);
@@ -171,27 +115,24 @@ export default function IssuesBoard({
                       &#9998;
                     </span>
                     <span
-                      style={{
-                        backgroundColor: "#CAA8F5",
-                        margin: "5px",
-                        padding: "5px",
-                        borderRadius: "5px",
-                      }}
+                      className={styles["issue-modal-close"]}
                       onClick={() => issueRemovalHandler(issue.issue_id)}
                     >
                       &#x2715;
                     </span>
                   </div>
                   <div>
-                    <span style={{ color: "white" }}>{issue.issue_title}</span>
+                    <span className={styles["issue-data"]}>
+                      {issue.issue_title}
+                    </span>
                   </div>
                   <div>
-                    <p style={{ color: "whitesmoke" }}>
+                    <p className={styles["issue-data"]}>
                       {issue.issue_description}
                     </p>
                   </div>
                   <div>
-                    <p style={{ color: "whitesmoke" }}>
+                    <p className={styles["issue-data"]}>
                       {issue.issue_priority}
                     </p>
                   </div>
@@ -202,24 +143,8 @@ export default function IssuesBoard({
       </div>
       {isIssueUpdateOpen && issueToUpdate ? (
         <div>
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              bottom: 0,
-              left: 0,
-              right: 0,
-              backgroundColor: "rgba(0, 0, 0, 0.7)",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-            }}
-          >
+          <div className={styles["dark-overlay"]} />
+          <div className={styles["issue-update-modal-container"]}>
             <IssueUpdateModal
               workspaceId={workspaceId}
               issue={issueToUpdate}

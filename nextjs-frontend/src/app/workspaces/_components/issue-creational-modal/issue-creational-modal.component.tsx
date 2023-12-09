@@ -19,14 +19,16 @@ const initialIssueData: IssueParams = {
   issue_state_id: 0,
 };
 
+type IssueCreationalModalProps = {
+  workspaceId: number;
+  onCancelHandler: Function;
+} & { project_id?: number };
+
 export default function IssueCreationalModal({
   workspaceId,
   onCancelHandler,
   project_id,
-}: {
-  workspaceId: number;
-  onCancelHandler: Function;
-} & { project_id?: number }) {
+}: IssueCreationalModalProps) {
   const [projects, setProjects] = useState<WorkspaceProject[]>([]);
   const [states, setStates] = useState<WorkspaceState[]>([]);
   const [projectId, setProjectId] = useState<number>(project_id || 0);
@@ -99,37 +101,12 @@ export default function IssueCreationalModal({
   };
 
   return (
-    <div
-      className={styles["modal-container"]}
-      style={{
-        position: "relative",
-      }}
-    >
+    <div className={styles["modal-container"]}>
       <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "absolute",
-          top: 20,
-          right: 20,
-          width: "10px",
-          height: "10px",
-          background: "rgba(24, 18, 41, 0.3)",
-          borderRadius: "5px",
-          padding: "10px",
-          cursor: "pointer",
-          userSelect: "none",
-        }}
+        className={styles["issue-modal-close"]}
         onClick={() => onCancelHandler(false)}
       >
-        <p
-          style={{
-            color: "white",
-          }}
-        >
-          &#x2715;
-        </p>
+        <p className={styles["issue-close-sign"]}>&#x2715;</p>
       </div>
       <h1 className={styles["heading"]}>Create Issue</h1>
       <div className={styles["input-container"]}>

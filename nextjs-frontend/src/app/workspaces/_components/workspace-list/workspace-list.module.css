@@ -8,3 +8,74 @@
   padding: 10px;
   font-size: 14px;
 }
+
+.current-workspace {
+  userselect: none;
+}
+
+.workspace-list-container-outer {
+  position: relative;
+}
+
+.workspace-list-title {
+  color: whitesmoke;
+  userselect: none;
+}
+
+.workspace-list-container-inner {
+  margin: 5px;
+  padding: 10px;
+  position: absolute;
+  background-color: #2d2643;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  height: 270px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: scroll;
+  border-radius: 10px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.workspace-creational-button {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: 20px;
+  color: whitesmoke;
+  text-align: center;
+  background-color: #241e35;
+  padding: 10px;
+  border-radius: 10px;
+  width: 80%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  user-select: none;
+  font-size: 14px;
+}
+
+.workspace-list {
+  height: 150px;
+  overflow: scroll;
+}
+
+.workspace-title {
+  user-select: none;
+}
+
+.dark-overlay {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+}

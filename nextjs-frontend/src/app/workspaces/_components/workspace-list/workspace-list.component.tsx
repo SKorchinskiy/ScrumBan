@@ -3,7 +3,7 @@
 import styles from "./workspace-list.module.css";
 import { useRouter } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
-import CreationalModal from "../creational-modal/creational-modal.component";
+import CreationalModal from "../workspace-creational-modal/workspace-creational-modal.component";
 
 type Workspace = {
   workspace_id: number;
@@ -45,7 +45,7 @@ export default function WorkspaceList({
     <Fragment>
       <div className={styles["workspace"]} onClick={toggleWorkspaceListOpen}>
         <span>
-          <span style={{ userSelect: "none" }}>
+          <span className={styles["current-workspace"]}>
             {currentWorkspace
               ? workspaceList.find(
                   (workspace) => workspace.workspace_id == currentWorkspace
@@ -57,36 +57,10 @@ export default function WorkspaceList({
         </span>
       </div>
       {isWorkspaceListOpen ? (
-        <div
-          style={{
-            position: "relative",
-          }}
-        >
-          <div
-            style={{
-              margin: "5px",
-              padding: "10px",
-              position: "absolute",
-              backgroundColor: "#2D2643",
-              left: 0,
-              right: 0,
-              top: 0,
-              height: "270px",
-              border: "1px solid rgba(255, 255, 255, 0.2)",
-              overflow: "scroll",
-              borderRadius: "10px",
-              boxShadow: "2px 2px 10px rgba(0, 0, 0, 0.5)",
-            }}
-          >
-            <p style={{ color: "whitesmoke", userSelect: "none" }}>
-              Workspaces
-            </p>
-            <div
-              style={{
-                height: "150px",
-                overflow: "scroll",
-              }}
-            >
+        <div className={styles["workspace-list-container-outer"]}>
+          <div className={styles["workspace-list-container-inner"]}>
+            <p className={styles["workspace-list-title"]}>Workspaces</p>
+            <div className={styles["workspace-list"]}>
               {workspaceList.map((workspace) => (
                 <div
                   key={workspace.workspace_id}
@@ -97,31 +71,14 @@ export default function WorkspaceList({
                     router.push(`/workspaces/${workspace.workspace_id}`);
                   }}
                 >
-                  <span style={{ userSelect: "none" }}>
+                  <span className={styles["workspace-title"]}>
                     {workspace.workspace_name}
                   </span>
                 </div>
               ))}
             </div>
-
             <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                position: "absolute",
-                bottom: "20px",
-                color: "whitesmoke",
-                textAlign: "center",
-                backgroundColor: "#241E35",
-                padding: "10px",
-                borderRadius: "10px",
-                width: "80%",
-                border: "1px solid rgba(255, 255, 255, 0.2)",
-                boxShadow: "2px 2px 10px rgba(0, 0, 0, 0.5)",
-                cursor: "pointer",
-                userSelect: "none",
-                fontSize: "14px",
-              }}
+              className={styles["workspace-creational-button"]}
               onClick={() => setIsCreationalModalOpen(true)}
             >
               <span>+ Create Workspace</span>
@@ -131,28 +88,10 @@ export default function WorkspaceList({
       ) : null}
       {isCreationalModalOpen ? (
         <Fragment>
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              bottom: 0,
-              left: 0,
-              right: 0,
-              backgroundColor: "rgba(0, 0, 0, 0.7)",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              translate: "-50% -50%",
-            }}
-          >
+          <div className={styles["dark-overlay"]} />
+          <div className={styles["modal-container"]}>
             <CreationalModal
-              onCancelHandler={() => {
-                setIsCreationalModalOpen(false);
-              }}
+              onCancelHandler={() => setIsCreationalModalOpen(false)}
             />
           </div>
         </Fragment>

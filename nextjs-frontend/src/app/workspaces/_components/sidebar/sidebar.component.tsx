@@ -5,9 +5,9 @@ import { Fragment, useEffect, useState } from "react";
 import WorkspaceList from "../workspace-list/workspace-list.component";
 import { WorkspaceProject } from "../../[workspaceId]/page";
 import { usePathname, useRouter } from "next/navigation";
-import IssueCreationalModal from "../creational-modal/issue-creational-modal.component";
+import IssueCreationalModal from "../issue-creational-modal/issue-creational-modal.component";
 import ProjectRepresentation from "../project-representation/project-representation.component";
-import StateCreationalModal from "../creational-modal/state-creational-modal.component";
+import StateCreationalModal from "../state-creational-modal/state-creational-modal.component";
 
 export type WorkspaceState = {
   state_id: number;
@@ -90,11 +90,8 @@ export default function SideBar({ workspace_id }: { workspace_id: number }) {
             </div>
           </div>
           <div className={styles["projects-container"]}>
-            <h3 style={{ margin: "0px", color: "white" }}>Projects</h3>
-            <div
-              className={styles["projects-list"]}
-              style={{ padding: "10px" }}
-            >
+            <h3 className={styles["projects-list-title"]}>Projects</h3>
+            <div className={styles["projects-list"]}>
               {workspaceProjects.map((project) => (
                 <ProjectRepresentation
                   key={project.project_id}
@@ -108,24 +105,8 @@ export default function SideBar({ workspace_id }: { workspace_id: number }) {
       </div>
       {isIssueCreationalModalOpen ? (
         <Fragment>
-          <div
-            style={{
-              position: "absolute",
-              top: "0",
-              bottom: "0",
-              left: "0",
-              right: "0",
-              backgroundColor: "rgba(0, 0, 0, 0.7)",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              translate: "-50% -50%",
-            }}
-          >
+          <div className={styles["dark-layout"]} />
+          <div className={styles["issue-modal-container"]}>
             <IssueCreationalModal
               workspaceId={workspace_id}
               onCancelHandler={(openStateModal: boolean) => {
@@ -138,29 +119,11 @@ export default function SideBar({ workspace_id }: { workspace_id: number }) {
       ) : null}
       {isStateModalOpen ? (
         <Fragment>
-          <div
-            style={{
-              position: "absolute",
-              top: "0",
-              bottom: "0",
-              left: "0",
-              right: "0",
-              backgroundColor: "rgba(0, 0, 0, 0.7)",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              translate: "-50% -50%",
-            }}
-          >
+          <div className={styles["dark-layout"]} />
+          <div className={styles["state-modal-container"]}>
             <StateCreationalModal
               workspaceId={workspace_id}
-              onCancelHandler={() => {
-                setIsStateModalOpen(false);
-              }}
+              onCancelHandler={() => setIsStateModalOpen(false)}
             />
           </div>
         </Fragment>

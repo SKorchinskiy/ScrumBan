@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEvent, useState } from "react";
-import styles from "./creational-modal.module.css";
+import styles from "./state-creational-modal.module.css";
 
 type StateProps = {
   state_name: string;
@@ -45,37 +45,12 @@ export default function StateCreationalModal({
   };
 
   return (
-    <div
-      className={styles["modal-container"]}
-      style={{
-        position: "relative",
-      }}
-    >
+    <div className={styles["modal-container"]}>
       <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "absolute",
-          top: 20,
-          right: 20,
-          width: "10px",
-          height: "10px",
-          background: "rgba(24, 18, 41, 0.3)",
-          borderRadius: "5px",
-          padding: "10px",
-          cursor: "pointer",
-          userSelect: "none",
-        }}
+        className={styles["modal-container-header"]}
         onClick={() => onCancelHandler()}
       >
-        <p
-          style={{
-            color: "white",
-          }}
-        >
-          &#x2715;
-        </p>
+        <p className={styles["modal-container-close"]}>&#x2715;</p>
       </div>
       <h1 className={styles["heading"]}>Create State</h1>
       <div className={styles["input-container"]}>

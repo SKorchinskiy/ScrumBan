@@ -56,27 +56,8 @@ export default function Sprints() {
   }, []);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          overflow: "scroll",
-          backgroundColor: "#392f53",
-          width: "95%",
-          height: "95%",
-          borderRadius: "10px",
-        }}
-      >
+    <div className={styles["sprint-page"]}>
+      <div className={styles["sprint-page-body"]}>
         <PanelHeader
           inputPlaceholder="Type to filter sprints..."
           creationalButtonText="Create Sprint"
@@ -90,57 +71,19 @@ export default function Sprints() {
           }}
           creationalButtonHandler={() => setIsCreationalModalOpen(true)}
         />
-        <div
-          style={{
-            backgroundColor: "#392F53",
-            width: "95%",
-            height: "95%",
-            borderRadius: "10px",
-          }}
-        >
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
-              backgroundColor: "#39375B",
-              margin: "15px",
-              borderRadius: "10px 10px 0px 0px",
-              padding: "5px",
-              color: "whitesmoke",
-              letterSpacing: "1px",
-            }}
-          >
-            <div
-              style={{
-                backgroundColor: "#745C97",
-                border: "1px solid rgba(0, 0, 0, 0.3)",
-              }}
-            >
-              <p style={{ textAlign: "center" }}>Sprint Title</p>
+        <div className={styles["sprint-table"]}>
+          <div className={styles["sprint-table-header"]}>
+            <div className={styles["table-header-column"]}>
+              <p className={styles["table-column-name"]}>Sprint Title</p>
             </div>
-            <div
-              style={{
-                backgroundColor: "#745C97",
-                border: "1px solid rgba(0, 0, 0, 0.3)",
-              }}
-            >
-              <p style={{ textAlign: "center" }}>Sprint Description</p>
+            <div className={styles["table-header-column"]}>
+              <p className={styles["table-column-name"]}>Sprint Description</p>
             </div>
-            <div
-              style={{
-                backgroundColor: "#745C97",
-                border: "1px solid rgba(0, 0, 0, 0.3)",
-              }}
-            >
-              <p style={{ textAlign: "center" }}>Start Date</p>
+            <div className={styles["table-header-column"]}>
+              <p className={styles["table-column-name"]}>Start Date</p>
             </div>
-            <div
-              style={{
-                backgroundColor: "#745C97",
-                border: "1px solid rgba(0, 0, 0, 0.3)",
-              }}
-            >
-              <p style={{ textAlign: "center" }}>End Date</p>
+            <div className={styles["table-header-column"]}>
+              <p className={styles["table-column-name"]}>End Date</p>
             </div>
           </div>
           {filterProjectSprints.map((sprint) => (
@@ -154,38 +97,22 @@ export default function Sprints() {
               }
             >
               <div className={styles["sprint-details"]}>
-                <p
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
+                <p className={styles["sprint-details-data"]}>
                   {sprint.sprint_title}
                 </p>
               </div>
               <div className={styles["sprint-details"]}>
-                <p
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
+                <p className={styles["sprint-details-data"]}>
                   {sprint.sprint_description}
                 </p>
               </div>
               <div className={styles["sprint-details"]}>
-                <p
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
+                <p className={styles["sprint-details-data"]}>
                   {sprint.sprint_start_date}
                 </p>
               </div>
               <div className={styles["sprint-details"]}>
-                <p
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
+                <p className={styles["sprint-details-data"]}>
                   {sprint.sprint_end_date}
                 </p>
               </div>
@@ -195,24 +122,8 @@ export default function Sprints() {
       </div>
       {isCreationalModalOpen ? (
         <Fragment>
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundColor: "rgba(0, 0, 0, 0.7)",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-            }}
-          >
+          <div className={styles["dark-overlay"]} />
+          <div className={styles["creational-modal-container"]}>
             <SprintCreationalModal
               workspaceId={workspaceId}
               projectId={projectId}
