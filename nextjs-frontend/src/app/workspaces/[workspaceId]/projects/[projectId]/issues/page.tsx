@@ -4,9 +4,9 @@ import PanelHeader from "@/app/workspaces/_components/panel-header/panel-header.
 import styles from "./page.module.css";
 import { usePathname } from "next/navigation";
 import { ChangeEvent, Fragment, useEffect, useMemo, useState } from "react";
-import IssueCreationalModal from "@/app/workspaces/_components/creational-modal/issue-creational-modal.component";
+import IssueCreationalModal from "@/app/workspaces/_components/issue-creational-modal/issue-creational-modal.component";
 import IssuesBoard from "@/app/_components/issues-board/issues-board.component";
-import StateCreationalModal from "@/app/workspaces/_components/creational-modal/state-creational-modal.component";
+import StateCreationalModal from "@/app/workspaces/_components/state-creational-modal/state-creational-modal.component";
 
 type StateProps = {
   state_id: number;
@@ -148,25 +148,8 @@ export default function Issues() {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          backgroundColor: "#392f53",
-          width: "950px",
-          height: "95%",
-          borderRadius: "10px",
-        }}
-      >
+    <div className={styles["issues-page"]}>
+      <div className={styles["issues-page-body"]}>
         <PanelHeader
           inputPlaceholder="Type to filter project issues..."
           creationalButtonText="Create Project Issue"
@@ -190,24 +173,8 @@ export default function Issues() {
       </div>
       {isIssueModalOpen ? (
         <Fragment>
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              bottom: 0,
-              right: 0,
-              backgroundColor: "rgba(0, 0, 0, 0.7)",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-            }}
-          >
+          <div className={styles["dark-overlay"]} />
+          <div className={styles["creational-modal-container"]}>
             <IssueCreationalModal
               workspaceId={workspaceId}
               project_id={projectId}
@@ -221,24 +188,8 @@ export default function Issues() {
       ) : null}
       {isStateModalOpen ? (
         <Fragment>
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              bottom: 0,
-              right: 0,
-              backgroundColor: "rgba(0, 0, 0, 0.7)",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-            }}
-          >
+          <div className={styles["dark-overlay"]} />
+          <div className={styles["creational-modal-container"]}>
             <StateCreationalModal
               workspaceId={workspaceId}
               onCancelHandler={() => setIsStateModalOpen(false)}
