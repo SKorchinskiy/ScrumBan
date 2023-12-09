@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEvent, MouseEvent, useState } from "react";
-import styles from "./creational-modal.module.css";
+import styles from "./workspace-creational-modal.module.css";
 import { useRouter } from "next/navigation";
 
 type WorkspaceParams = {
@@ -15,7 +15,7 @@ const initialWorkspaceData: WorkspaceParams = {
 export default function CreationalModal({
   onCancelHandler,
 }: {
-  onCancelHandler: Function;
+  onCancelHandler?: Function;
 }) {
   const router = useRouter();
   const [workspaceInfo, setWorkspaceInfo] =
@@ -50,38 +50,15 @@ export default function CreationalModal({
   };
 
   return (
-    <div
-      className={styles["modal-container"]}
-      style={{
-        position: "relative",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "absolute",
-          top: 20,
-          right: 20,
-          width: "10px",
-          height: "10px",
-          background: "rgba(24, 18, 41, 0.3)",
-          borderRadius: "5px",
-          padding: "10px",
-          cursor: "pointer",
-          userSelect: "none",
-        }}
-        onClick={() => onCancelHandler()}
-      >
-        <p
-          style={{
-            color: "white",
-          }}
+    <div className={styles["modal-container"]}>
+      {onCancelHandler ? (
+        <div
+          className={styles["modal-container-header"]}
+          onClick={() => onCancelHandler()}
         >
-          &#x2715;
-        </p>
-      </div>
+          <p className={styles["modal-container-close"]}>&#x2715;</p>
+        </div>
+      ) : null}
       <h1 className={styles["heading"]}>Create Workspace</h1>
       <div className={styles["input-container"]}>
         <input
