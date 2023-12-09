@@ -25,13 +25,12 @@ export default function ProjectRepresentation({
         className={styles["project-representation"]}
         onClick={() => toggleAreProjectDetailsOpen()}
       >
-        <p style={{ userSelect: "none" }}>{project.project_name}</p>
+        <p className={styles["project-name"]}>{project.project_name}</p>
       </div>
       {areProjectDetailsOpen ? (
         <div>
           <p
             className={styles["project-representation"]}
-            style={{ userSelect: "none", padding: "5px" }}
             onClick={() =>
               router.push(
                 `/workspaces/${workspaceId}/projects/${project.project_id}/issues`
@@ -42,7 +41,6 @@ export default function ProjectRepresentation({
           </p>
           <p
             className={styles["project-representation"]}
-            style={{ userSelect: "none", padding: "5px" }}
             onClick={() =>
               router.push(
                 `/workspaces/${workspaceId}/projects/${project.project_id}/sprints`
