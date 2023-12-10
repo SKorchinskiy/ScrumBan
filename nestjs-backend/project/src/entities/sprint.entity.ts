@@ -31,7 +31,9 @@ export class SprintEntity {
   @Column('date')
   sprint_end_date: Date;
 
-  @ManyToOne(() => ProjectEntity, (project) => project.sprints)
+  @ManyToOne(() => ProjectEntity, (project) => project.sprints, {
+    onDelete: 'CASCADE',
+  })
   project: ProjectEntity;
 
   @OneToMany(() => IssueEntity, (issue) => issue.sprint)
