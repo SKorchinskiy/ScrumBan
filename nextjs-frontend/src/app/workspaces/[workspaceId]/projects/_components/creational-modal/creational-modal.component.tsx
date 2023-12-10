@@ -50,7 +50,7 @@ export default function CreationalModal({
       response.json().then((project) => {
         if (project?.project_id) {
           router.push(
-            `/workspaces/${workspace_id}/projects/${project.project_id}`
+            `/workspaces/${workspace_id}/projects/${project.project_id}/issues`
           );
         }
       })

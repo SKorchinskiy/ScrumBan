@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./project-representation.module.css";
-import { WorkspaceProject } from "../../[workspaceId]/page";
+import { WorkspaceProject } from "../../[workspaceId]/projects/page";
 import { Fragment, useState } from "react";
 import { useRouter } from "next/navigation";
 

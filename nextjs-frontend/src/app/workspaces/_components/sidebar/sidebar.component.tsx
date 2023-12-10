@@ -1,9 +1,9 @@
 "use client";
 
 import styles from "./sidebar.module.css";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import WorkspaceList from "../workspace-list/workspace-list.component";
-import { WorkspaceProject } from "../../[workspaceId]/page";
+import { WorkspaceProject } from "../../[workspaceId]/projects/page";
 import { usePathname, useRouter } from "next/navigation";
 import IssueCreationalModal from "../issue-creational-modal/issue-creational-modal.component";
 import ProjectRepresentation from "../project-representation/project-representation.component";
@@ -26,6 +26,13 @@ export default function SideBar({ workspace_id }: { workspace_id: number }) {
   const [workspaceProjects, setWorkspaceProjects] = useState<
     WorkspaceProject[]
   >([]);
+  const workspaceId = useMemo(() => {
+    const pathChunks = pathname.split("/");
+    const workspaceChunkIndex = pathChunks.findIndex(
+      (value) => value === "workspaces"
+    );
+    return pathChunks[workspaceChunkIndex + 1];
+  }, [pathname]);
 
   const toggleIssueCreationalModalOpen = () =>
     setIsIssueCreationalModalOpen(!isIssueCreationalModalOpen);
@@ -61,24 +68,17 @@ export default function SideBar({ workspace_id }: { workspace_id: number }) {
             >
               <p>Create new Issue</p>
             </div>
-            <div className={styles["general-option"]}>
+            <div
+              className={styles["general-option"]}
+              onClick={() =>
+                router.push(`/workspaces/${workspaceId}/dashboard`)
+              }
+            >
               <p>Dashboard</p>
             </div>
             <div
               className={styles["general-option"]}
-              onClick={() => {
-                const pathChunks = pathname.split("/");
-                const workspaceChunkIndex = pathChunks.findIndex(
-                  (value) => value === "workspaces"
-                );
-                if (workspaceChunkIndex !== pathChunks.length - 1) {
-                  router.push(
-                    `/workspaces/${
-                      pathChunks[workspaceChunkIndex + 1]
-                    }/projects`
-                  );
-                }
-              }}
+              onClick={() => router.push(`/workspaces/${workspaceId}/projects`)}
             >
               <p>Projects</p>
             </div>

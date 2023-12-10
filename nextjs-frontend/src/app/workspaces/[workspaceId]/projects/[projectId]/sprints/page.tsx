@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { WorkspaceProject } from "../../../page";
+import { WorkspaceProject } from "../../page";
 import styles from "./page.module.css";
 import { ChangeEvent, Fragment, useEffect, useMemo, useState } from "react";
 import PanelHeader from "@/app/workspaces/_components/panel-header/panel-header.component";

@@ -1,0 +1,35 @@
+.activity-board {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.activity-overview {
+  padding: 15px;
+  width: 90%;
+  height: 200px;
+  background-color: #2d2643;
+  border-radius: 10px;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.7);
+  overflow: scroll;
+  display: flex;
+  justify-content: space-around;
+}
+
+.activity-overview-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  height: 90%;
+  border: 1px solid white;
+  border-radius: 10px;
+  background-color: #443c68;
+  user-select: none;
+  cursor: pointer;
+  font-weight: bold;
+  color: white;
+  text-transform: uppercase;
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.7);
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.4);
+}

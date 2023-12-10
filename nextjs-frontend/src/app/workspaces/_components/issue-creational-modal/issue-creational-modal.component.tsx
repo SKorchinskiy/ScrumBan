@@ -2,7 +2,7 @@
 
 import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import styles from "./issue-creational-modal.module.css";
-import { WorkspaceProject } from "../../[workspaceId]/page";
+import { WorkspaceProject } from "../../[workspaceId]/projects/page";
 import { WorkspaceState } from "../sidebar/sidebar.component";
 
 export type IssueParams = {

@@ -1,4 +1,9 @@
-.project-board-container {
+.user-greeting {
+  color: whitesmoke;
+  margin-left: 10px;
+}
+
+.specific-workspace-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -6,7 +11,8 @@
   height: 100%;
 }
 
-.project-board {
+.specific-workspace-board {
+  position: relative;
   background-color: #392f53;
   width: 95%;
   height: 95%;
