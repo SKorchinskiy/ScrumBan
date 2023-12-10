@@ -100,15 +100,7 @@ export default function SignInForm({ toggleIsSignInHidden }: UserSignInProps) {
               onClick={(e) => signUserIn(e)}
             >
               Sign in
-            </button>
-            <div className={styles["sign-in-options"]}>
-              <button className={styles["optional-button"]}>
-                Sign in with Google
-              </button>
-              <button className={styles["optional-button"]}>
-                Sign in with GitHub
-              </button>
-            </div>
+            </button>{" "}
           </div>
         </div>
         <FormFrame />
