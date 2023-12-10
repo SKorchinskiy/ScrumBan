@@ -68,7 +68,9 @@ export default function WorkspaceList({
                   onClick={() => {
                     toggleWorkspaceListOpen();
                     setCurrentWorkspace(workspace.workspace_id);
-                    router.push(`/workspaces/${workspace.workspace_id}`);
+                    router.push(
+                      `/workspaces/${workspace.workspace_id}/dashboard`
+                    );
                   }}
                 >
                   <span className={styles["workspace-title"]}>

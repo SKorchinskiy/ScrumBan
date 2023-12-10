@@ -43,7 +43,7 @@ export default function CreationalModal({
     }).then((response) =>
       response.json().then((workspace) => {
         if (workspace?.workspace_id) {
-          router.push(`/workspaces/${workspace.workspace_id}`);
+          router.push(`/workspaces/${workspace.workspace_id}/dashboard`);
         }
       })
     );

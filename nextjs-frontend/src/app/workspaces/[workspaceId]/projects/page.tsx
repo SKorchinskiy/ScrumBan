@@ -2,10 +2,21 @@
 
 import styles from "./page.module.css";
 import { Fragment, useEffect, useState } from "react";
-import { WorkspaceProject } from "../page";
 import { useRouter } from "next/navigation";
 import CreationalModal from "./_components/creational-modal/creational-modal.component";
 import PanelHeader from "../../_components/panel-header/panel-header.component";
+
+export type WorkspaceProject = {
+  project_id: number;
+  project_name: string;
+  project_description: string;
+  workspace_id: number;
+  project_access: "public" | "private";
+  sprints: Iterable<any>;
+  labels: Iterable<any>;
+  states: Iterable<any>;
+  issues: Iterable<any>;
+};
 
 export default function Projects({
   params,
@@ -22,6 +33,16 @@ export default function Projects({
 
   const toggleCreationalModal = () =>
     setIsCreationalModalOpen(!isCreationalModalOpen);
+
+  const projectRemovalHandler = async (projectId: number) => {
+    await fetch(
+      `http://localhost:3000/workspaces/${params.workspaceId}/projects/${projectId}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+      }
+    );
+  };
 
   useEffect(() => {
     const fetchWorkspaceProjects = async () => {
@@ -66,26 +87,36 @@ export default function Projects({
               <div
                 key={project.project_id}
                 className={styles["specific-project"]}
-                onClick={() =>
-                  router.push(
-                    `/workspaces/${params.workspaceId}/projects/${project.project_id}`
-                  )
-                }
               >
-                <div className={styles["specific-project-details"]}>
+                <div className={styles["project-header"]}>
+                  <span
+                    className={styles["project-modal-close"]}
+                    onClick={() => projectRemovalHandler(project.project_id)}
+                  >
+                    &#x2715;
+                  </span>
+                </div>
+                <div
+                  className={styles["specific-project-details"]}
+                  onClick={() =>
+                    router.push(
+                      `/workspaces/${params.workspaceId}/projects/${project.project_id}/issues`
+                    )
+                  }
+                >
                   <span className={styles["project-data"]}>
                     {project.project_name}
                   </span>
-                </div>
-                <div>
-                  <p className={styles["project-data"]}>
-                    {project.project_description}
-                  </p>
-                </div>
-                <div>
-                  <p className={styles["project-data"]}>
-                    {project.project_access}
-                  </p>
+                  <div>
+                    <p className={styles["project-data"]}>
+                      {project.project_description}
+                    </p>
+                  </div>
+                  <div>
+                    <p className={styles["project-data"]}>
+                      {project.project_access}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}

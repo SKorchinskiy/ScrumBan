@@ -59,7 +59,7 @@ export default function SignInForm({ toggleIsSignInHidden }: UserSignInProps) {
         if (!workspaces?.length) {
           router.push("/workspaces");
         } else {
-          router.push(`/workspaces/${workspaces[0].workspace_id}`);
+          router.push(`/workspaces/${workspaces[0].workspace_id}/dashboard`);
         }
       }
     };

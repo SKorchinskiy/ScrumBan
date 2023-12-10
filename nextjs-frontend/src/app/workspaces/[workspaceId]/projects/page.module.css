@@ -64,3 +64,23 @@
 .project-data {
   color: whitesmoke;
 }
+
+.project-header {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.project-modal-update {
+  background-color: #caa8f5;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.project-modal-close {
+  background-color: #caa8f5;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+}
