@@ -40,7 +40,7 @@ export default function SideBar({ workspace_id }: { workspace_id: number }) {
   useEffect(() => {
     const fetchUserProjects = async () => {
       const response = await fetch(
-        `http://localhost:3000/workspaces/${workspace_id}/projects`,
+        `http://localhost:8000/workspaces/${workspace_id}/projects`,
         {
           method: "GET",
           credentials: "include",

@@ -33,7 +33,7 @@ export default function IssueUpdateModal({
   useEffect(() => {
     const fetchWorkspaceStates = async () => {
       const response = await fetch(
-        `http://localhost:3000/workspaces/${workspaceId}/states`,
+        `http://localhost:8000/workspaces/${workspaceId}/states`,
         {
           method: "GET",
           credentials: "include",
@@ -62,7 +62,7 @@ export default function IssueUpdateModal({
 
   const updateIssue = async (event: MouseEvent<HTMLButtonElement>) => {
     await fetch(
-      `http://localhost:3000/workspaces/${workspaceId}/issues/${issueId}`,
+      `http://localhost:8000/workspaces/${workspaceId}/issues/${issueId}`,
       {
         method: "PUT",
         headers: {

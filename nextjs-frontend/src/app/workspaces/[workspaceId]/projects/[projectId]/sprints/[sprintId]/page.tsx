@@ -75,7 +75,7 @@ export default function Sprint() {
   useEffect(() => {
     const getWorkspaceStates = async () => {
       const response = await fetch(
-        `http://localhost:3000/workspaces/${workspaceId}/states`,
+        `http://localhost:8000/workspaces/${workspaceId}/states`,
         {
           method: "GET",
           credentials: "include",
@@ -100,7 +100,7 @@ export default function Sprint() {
   useEffect(() => {
     const fetchSprintIssues = async () => {
       const response = await fetch(
-        `http://localhost:3000/workspaces/${workspaceId}/projects/${projectId}/issues`,
+        `http://localhost:8000/workspaces/${workspaceId}/projects/${projectId}/issues`,
         {
           method: "GET",
           credentials: "include",
@@ -120,7 +120,7 @@ export default function Sprint() {
 
   const issueRemovalHandler = async (issueId: number) => {
     await fetch(
-      `http://localhost:3000/workspaces/${workspaceId}/projects/${projectId}/sprints/${sprintId}/issues/${issueId}`,
+      `http://localhost:8000/workspaces/${workspaceId}/projects/${projectId}/sprints/${sprintId}/issues/${issueId}`,
       {
         method: "DELETE",
         credentials: "include",
@@ -152,7 +152,7 @@ export default function Sprint() {
       issue_state_id: newStateColumnId,
     };
     const response = await fetch(
-      `http://localhost:3000/workspaces/${workspaceId}/projects/${projectId}/issues/${issueId}`,
+      `http://localhost:8000/workspaces/${workspaceId}/projects/${projectId}/issues/${issueId}`,
       {
         method: "PUT",
         credentials: "include",
@@ -187,7 +187,7 @@ export default function Sprint() {
 
     for await (let issue of addIssuesToSprint) {
       await fetch(
-        `http://localhost:3000/workspaces/${workspaceId}/projects/${projectId}/sprints/${sprintId}/issues/${issue.issue_id}`,
+        `http://localhost:8000/workspaces/${workspaceId}/projects/${projectId}/sprints/${sprintId}/issues/${issue.issue_id}`,
         {
           method: "POST",
           credentials: "include",
@@ -197,7 +197,7 @@ export default function Sprint() {
 
     for await (let issue of removeIssuesFromSprint) {
       await fetch(
-        `http://localhost:3000/workspaces/${workspaceId}/projects/${projectId}/sprints/${sprintId}/issues/${issue.issue_id}`,
+        `http://localhost:8000/workspaces/${workspaceId}/projects/${projectId}/sprints/${sprintId}/issues/${issue.issue_id}`,
         {
           method: "DELETE",
           credentials: "include",

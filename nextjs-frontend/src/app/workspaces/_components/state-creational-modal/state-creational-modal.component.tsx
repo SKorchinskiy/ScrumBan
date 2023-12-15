@@ -33,7 +33,7 @@ export default function StateCreationalModal({
   };
 
   const createNewState = async () => {
-    await fetch(`http://localhost:3000/workspaces/${workspaceId}/states`, {
+    await fetch(`http://localhost:8000/workspaces/${workspaceId}/states`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

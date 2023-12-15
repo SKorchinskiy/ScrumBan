@@ -37,7 +37,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchWOrkspaceProjects = async () => {
       const response = await fetch(
-        `http://localhost:3000/workspaces/${workspaceId}/projects`,
+        `http://localhost:8000/workspaces/${workspaceId}/projects`,
         {
           method: "GET",
           credentials: "include",
