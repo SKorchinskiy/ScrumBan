@@ -15,7 +15,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         name: 'USER',
         transport: Transport.TCP,
         options: {
-          port: 3003,
+          port: 8003,
           host: '127.0.0.1',
         },
       },

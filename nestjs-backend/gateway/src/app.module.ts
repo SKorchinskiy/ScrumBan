@@ -38,7 +38,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         name: 'AUTH',
         transport: Transport.TCP,
         options: {
-          port: 3001,
+          port: 8001,
           host: '127.0.0.1',
         },
       },
@@ -46,7 +46,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         name: 'PROJECT',
         transport: Transport.TCP,
         options: {
-          port: 3002,
+          port: 8002,
           host: '127.0.0.1',
         },
       },
@@ -54,7 +54,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         name: 'USER',
         transport: Transport.TCP,
         options: {
-          port: 3003,
+          port: 8003,
           host: '127.0.0.1',
         },
       },
@@ -62,7 +62,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         name: 'WORKSPACE',
         transport: Transport.TCP,
         options: {
-          port: 3004,
+          port: 8004,
           host: '127.0.0.1',
         },
       },
