@@ -28,7 +28,7 @@ export default function WorkspaceList({
 
   useEffect(() => {
     const fetchUserWorkspaces = async () => {
-      const response = await fetch("http://localhost:3000/workspaces", {
+      const response = await fetch("http://localhost:8000/workspaces", {
         method: "GET",
         credentials: "include",
       });

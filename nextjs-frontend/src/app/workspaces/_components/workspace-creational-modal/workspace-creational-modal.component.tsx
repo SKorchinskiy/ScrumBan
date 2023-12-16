@@ -31,7 +31,7 @@ export default function CreationalModal({
   };
 
   const createNewWorkspace = (event: MouseEvent<HTMLButtonElement>) => {
-    fetch("http://localhost:3000/workspaces", {
+    fetch("http://localhost:8000/workspaces", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

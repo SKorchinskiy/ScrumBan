@@ -37,7 +37,7 @@ export default function IssueCreationalModal({
   useEffect(() => {
     const fetchWorkspaceProject = async () => {
       const response = await fetch(
-        `http://localhost:3000/workspaces/${workspaceId}/projects`,
+        `http://localhost:8000/workspaces/${workspaceId}/projects`,
         {
           method: "GET",
           credentials: "include",
@@ -56,7 +56,7 @@ export default function IssueCreationalModal({
   useEffect(() => {
     const fetchWorkspaceStates = async () => {
       const response = await fetch(
-        `http://localhost:3000/workspaces/${workspaceId}/states`,
+        `http://localhost:8000/workspaces/${workspaceId}/states`,
         {
           method: "GET",
           credentials: "include",
@@ -85,7 +85,7 @@ export default function IssueCreationalModal({
 
   const createNewIssue = async (event: MouseEvent<HTMLButtonElement>) => {
     await fetch(
-      `http://localhost:3000/workspaces/${workspaceId}/projects/${projectId}/issues`,
+      `http://localhost:8000/workspaces/${workspaceId}/projects/${projectId}/issues`,
       {
         method: "POST",
         headers: {

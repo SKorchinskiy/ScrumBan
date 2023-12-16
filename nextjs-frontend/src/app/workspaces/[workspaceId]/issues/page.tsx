@@ -47,7 +47,7 @@ export default function Issues() {
   useEffect(() => {
     const getWorkspaceStates = async () => {
       const response = await fetch(
-        `http://localhost:3000/workspaces/${workspaceId}/states`,
+        `http://localhost:8000/workspaces/${workspaceId}/states`,
         {
           method: "GET",
           credentials: "include",
@@ -68,7 +68,7 @@ export default function Issues() {
   useEffect(() => {
     const fetchWorkspaceIssues = async () => {
       const response = await fetch(
-        `http://localhost:3000/workspaces/${workspaceId}/issues`,
+        `http://localhost:8000/workspaces/${workspaceId}/issues`,
         {
           method: "GET",
           credentials: "include",
@@ -87,7 +87,7 @@ export default function Issues() {
 
   const issueRemovalHandler = async (issueId: number) => {
     await fetch(
-      `http://localhost:3000/workspaces/${workspaceId}/issues/${issueId}`,
+      `http://localhost:8000/workspaces/${workspaceId}/issues/${issueId}`,
       {
         method: "DELETE",
         credentials: "include",
@@ -113,7 +113,7 @@ export default function Issues() {
       issue_state_id: newStateColumnId,
     };
     const response = await fetch(
-      `http://localhost:3000/workspaces/${workspaceId}/projects/${targetIssue.project.project_id}/issues/${issueId}`,
+      `http://localhost:8000/workspaces/${workspaceId}/projects/${targetIssue.project.project_id}/issues/${issueId}`,
       {
         method: "PUT",
         credentials: "include",

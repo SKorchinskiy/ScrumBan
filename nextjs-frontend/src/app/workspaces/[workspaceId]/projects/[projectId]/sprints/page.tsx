@@ -41,7 +41,7 @@ export default function Sprints() {
   useEffect(() => {
     const fetchProjectSprints = async () => {
       const response = await fetch(
-        `http://localhost:3000/workspaces/${workspaceId}/projects/${projectId}/sprints`,
+        `http://localhost:8000/workspaces/${workspaceId}/projects/${projectId}/sprints`,
         {
           method: "GET",
           credentials: "include",

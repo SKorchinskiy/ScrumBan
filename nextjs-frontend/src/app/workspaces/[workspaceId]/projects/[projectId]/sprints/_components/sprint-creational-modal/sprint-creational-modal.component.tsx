@@ -39,7 +39,7 @@ export default function SprintCreationalModal({
   const createNewSprint = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     await fetch(
-      `http://localhost:3000/workspaces/${workspaceId}/projects/${projectId}/sprints`,
+      `http://localhost:8000/workspaces/${workspaceId}/projects/${projectId}/sprints`,
       {
         method: "POST",
         headers: {

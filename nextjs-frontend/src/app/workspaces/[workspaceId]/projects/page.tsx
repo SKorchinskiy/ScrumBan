@@ -36,7 +36,7 @@ export default function Projects({
 
   const projectRemovalHandler = async (projectId: number) => {
     await fetch(
-      `http://localhost:3000/workspaces/${params.workspaceId}/projects/${projectId}`,
+      `http://localhost:8000/workspaces/${params.workspaceId}/projects/${projectId}`,
       {
         method: "DELETE",
         credentials: "include",
@@ -47,7 +47,7 @@ export default function Projects({
   useEffect(() => {
     const fetchWorkspaceProjects = async () => {
       const response = await fetch(
-        `http://localhost:3000/workspaces/${params.workspaceId}/projects`,
+        `http://localhost:8000/workspaces/${params.workspaceId}/projects`,
         {
           method: "GET",
           credentials: "include",
