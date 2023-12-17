@@ -1,32 +1,57 @@
+# define workspace microservice services
 services:
+  # basic workspace service
   workspace:
+    # container name to reference by other containers
     container_name: backend-scrumban-workspace
+    # define dependenices for the container
+    # only after which build the current container
     depends_on:
       - postgres
+    # build the container from the Dockerfile definitions in the current directory
     build: ./
+    # start the server
     command: npm run start
+    # exposing port 8004 only to the container containing networks
     ports:
-      - 8004:8004
+      - 8004
+    # save data in the volumes
+    # exclude node_modules with the anonymous volume
     volumes:
       - ./:/usr/src/workspace
       - /usr/src/workspace/node_modules/
+    # define networks which include the container
     networks:
       - custom-bridge-network
       - workspace-network
+  # define postgres service (container)
   postgres:
+    # build container from the postgres image
     image: postgres:14.9
+    # define environment variables
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: scrumban
+    # define networks which contain the container
     networks:
       - workspace-network
+    # expose port 5432 to the same network of containers
+    # (is not available for other networks or host)
     ports:
       - 5432
+
+# define used networks
 networks:
+  # define custom global network
   custom-bridge-network:
+    # define search name
     name: custom-bridge-network
+    # recognise network as externaly defined
     external: true
+  # define workspace microservice specific network
   workspace-network:
+    # define network name
     name: workspace-network
+    # define network interaction algorithm for containers
     driver: bridge
