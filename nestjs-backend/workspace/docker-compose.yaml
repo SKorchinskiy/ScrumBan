@@ -1,0 +1,32 @@
+services:
+  workspace:
+    container_name: backend-scrumban-workspace
+    depends_on:
+      - postgres
+    build: ./
+    command: npm run start
+    ports:
+      - 8004:8004
+    volumes:
+      - ./:/usr/src/workspace
+      - /usr/src/workspace/node_modules/
+    networks:
+      - custom-bridge-network
+      - workspace-network
+  postgres:
+    image: postgres:14.9
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: scrumban
+    networks:
+      - workspace-network
+    ports:
+      - 5432
+networks:
+  custom-bridge-network:
+    name: custom-bridge-network
+    external: true
+  workspace-network:
+    name: workspace-network
+    driver: bridge
