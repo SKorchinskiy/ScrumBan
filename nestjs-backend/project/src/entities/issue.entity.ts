@@ -45,7 +45,7 @@ export class IssueEntity {
   @ManyToOne(() => SprintEntity, (sprint) => sprint.issues)
   sprint: SprintEntity;
 
-  @ManyToOne(() => ProjectEntity)
+  @ManyToOne(() => ProjectEntity, { onDelete: 'CASCADE' })
   project: ProjectEntity;
 
   @ManyToMany(() => MemberEntity)
