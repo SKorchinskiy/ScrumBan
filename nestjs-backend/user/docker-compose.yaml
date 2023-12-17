@@ -1,28 +1,50 @@
+# define services used by user microservice
 services:
+  # basic user service
   user:
+    # container name for reference by other containers
     container_name: backend-scrumban-user
+    # dependencies of the container
+    # only after which the current container is build
     depends_on:
       - postgres
+    # container's networks
     networks:
       - custom-bridge-network
+    # build the container from the Dockerfile in the current dir
     build: ./
+    # start the service
+    command: npm run start
+    # exposing port 8003 only to the container containing networks
     ports:
-      - 8003:8003
+      - 8003
+    # save data in the volumes
+    # exclude node_modules with the anonymous volume
     volumes:
       - ./:/usr/src/user
       - /usr/src/user/node_modules/
-    command: npm run start
+  # set up postgres service
   postgres:
+    # basic postgres image
     image: postgres:14.9
+    # networks which include the container
     networks:
       - custom-bridge-network
+    # environment variables
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: scrumban
+    # expose default pg port to the container
+    # (not available from the host)
     ports:
-      - 5431:5432
+      - 5432
+
+# define used networks
 networks:
+  # describe custom network
   custom-bridge-network:
+    # search network by the provided name
     name: custom-bridge-network
+    # recognise container as external
     external: true

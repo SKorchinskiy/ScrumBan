@@ -1,15 +1,28 @@
+# setting up services for auth microservice
 services:
+  # basic auth service
   auth:
+    # container name for other containers to interact
     container_name: backend-scrumban-auth
+    # custom network defined in the gateway
     networks:
       - custom-bridge-network
+    # building basic image from Dockerfile
     build: ./
+    # starting the service
     command: npm run start
+    # exposing port 8001 only to the container containing networks
     ports:
-      - 8001:8001
+      - 8001
+    # saving container data into volumes
     volumes:
       - ./:/usr/src/auth
+
+# used networks
 networks:
+  # custom network defined in the gateway
   custom-bridge-network:
+    # compose searches for network with provided name
     name: custom-bridge-network
+    # recognise network as external (defined elsewhere)
     external: true
