@@ -1,31 +1,55 @@
+# define projetc microservice services
 services:
+  # basic project service
   project:
+    # container name for reference by other containers
     container_name: backend-scrumban-project
+    # dependencies only after which the container is created
     depends_on:
       - postgres
+    # build container from Dockerfile in the current directory
     build: ./
+    # start the service
     command: npm run start
+    # exposing port 8002 only to the container containing networks
     ports:
-      - 8002:8002
+      - 8002
+    # persist data in the volume
     volumes:
       - ./:/usr/src/project
+    # define networks where container is available
     networks:
       - custom-bridge-network
       - project-network
+  # set up postgres db service
   postgres:
+    # pull basic postgres image
     image: postgres:14.9
+    # define environment variables
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: scrumban
+    # define networks where container is available
     networks:
       - project-network
+    # expost port 5432 only inside the participating networks
+    # (is not available on the host)
     ports:
       - 5432
+
+# defined used networks
 networks:
+  # define custom global network
   custom-bridge-network:
+    # name by which the network is searched
     name: custom-bridge-network
+    # recognise container as exteranl
     external: true
+  # local network for project microservice services
   project-network:
+    # network name
     name: project-network
+    # basic driver to define
+    # how containers communicate inside the container
     driver: bridge
