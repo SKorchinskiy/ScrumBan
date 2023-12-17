@@ -1,0 +1,15 @@
+services:
+  gateway:
+    container_name: backend-scrumban-gateway
+    networks:
+      - custom-bridge-network
+    build: ./
+    command: npm run start
+    ports:
+      - 8000:8000
+    volumes:
+      - ./:/usr/src/gateway
+networks:
+  custom-bridge-network:
+    name: custom-bridge-network
+    driver: bridge

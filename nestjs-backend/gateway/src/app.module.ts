@@ -38,32 +38,32 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         name: 'AUTH',
         transport: Transport.TCP,
         options: {
-          port: 3001,
-          host: '127.0.0.1',
+          port: 8001,
+          host: 'backend-scrumban-auth',
         },
       },
       {
         name: 'PROJECT',
         transport: Transport.TCP,
         options: {
-          port: 3002,
-          host: '127.0.0.1',
+          port: 8002,
+          host: 'backend-scrumban-project',
         },
       },
       {
         name: 'USER',
         transport: Transport.TCP,
         options: {
-          port: 3003,
-          host: '127.0.0.1',
+          port: 8003,
+          host: 'backend-scrumban-user',
         },
       },
       {
         name: 'WORKSPACE',
         transport: Transport.TCP,
         options: {
-          port: 3004,
-          host: '127.0.0.1',
+          port: 8004,
+          host: 'backend-scrumban-workspace',
         },
       },
     ]),

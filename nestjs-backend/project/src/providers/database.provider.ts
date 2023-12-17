@@ -12,10 +12,11 @@ export const databaseProviders = [
     useFactory: async () => {
       const dataSource = new DataSource({
         type: 'postgres',
-        host: 'localhost',
-        port: 5431,
-        username: '',
-        password: '',
+        host: 'postgres',
+        username: 'admin',
+        password: 'admin',
+        port: 5432,
+        database: 'scrumban',
         entities: [
           IssueEntity,
           LabelEntity,
@@ -24,7 +25,6 @@ export const databaseProviders = [
           SprintEntity,
           StateEntity,
         ],
-        database: '',
         synchronize: true,
       });
 

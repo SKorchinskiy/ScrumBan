@@ -12,6 +12,6 @@ async function bootstrap() {
     origin: process.env.ALLOWED_REQUEST_ORIGIN,
     credentials: true,
   });
-  await app.listen(3000);
+  await app.listen(8000);
 }
 bootstrap();

@@ -12,13 +12,13 @@ async function bootstrap() {
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.TCP,
     options: {
-      port: 3003,
-      host: '127.0.0.1',
+      port: 8003,
+      host: 'backend-scrumban-user',
     },
   } as TcpOptions);
 
   await app.startAllMicroservices();
 
-  await app.listen(3003);
+  // await app.listen(8003);
 }
 bootstrap();

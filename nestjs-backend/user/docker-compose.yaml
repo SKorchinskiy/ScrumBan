@@ -1,0 +1,28 @@
+services:
+  user:
+    container_name: backend-scrumban-user
+    depends_on:
+      - postgres
+    networks:
+      - custom-bridge-network
+    build: ./
+    ports:
+      - 8003:8003
+    volumes:
+      - ./:/usr/src/user
+      - /usr/src/user/node_modules/
+    command: npm run start
+  postgres:
+    image: postgres:14.9
+    networks:
+      - custom-bridge-network
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: scrumban
+    ports:
+      - 5431:5432
+networks:
+  custom-bridge-network:
+    name: custom-bridge-network
+    external: true
