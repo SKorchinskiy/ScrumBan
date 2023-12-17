@@ -1,15 +1,28 @@
+# define services used by gateway
 services:
+  # basic gateway service
   gateway:
+    # container name for reference by other containers
     container_name: backend-scrumban-gateway
+    # use custom network
     networks:
       - custom-bridge-network
+    # build from Dockerfile located in the current dir
     build: ./
+    # start the service
     command: npm run start
+    # map port 8000 to the corresponding host port
     ports:
       - 8000:8000
+      # persist data in the volumes
     volumes:
       - ./:/usr/src/gateway
+
+# define used networks
 networks:
+  # define custom network
   custom-bridge-network:
+    # network name to reference
     name: custom-bridge-network
+    # type of the connection between containers inside the network
     driver: bridge
