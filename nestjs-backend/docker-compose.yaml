@@ -1,0 +1,102 @@
+# global microservices compose file
+services:
+  # auth service container setup
+  auth:
+    # auth container name used to refer by other services
+    container_name: backend-scrumban-auth
+    # dependencies only after building which the container is created
+    depends_on:
+      - gateway
+    # location of the Dockerfile for auth service
+    build: ./auth/
+    # start auth service
+    command: npm run start
+    # expose port 8001 to the common network
+    ports:
+      - 8001
+    # persist data in the volume
+    volumes:
+      - ./:/usr/src/backend-scrumban/auth
+  # gateway service container setup
+  gateway:
+    # gateway service container name refered by other services
+    container_name: backend-scrumban-gateway
+    # location of the Dockerfile for the gateway service
+    build: ./gateway/
+    # start gateway service
+    command: npm run start
+    # map port 8000 of the container to the corresponding host port
+    ports:
+      - 8000:8000
+    # persist data in the volume
+    volumes:
+      - ./:/usr/src/backend-scrumban/gateway
+  # project service container setup
+  project:
+    # project container name refered by other services
+    container_name: backend-scrumban-project
+    # project container dependencies
+    depends_on:
+      - postgres
+      - gateway
+    # location of project service Dockerfile
+    build: ./project/
+    # start project service
+    command: npm run start
+    # expose port 8002 to the common network
+    ports:
+      - 8002
+    # persist data in the volume
+    volumes:
+      - ./:/usr/src/backend-scrumban/project
+  # postgres service container setup
+  postgres:
+    # pull postgres image
+    image: postgres:14.9
+    # set environment variables
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: scrumban
+    # expose port 5432 to the common network
+    ports:
+      - 5432
+  # user service container setup
+  user:
+    # user container name refered by other services
+    container_name: backend-scrumban-user
+    # user container dependencies
+    depends_on:
+      - postgres
+      - gateway
+    # location of user service Dockerfile
+    build: ./user/
+    # start user service
+    command: npm run start
+    # expose port 8003 to the common network
+    ports:
+      - 8003
+    # persist data in the volume
+    # remove local node_modules from the container with anonymous volume
+    volumes:
+      - ./:/usr/src/backend-scrumban/user
+      - /usr/src/backend-scrumban/user/node_modules/
+  # workspace service setup
+  workspace:
+    # workspace container name refered by other services
+    container_name: backend-scrumban-workspace
+    # workspace container dependencies
+    depends_on:
+      - postgres
+    # location of workspace service Dockerfile
+    build: ./workspace/
+    # start workspace service
+    command: npm run start
+    # expose port 8004 to the common network
+    ports:
+      - 8004
+    # persist data in the volume
+    # remove local node_modules from the container with anonymous volume
+    volumes:
+      - ./:/usr/src/scrumban-backend/workspace
+      - /usr/src/scrumban-backend/workspace/node_modules/
