@@ -1,0 +1,15 @@
+services:
+  auth:
+    container_name: backend-scrumban-auth
+    networks:
+      - custom-bridge-network
+    build: ./
+    command: npm run start
+    ports:
+      - 8001:8001
+    volumes:
+      - ./:/usr/src/auth
+networks:
+  custom-bridge-network:
+    name: custom-bridge-network
+    external: true
