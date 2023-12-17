@@ -16,7 +16,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         transport: Transport.TCP,
         options: {
           port: 8003,
-          host: '127.0.0.1',
+          host: 'backend-scrumban-user',
         },
       },
     ]),

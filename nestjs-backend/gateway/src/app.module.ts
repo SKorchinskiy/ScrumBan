@@ -39,7 +39,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         transport: Transport.TCP,
         options: {
           port: 8001,
-          host: '127.0.0.1',
+          host: 'backend-scrumban-auth',
         },
       },
       {
@@ -47,7 +47,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         transport: Transport.TCP,
         options: {
           port: 8002,
-          host: '127.0.0.1',
+          host: 'backend-scrumban-project',
         },
       },
       {
@@ -55,7 +55,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         transport: Transport.TCP,
         options: {
           port: 8003,
-          host: '127.0.0.1',
+          host: 'backend-scrumban-user',
         },
       },
       {
@@ -63,7 +63,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         transport: Transport.TCP,
         options: {
           port: 8004,
-          host: '127.0.0.1',
+          host: 'backend-scrumban-workspace',
         },
       },
     ]),
