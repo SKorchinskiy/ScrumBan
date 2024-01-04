@@ -1,3 +1,4 @@
+import { StatsEntity } from 'src/entities/stats.entity';
 import { WorkspaceEntity } from 'src/entities/workspace.entity';
 import { DataSource } from 'typeorm';
 
@@ -11,7 +12,7 @@ export const databaseProviders = [
         port: 5432,
         username: 'admin',
         password: 'admin',
-        entities: [WorkspaceEntity],
+        entities: [WorkspaceEntity, StatsEntity],
         database: 'scrumban',
         synchronize: true,
       });
