@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
@@ -20,6 +25,7 @@ import { SprintController } from './project/sprint/sprint.controller';
 import { SprintService } from './project/sprint/sprint.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import ActivityMiddleware from './middlewares/activity.middleware';
 
 @Module({
   imports: [
@@ -92,4 +98,21 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     ConfigService,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(ActivityMiddleware)
+      .exclude(
+        { path: 'workspaces', method: RequestMethod.GET },
+        { path: 'workspaces/:workspaceId/*', method: RequestMethod.GET },
+      )
+      .forRoutes(
+        ProjectController,
+        WorkspaceController,
+        IssueController,
+        StateController,
+        LabelController,
+        SprintController,
+      );
+  }
+}
