@@ -12,7 +12,9 @@
 }
 
 .specific-workspace-board {
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   background-color: #392f53;
   width: 95%;
   height: 95%;

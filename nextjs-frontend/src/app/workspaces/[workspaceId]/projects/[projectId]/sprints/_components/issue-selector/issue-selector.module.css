@@ -19,11 +19,15 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   overflow: scroll;
-  height: 300px;
+  min-height: 150px;
+  max-height: 300px;
   box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 0.5);
 }
 
 .specific-project-issue {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   user-select: none;
   padding: 15px;

@@ -19,6 +19,9 @@
 }
 
 .general {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin: 15px;
   height: 50%;
   overflow: scroll;
@@ -75,6 +78,7 @@
   left: 0px;
   right: 0px;
   background-color: rgba(0, 0, 0, 0.7);
+  z-index: 10;
 }
 
 .state-modal-container,
@@ -83,4 +87,5 @@
   top: 50%;
   left: 50%;
   translate: -50% -50%;
+  z-index: 10;
 }

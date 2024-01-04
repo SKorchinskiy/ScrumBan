@@ -59,7 +59,7 @@ export default function Dashboard() {
           projects={workspaceProjects}
           workspaceId={workspaceId}
         />
-        <ActivityGraph />
+        <ActivityGraph workspaceId={workspaceId} />
       </div>
     </div>
   );

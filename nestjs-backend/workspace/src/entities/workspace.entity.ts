@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { StatsEntity } from './stats.entity';
 @Entity()
 export class WorkspaceEntity {
   @PrimaryGeneratedColumn()
@@ -12,4 +13,7 @@ export class WorkspaceEntity {
 
   @Column({ nullable: false })
   workspace_owner: number;
+
+  @OneToMany(() => StatsEntity, (stats) => stats.statId)
+  stats: StatsEntity[];
 }

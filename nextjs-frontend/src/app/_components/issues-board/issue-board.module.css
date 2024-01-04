@@ -24,7 +24,9 @@
   margin: 10px;
   border-radius: 10px;
   overflow: scroll;
-  min-width: 300px;
+  min-width: 200px;
+  max-width: 500px;
+  max-height: 600px;
 }
 
 .draggable-issue {
@@ -34,6 +36,7 @@
   justify-content: space-around;
   background-color: #443c68;
   width: 200px;
+  min-height: 150px;
   margin: 15px;
   border-radius: 10px;
   padding: 5px;

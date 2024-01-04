@@ -37,6 +37,9 @@ export default function SideBar({ workspace_id }: { workspace_id: number }) {
   const toggleIssueCreationalModalOpen = () =>
     setIsIssueCreationalModalOpen(!isIssueCreationalModalOpen);
 
+  const toggleStateCreationalModal = () =>
+    setIsStateModalOpen(!isStateModalOpen);
+
   useEffect(() => {
     const fetchUserProjects = async () => {
       const response = await fetch(
@@ -67,6 +70,12 @@ export default function SideBar({ workspace_id }: { workspace_id: number }) {
               onClick={() => toggleIssueCreationalModalOpen()}
             >
               <p>Create new Issue</p>
+            </div>
+            <div
+              className={styles["general-option"]}
+              onClick={() => toggleStateCreationalModal()}
+            >
+              <p>Create new State</p>
             </div>
             <div
               className={styles["general-option"]}
