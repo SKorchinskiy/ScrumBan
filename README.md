@@ -8,7 +8,7 @@
 
 + [Project Workflow](https://github.com/SKorchinskiy/ScrumBan?tab=readme-ov-file#project-workflow)
 
-+ [Why did I build this project ?](https://github.com/SKorchinskiy/ScrumBan?tab=readme-ov-file#why-did-i-build-this-project-)
++ [Why have I built this project ?](https://github.com/SKorchinskiy/ScrumBan?tab=readme-ov-file#why-have-i-built-this-project-)
 
 + [What did I learn ?](https://github.com/SKorchinskiy/ScrumBan?tab=readme-ov-file#what-did-i-learn-)
 
