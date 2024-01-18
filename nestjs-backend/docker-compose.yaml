@@ -60,7 +60,7 @@ services:
       POSTGRES_DB: scrumban
     # expose port 5432 to the common network
     ports:
-      - 5432
+      - 8080:5432
   # user service container setup
   user:
     # user container name refered by other services
