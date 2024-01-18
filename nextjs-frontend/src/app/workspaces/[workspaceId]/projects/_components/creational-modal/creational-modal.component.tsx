@@ -36,25 +36,28 @@ export default function CreationalModal({
     }));
   };
 
-  const createNewProject = (event: MouseEvent<HTMLButtonElement>) => {
-    fetch(`http://localhost:8000/workspaces/${workspace_id}/projects`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        ...projectData,
-      }),
-    }).then((response) =>
-      response.json().then((project) => {
-        if (project?.project_id) {
-          router.push(
-            `/workspaces/${workspace_id}/projects/${project.project_id}/issues`
-          );
-        }
-      })
+  const createNewProject = async (event: MouseEvent<HTMLButtonElement>) => {
+    const response = await fetch(
+      `http://localhost:8000/workspaces/${workspace_id}/projects`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          ...projectData,
+        }),
+      }
     );
+    if (response.ok) {
+      const project = await response.json();
+      if (project?.project_id) {
+        router.push(
+          `/workspaces/${workspace_id}/projects/${project.project_id}/issues`
+        );
+      }
+    }
   };
 
   return (

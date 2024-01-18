@@ -21,6 +21,7 @@
   background-color: #392f53;
   width: 95%;
   height: 95%;
+  overflow: scroll;
   border-radius: 10px;
 }
 

@@ -1,17 +1,19 @@
+import { IssueProps } from "@/app/types/types";
 import styles from "./issue-selector.module.css";
 import { useState } from "react";
-import { IssueProps } from "../../[sprintId]/page";
 
 type IssueSelectorProps = {
   issues: IssueProps[];
   sprintIssues: IssueProps[];
   issueUpdateHandler: (_: number[]) => void;
+  toggleIssueSelectorOpen: Function;
 };
 
 export default function IssueSelector({
   issues,
   sprintIssues,
   issueUpdateHandler,
+  toggleIssueSelectorOpen,
 }: IssueSelectorProps) {
   const [selectedIssues, setSelectedIssues] = useState<number[]>(
     sprintIssues.map((issue) => issue.issue_id)
@@ -40,6 +42,12 @@ export default function IssueSelector({
     <div className={styles["issue-selector"]}>
       <div className={styles["selector-header"]}>
         Choose issues to add / remove
+        <div
+          className={styles["issue-header"]}
+          onClick={() => toggleIssueSelectorOpen()}
+        >
+          <p className={styles["issue-close-sign"]}>&#x2715;</p>
+        </div>
       </div>
       <div className={styles["project-issues"]}>
         {issues.map((issue) => (

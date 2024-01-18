@@ -7,30 +7,7 @@ import { ChangeEvent, Fragment, useEffect, useMemo, useState } from "react";
 import IssueCreationalModal from "@/app/workspaces/_components/issue-creational-modal/issue-creational-modal.component";
 import IssuesBoard from "@/app/_components/issues-board/issues-board.component";
 import StateCreationalModal from "@/app/workspaces/_components/state-creational-modal/state-creational-modal.component";
-
-type StateProps = {
-  state_id: number;
-  state_name: string;
-  state_color: string;
-  workspace_id: number;
-};
-
-type ProjectProps = {
-  project_id: number;
-  project_name: string;
-  project_description: string;
-  workspace_id: number;
-  project_access: string;
-};
-
-type IssueProps = {
-  issue_id: number;
-  issue_title: string;
-  issue_description: string;
-  issue_priority: "None" | "Low" | "Medium" | "High" | "Urgent";
-  project: ProjectProps;
-  issue_state: StateProps;
-};
+import { IssueProps, StateProps } from "@/app/types/types";
 
 export default function Issues() {
   const pathname = usePathname();
@@ -68,13 +45,14 @@ export default function Issues() {
           credentials: "include",
         }
       );
-
-      const workspaceStates = await response.json();
-      setStates(workspaceStates);
+      if (response.ok) {
+        const workspaceStates = await response.json();
+        setStates(workspaceStates);
+      }
     };
 
     getWorkspaceStates();
-  }, []);
+  }, [workspaceId]);
 
   useEffect(() => {
     setFilteredIssues(projectIssues);
@@ -89,7 +67,6 @@ export default function Issues() {
           credentials: "include",
         }
       );
-
       if (response.ok) {
         const issues = await response.json();
         setProjectIssues(issues);
@@ -98,7 +75,7 @@ export default function Issues() {
     };
 
     fetchProjectIssues();
-  }, []);
+  }, [projectId, workspaceId]);
 
   const issueRemovalHandler = async (issueId: number) => {
     await fetch(
@@ -138,39 +115,50 @@ export default function Issues() {
         body: JSON.stringify({ ...updateIssueDto }),
       }
     );
-    const updatedIssue = (await response.json()) as IssueProps;
-    const updatedIssues: IssueProps[] = projectIssues.filter(
-      (issue) => issue.issue_id !== updatedIssue.issue_id
-    );
-    updatedIssues.push(updatedIssue);
-    setProjectIssues(updatedIssues);
-    setFilteredIssues(updatedIssues);
+    if (response.ok) {
+      const updatedIssue = (await response.json()) as IssueProps;
+      const updatedIssues: IssueProps[] = projectIssues.filter(
+        (issue) => issue.issue_id !== updatedIssue.issue_id
+      );
+      updatedIssues.push(updatedIssue);
+      setProjectIssues(updatedIssues);
+      setFilteredIssues(updatedIssues);
+    }
   };
 
+  const onIssueCreateHandler = (issue: IssueProps) =>
+    setProjectIssues((prev) => [...prev].concat(issue));
+
+  const changeUpdatedIssue = (issue: IssueProps) =>
+    setProjectIssues((prev) =>
+      prev.map((current_issue) =>
+        current_issue.issue_id === issue.issue_id ? issue : current_issue
+      )
+    );
+
   return (
-    <div className={styles["issues-page"]}>
-      <div className={styles["issues-page-body"]}>
-        <PanelHeader
-          inputPlaceholder="Type to filter project issues..."
-          creationalButtonText="Create Project Issue"
-          onInputChangeHandler={(event: ChangeEvent<HTMLInputElement>) => {
-            const value = event.target.value;
-            setFilteredIssues(
-              projectIssues.filter((issue) =>
-                issue.issue_title.toLowerCase().includes(value)
-              )
-            );
-          }}
-          creationalButtonHandler={() => setIsIssueModalOpen(true)}
-        />
-        <IssuesBoard
-          workspaceId={workspaceId}
-          issues={filteredIssues}
-          states={states}
-          handleIssueChange={handleIssueChange}
-          issueRemovalHandler={issueRemovalHandler}
-        />
-      </div>
+    <Fragment>
+      <PanelHeader
+        inputPlaceholder="Type to filter project issues..."
+        creationalButtonText="Create Project Issue"
+        onInputChangeHandler={(event: ChangeEvent<HTMLInputElement>) => {
+          const value = event.target.value;
+          setFilteredIssues(
+            projectIssues.filter((issue) =>
+              issue.issue_title.toLowerCase().includes(value)
+            )
+          );
+        }}
+        creationalButtonHandler={() => setIsIssueModalOpen(true)}
+      />
+      <IssuesBoard
+        workspaceId={workspaceId}
+        issues={filteredIssues}
+        states={states}
+        handleIssueChange={handleIssueChange}
+        issueRemovalHandler={issueRemovalHandler}
+        changeUpdatedIssue={changeUpdatedIssue}
+      />
       {isIssueModalOpen ? (
         <Fragment>
           <div className={styles["dark-overlay"]} />
@@ -178,6 +166,7 @@ export default function Issues() {
             <IssueCreationalModal
               workspaceId={workspaceId}
               project_id={projectId}
+              onIssueCreateHandler={onIssueCreateHandler}
               onCancelHandler={(shouldStateModalOpen: boolean) => {
                 setIsIssueModalOpen(false);
                 setIsStateModalOpen(shouldStateModalOpen);
@@ -197,6 +186,6 @@ export default function Issues() {
           </div>
         </Fragment>
       ) : null}
-    </div>
+    </Fragment>
   );
 }

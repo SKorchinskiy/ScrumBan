@@ -30,8 +30,8 @@ export default function CreationalModal({
     }));
   };
 
-  const createNewWorkspace = (event: MouseEvent<HTMLButtonElement>) => {
-    fetch("http://localhost:8000/workspaces", {
+  const createNewWorkspace = async (event: MouseEvent<HTMLButtonElement>) => {
+    const response = await fetch("http://localhost:8000/workspaces", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -40,13 +40,14 @@ export default function CreationalModal({
       body: JSON.stringify({
         ...workspaceInfo,
       }),
-    }).then((response) =>
-      response.json().then((workspace) => {
-        if (workspace?.workspace_id) {
-          router.push(`/workspaces/${workspace.workspace_id}/dashboard`);
-        }
-      })
-    );
+    });
+
+    if (response.ok) {
+      const workspace = await response.json();
+      if (workspace?.workspace_id) {
+        router.push(`/workspaces/${workspace.workspace_id}/dashboard`);
+      }
+    }
   };
 
   return (

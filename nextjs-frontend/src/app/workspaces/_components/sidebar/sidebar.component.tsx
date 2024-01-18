@@ -3,18 +3,11 @@
 import styles from "./sidebar.module.css";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import WorkspaceList from "../workspace-list/workspace-list.component";
-import { WorkspaceProject } from "../../[workspaceId]/projects/page";
 import { usePathname, useRouter } from "next/navigation";
 import IssueCreationalModal from "../issue-creational-modal/issue-creational-modal.component";
 import ProjectRepresentation from "../project-representation/project-representation.component";
 import StateCreationalModal from "../state-creational-modal/state-creational-modal.component";
-
-export type WorkspaceState = {
-  state_id: number;
-  workspace_id: number | string;
-  state_name: string;
-  state_color: string;
-};
+import { WorkspaceProject } from "@/app/types/types";
 
 export default function SideBar({ workspace_id }: { workspace_id: number }) {
   const pathname = usePathname();
@@ -57,7 +50,7 @@ export default function SideBar({ workspace_id }: { workspace_id: number }) {
     };
 
     fetchUserProjects();
-  }, []);
+  }, [workspace_id]);
 
   return (
     <Fragment>

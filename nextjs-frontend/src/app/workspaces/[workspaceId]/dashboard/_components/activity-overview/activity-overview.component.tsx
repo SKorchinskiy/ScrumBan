@@ -1,8 +1,8 @@
 "use client";
 
+import { ProjectProps } from "@/app/types/types";
 import styles from "./activity-overview.module.css";
-import { usePathname, useRouter } from "next/navigation";
-import { ProjectProps } from "../../../projects/[projectId]/sprints/[sprintId]/page";
+import { useRouter } from "next/navigation";
 
 type ActivityOverviewProps = {
   projects: ProjectProps[];
@@ -14,7 +14,6 @@ export default function ActivityOverview({
   workspaceId,
 }: ActivityOverviewProps) {
   const router = useRouter();
-  const pathname = usePathname();
 
   return (
     <div className={styles["activity-board"]}>

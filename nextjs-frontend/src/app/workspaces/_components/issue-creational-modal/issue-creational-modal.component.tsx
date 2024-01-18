@@ -2,15 +2,12 @@
 
 import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import styles from "./issue-creational-modal.module.css";
-import { WorkspaceProject } from "../../[workspaceId]/projects/page";
-import { WorkspaceState } from "../sidebar/sidebar.component";
-
-export type IssueParams = {
-  issue_title: string;
-  issue_description: string;
-  issue_priority: "None" | "Low" | "Medium" | "High" | "Urgent";
-  issue_state_id: number;
-};
+import {
+  IssueParams,
+  IssueProps,
+  WorkspaceProject,
+  WorkspaceState,
+} from "@/app/types/types";
 
 const initialIssueData: IssueParams = {
   issue_title: "",
@@ -22,11 +19,13 @@ const initialIssueData: IssueParams = {
 type IssueCreationalModalProps = {
   workspaceId: number;
   onCancelHandler: Function;
+  onIssueCreateHandler?: Function;
 } & { project_id?: number };
 
 export default function IssueCreationalModal({
   workspaceId,
   onCancelHandler,
+  onIssueCreateHandler,
   project_id,
 }: IssueCreationalModalProps) {
   const [projects, setProjects] = useState<WorkspaceProject[]>([]);
@@ -51,7 +50,7 @@ export default function IssueCreationalModal({
     };
 
     fetchWorkspaceProject();
-  }, []);
+  }, [workspaceId]);
 
   useEffect(() => {
     const fetchWorkspaceStates = async () => {
@@ -70,7 +69,7 @@ export default function IssueCreationalModal({
     };
 
     fetchWorkspaceStates();
-  }, []);
+  }, [workspaceId]);
 
   const setIssueInputData = (
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -84,7 +83,7 @@ export default function IssueCreationalModal({
   };
 
   const createNewIssue = async (event: MouseEvent<HTMLButtonElement>) => {
-    await fetch(
+    const response = await fetch(
       `http://localhost:8000/workspaces/${workspaceId}/projects/${projectId}/issues`,
       {
         method: "POST",
@@ -97,6 +96,10 @@ export default function IssueCreationalModal({
         }),
       }
     );
+    if (response.ok && onIssueCreateHandler) {
+      const issue = (await response.json()) as IssueProps;
+      onIssueCreateHandler(issue);
+    }
     onCancelHandler(false);
   };
 
