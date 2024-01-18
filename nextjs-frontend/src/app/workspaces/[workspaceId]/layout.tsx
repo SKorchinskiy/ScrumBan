@@ -24,7 +24,9 @@ export default async function RootLayout({
       <body className={inter.className}>
         <div className="workspace-page">
           <SideBar workspace_id={params.workspaceId} />
-          {children}
+          <div className="main-panel">
+            <div className="main-panel-container">{children}</div>
+          </div>
         </div>
       </body>
     </html>

@@ -10,4 +10,25 @@ body {
   background-color: #18122a;
   display: flex;
   justify-content: space-between;
+  overflow: scroll;
+  box-sizing: border-box;
+}
+
+.main-panel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.main-panel-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #392f53;
+  width: 95%;
+  height: 95%;
+  border-radius: 10px;
 }
