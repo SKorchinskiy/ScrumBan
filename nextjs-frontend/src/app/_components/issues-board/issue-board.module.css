@@ -1,5 +1,6 @@
 .issue-board {
   overflow: scroll;
+  width: 95%;
 }
 
 .issue-board-header,
@@ -24,8 +25,9 @@
   margin: 10px;
   border-radius: 10px;
   overflow: scroll;
-  min-width: 200px;
-  max-width: 500px;
+  min-height: 500px;
+  min-width: 300px;
+  max-width: 900px;
   max-height: 600px;
 }
 

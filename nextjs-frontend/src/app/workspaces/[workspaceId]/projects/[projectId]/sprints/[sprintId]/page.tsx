@@ -6,39 +6,7 @@ import PanelHeader from "@/app/workspaces/_components/panel-header/panel-header.
 import { ChangeEvent, Fragment, useEffect, useMemo, useState } from "react";
 import IssueSelector from "../_components/issue-selector/issue-selector.component";
 import { usePathname } from "next/navigation";
-
-export type StateProps = {
-  state_id: number;
-  state_name: string;
-  state_color: string;
-  workspace_id: number;
-};
-
-export type ProjectProps = {
-  project_id: number;
-  project_name: string;
-  project_description: string;
-  workspace_id: number;
-  project_access: string;
-};
-
-export type SprintProps = {
-  sprint_id: number;
-  sprint_title: string;
-  sprint_description: string;
-  sprint_start_date: string;
-  sprint_end_date: string;
-};
-
-export type IssueProps = {
-  issue_id: number;
-  issue_title: string;
-  issue_description: string;
-  issue_priority: "None" | "Low" | "Medium" | "High" | "Urgent";
-  project: ProjectProps;
-  issue_state: StateProps;
-  sprint: SprintProps | null;
-};
+import { IssueProps, StateProps } from "@/app/types/types";
 
 export default function Sprint() {
   const pathname = usePathname();
@@ -81,13 +49,14 @@ export default function Sprint() {
           credentials: "include",
         }
       );
-
-      const workspaceStates = await response.json();
-      setStates(workspaceStates);
+      if (response.ok) {
+        const workspaceStates = await response.json();
+        setStates(workspaceStates);
+      }
     };
 
     getWorkspaceStates();
-  }, []);
+  }, [workspaceId]);
 
   useEffect(() => {
     setFilteredIssues(
@@ -109,6 +78,7 @@ export default function Sprint() {
           },
         }
       );
+
       if (response.ok) {
         const issues: IssueProps[] = await response.json();
         setProjectIssues(issues);
@@ -116,7 +86,7 @@ export default function Sprint() {
     };
 
     fetchSprintIssues();
-  }, []);
+  }, [projectId, workspaceId]);
 
   const issueRemovalHandler = async (issueId: number) => {
     await fetch(
@@ -162,15 +132,17 @@ export default function Sprint() {
         body: JSON.stringify({ ...updateIssueDto }),
       }
     );
-    const updatedIssue = (await response.json()) as IssueProps;
-    const updatedIssues: IssueProps[] = projectIssues.filter(
-      (issue) => issue.issue_id !== updatedIssue.issue_id
-    );
-    updatedIssues.push(updatedIssue);
-    setProjectIssues(updatedIssues);
-    setFilteredIssues(
-      updatedIssues.filter((issue) => issue.sprint?.sprint_id === sprintId)
-    );
+    if (response.ok) {
+      const updatedIssue = (await response.json()) as IssueProps;
+      const updatedIssues: IssueProps[] = projectIssues.filter(
+        (issue) => issue.issue_id !== updatedIssue.issue_id
+      );
+      updatedIssues.push(updatedIssue);
+      setProjectIssues(updatedIssues);
+      setFilteredIssues(
+        updatedIssues.filter((issue) => issue.sprint?.sprint_id === sprintId)
+      );
+    }
   };
 
   const issueUpdateHandler = async (sprintIssueIds: number[]) => {
@@ -205,33 +177,57 @@ export default function Sprint() {
       );
     }
 
-    setIsIssueModalOpen(false);
+    const response = await fetch(
+      `http://localhost:8000/workspaces/${workspaceId}/projects/${projectId}/issues`,
+      {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.ok) {
+      const issues: IssueProps[] = await response.json();
+      setProjectIssues(issues);
+
+      setIsIssueModalOpen(false);
+    }
   };
 
+  const toggleIssueSelectorOpen = () => setIsIssueModalOpen(!isIssueModalOpen);
+
+  const changeUpdatedIssue = (issue: IssueProps) =>
+    setProjectIssues((prev) =>
+      prev.map((current_issue) =>
+        current_issue.issue_id === issue.issue_id ? issue : current_issue
+      )
+    );
+
   return (
-    <div className={styles["sprint-page"]}>
-      <div className={styles["sprint-page-body"]}>
-        <PanelHeader
-          inputPlaceholder="Type to filter sprint issues..."
-          creationalButtonText="Update Issues"
-          onInputChangeHandler={(event: ChangeEvent<HTMLInputElement>) => {
-            const value = event.target.value;
-            setFilteredIssues(
-              sprintIssues.filter((issue) =>
-                issue.issue_title.toLowerCase().includes(value)
-              )
-            );
-          }}
-          creationalButtonHandler={() => setIsIssueModalOpen(true)}
-        />
-        <IssuesBoard
-          workspaceId={workspaceId}
-          issues={filteredIssues}
-          states={states}
-          handleIssueChange={handleIssueChange}
-          issueRemovalHandler={issueRemovalHandler}
-        />
-      </div>
+    <Fragment>
+      <PanelHeader
+        inputPlaceholder="Type to filter sprint issues..."
+        creationalButtonText="Update Issues"
+        onInputChangeHandler={(event: ChangeEvent<HTMLInputElement>) => {
+          const value = event.target.value;
+          setFilteredIssues(
+            sprintIssues.filter((issue) =>
+              issue.issue_title.toLowerCase().includes(value)
+            )
+          );
+        }}
+        creationalButtonHandler={() => setIsIssueModalOpen(true)}
+      />
+      <IssuesBoard
+        workspaceId={workspaceId}
+        issues={filteredIssues}
+        states={states}
+        handleIssueChange={handleIssueChange}
+        issueRemovalHandler={issueRemovalHandler}
+        changeUpdatedIssue={changeUpdatedIssue}
+      />
       {isIssueModalOpen ? (
         <Fragment>
           <div className={styles["dark-overlay"]} />
@@ -240,10 +236,11 @@ export default function Sprint() {
               issues={projectIssues}
               sprintIssues={sprintIssues}
               issueUpdateHandler={issueUpdateHandler}
+              toggleIssueSelectorOpen={toggleIssueSelectorOpen}
             />
           </div>
         </Fragment>
       ) : null}
-    </div>
+    </Fragment>
   );
 }

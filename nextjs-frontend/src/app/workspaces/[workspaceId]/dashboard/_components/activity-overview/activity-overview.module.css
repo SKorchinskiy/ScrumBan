@@ -7,7 +7,7 @@
 .activity-overview {
   padding: 15px;
   width: 90%;
-  height: 200px;
+  height: 100px;
   background-color: #2d2643;
   border-radius: 10px;
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.7);
@@ -20,8 +20,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 100px;
   border: 1px solid white;
   border-radius: 10px;
   background-color: #443c68;

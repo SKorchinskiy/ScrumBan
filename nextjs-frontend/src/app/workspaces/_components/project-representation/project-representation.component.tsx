@@ -1,9 +1,9 @@
 "use client";
 
 import styles from "./project-representation.module.css";
-import { WorkspaceProject } from "../../[workspaceId]/projects/page";
 import { Fragment, useState } from "react";
 import { useRouter } from "next/navigation";
+import { WorkspaceProject } from "@/app/types/types";
 
 export default function ProjectRepresentation({
   project,

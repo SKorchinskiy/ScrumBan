@@ -1,5 +1,6 @@
 import { ChangeEvent, MouseEvent, useState } from "react";
 import styles from "./sprint-creational-modal.module.css";
+import { useRouter } from "next/navigation";
 
 type SprintParams = {
   sprint_title: string;
@@ -26,6 +27,7 @@ export default function SprintCreationalModal({
   projectId,
   onCancelHandler,
 }: SprintCreationalModalProps) {
+  const router = useRouter();
   const [sprintInfo, setSprintInfo] = useState<SprintParams>(initialSprintData);
 
   const setSprintInputData = (event: ChangeEvent<HTMLInputElement>) => {
@@ -38,7 +40,7 @@ export default function SprintCreationalModal({
 
   const createNewSprint = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    await fetch(
+    const response = await fetch(
       `http://localhost:8000/workspaces/${workspaceId}/projects/${projectId}/sprints`,
       {
         method: "POST",
@@ -49,6 +51,11 @@ export default function SprintCreationalModal({
         body: JSON.stringify({ ...sprintInfo }),
       }
     );
+
+    if (response.ok) {
+      const sprint = await response.json();
+      router.push(`sprints/${sprint.sprint_id}`);
+    }
     onCancelHandler();
   };
 

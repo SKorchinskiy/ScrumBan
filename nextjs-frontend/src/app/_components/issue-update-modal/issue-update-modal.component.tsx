@@ -2,24 +2,18 @@
 
 import { ChangeEvent, MouseEvent, useEffect, useMemo, useState } from "react";
 import styles from "./issue-update-modal.module.css";
-import { WorkspaceState } from "@/app/workspaces/_components/sidebar/sidebar.component";
-import { IssueProps } from "@/app/workspaces/[workspaceId]/projects/[projectId]/sprints/[sprintId]/page";
-
-export type IssueParams = {
-  issue_title: string;
-  issue_description: string;
-  issue_priority: "None" | "Low" | "Medium" | "High" | "Urgent";
-  issue_state_id: number;
-};
+import { IssueParams, IssueProps, WorkspaceState } from "@/app/types/types";
 
 export default function IssueUpdateModal({
   issue,
   workspaceId,
   onCancelHandler,
+  changeUpdatedIssue,
 }: {
   issue: Partial<IssueProps>;
   workspaceId: number;
   onCancelHandler: Function;
+  changeUpdatedIssue: Function;
 } & { project_id?: number }) {
   const [states, setStates] = useState<WorkspaceState[]>([]);
   const issueId = useMemo(() => issue.issue_id, [issue]);
@@ -47,7 +41,7 @@ export default function IssueUpdateModal({
     };
 
     fetchWorkspaceStates();
-  }, []);
+  }, [workspaceId]);
 
   const setIssueInputData = (
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -61,7 +55,7 @@ export default function IssueUpdateModal({
   };
 
   const updateIssue = async (event: MouseEvent<HTMLButtonElement>) => {
-    await fetch(
+    const response = await fetch(
       `http://localhost:8000/workspaces/${workspaceId}/issues/${issueId}`,
       {
         method: "PUT",
@@ -74,6 +68,12 @@ export default function IssueUpdateModal({
         }),
       }
     );
+
+    if (response.ok) {
+      const issue = await response.json();
+      changeUpdatedIssue(issue);
+    }
+
     onCancelHandler();
   };
 

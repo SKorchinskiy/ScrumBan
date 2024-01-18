@@ -48,18 +48,20 @@ export default function SignInForm({ toggleIsSignInHidden }: UserSignInProps) {
         }),
       });
 
-      const user = await response.json();
-      if (user.accessToken) {
-        const workspaces = await (
-          await fetch("http://localhost:8000/workspaces", {
-            method: "GET",
-            credentials: "include",
-          })
-        ).json();
-        if (!workspaces?.length) {
-          router.push("/workspaces");
-        } else {
-          router.push(`/workspaces/${workspaces[0].workspace_id}/dashboard`);
+      if (response.ok) {
+        const user = await response.json();
+        if (user.accessToken) {
+          const workspaces = await (
+            await fetch("http://localhost:8000/workspaces", {
+              method: "GET",
+              credentials: "include",
+            })
+          ).json();
+          if (!workspaces?.length) {
+            router.push("/workspaces");
+          } else {
+            router.push(`/workspaces/${workspaces[0].workspace_id}/dashboard`);
+          }
         }
       }
     };

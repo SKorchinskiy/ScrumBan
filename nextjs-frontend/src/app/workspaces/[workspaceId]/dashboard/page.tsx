@@ -4,14 +4,13 @@ import styles from "./page.module.css";
 import ActivityGraph from "./_components/activity-graph/activity-graph.component";
 import ActivityOverview from "./_components/activity-overview/activity-overview.component";
 import { useEffect, useMemo, useState } from "react";
-import { ProjectProps } from "../projects/[projectId]/sprints/[sprintId]/page";
 import { usePathname } from "next/navigation";
+import { ProjectProps } from "@/app/types/types";
 
 export default function Dashboard() {
   const [workspaceProjects, setWorkspaceProjects] = useState<ProjectProps[]>(
     []
   );
-
   const pathname = usePathname();
   const currentHour = useMemo(
     () => parseInt(new Date(Date.now()).toTimeString().split(":")[0]),
@@ -43,9 +42,10 @@ export default function Dashboard() {
           credentials: "include",
         }
       );
-
-      const projects = await response.json();
-      setWorkspaceProjects(projects);
+      if (response.ok) {
+        const projects = await response.json();
+        setWorkspaceProjects(projects);
+      }
     };
 
     fetchWOrkspaceProjects();

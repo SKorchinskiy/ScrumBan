@@ -3,11 +3,7 @@
 import styles from "./activity-graph.module.css";
 import BoxShapedDay from "../box-shaped-day/box-shaped-day.component";
 import { useEffect, useState } from "react";
-
-export type WorkspaceStats = {
-  countOfActivities: number;
-  createdAt: string;
-};
+import { WorkspaceStats } from "@/app/types/types";
 
 export default function ActivityGraph({
   workspaceId,
@@ -31,18 +27,21 @@ export default function ActivityGraph({
           credentials: "include",
         }
       );
-      const data: WorkspaceStats[] = await response.json();
-      setYearWorkspaceStats(
-        data.sort((a: WorkspaceStats, b: WorkspaceStats) => {
-          if (a.createdAt == b.createdAt) return 0;
-          if (a.createdAt < b.createdAt) return -1;
-          return 1;
-        })
-      );
+
+      if (response.ok) {
+        const data: WorkspaceStats[] = await response.json();
+        setYearWorkspaceStats(
+          data.sort((a: WorkspaceStats, b: WorkspaceStats) => {
+            if (a.createdAt == b.createdAt) return 0;
+            if (a.createdAt < b.createdAt) return -1;
+            return 1;
+          })
+        );
+      }
     };
 
     fetchWorkspaceStats();
-  }, []);
+  }, [workspaceId]);
 
   return (
     <div className={styles["activity-graph"]}>

@@ -3,38 +3,8 @@
 import styles from "./issue-board.module.css";
 import { DragEvent, useState } from "react";
 import IssueUpdateModal from "../issue-update-modal/issue-update-modal.component";
-
-type StateProps = {
-  state_id: number;
-  state_name: string;
-  state_color: string;
-  workspace_id: number;
-};
-
-type ProjectProps = {
-  project_id: number;
-  project_name: string;
-  project_description: string;
-  workspace_id: number;
-  project_access: string;
-};
-
-type IssueProps = {
-  issue_id: number;
-  issue_title: string;
-  issue_description: string;
-  issue_priority: "None" | "Low" | "Medium" | "High" | "Urgent";
-  project: ProjectProps;
-  issue_state: StateProps;
-};
-
-type IssuesBoardProps = {
-  workspaceId: number;
-  issues: IssueProps[];
-  states: StateProps[];
-  handleIssueChange: (issueId: number, newStateColumnId: number) => void;
-  issueRemovalHandler: (issueId: number) => void;
-};
+import IssueCard from "../issue-card/issue-card.component";
+import { IssueProps, IssuesBoardProps } from "@/app/types/types";
 
 export default function IssuesBoard({
   workspaceId,
@@ -42,6 +12,7 @@ export default function IssuesBoard({
   states,
   handleIssueChange,
   issueRemovalHandler,
+  changeUpdatedIssue,
 }: IssuesBoardProps) {
   const [draggedIssueId, setDraggedIssueId] = useState<number>(0);
   const [lastEnteredColumnId, setLastEnteredColumnId] = useState<number>(0);
@@ -66,9 +37,9 @@ export default function IssuesBoard({
     handleIssueChange(draggedIssueId, lastEnteredColumnId);
   }
 
-  const onCancelHandler = () => {
-    setIsIssueUpdateOpen(false);
-  };
+  const onCancelHandler = () => setIsIssueUpdateOpen(false);
+  const toggleIssueModalState = () => setIsIssueUpdateOpen(!isIssueUpdateOpen);
+  const onIssueUpdateHandler = (issue: IssueProps) => setIssueToUpdate(issue);
 
   return (
     <div className={styles["issue-board"]}>
@@ -95,48 +66,18 @@ export default function IssuesBoard({
             onDrop={dropHandler}
           >
             {issues
-              .filter((issue) => issue.issue_state.state_id === state.state_id)
+              .filter(
+                (issue) => issue?.issue_state?.state_id === state.state_id
+              )
               .map((issue) => (
-                <div
+                <IssueCard
                   key={issue.issue_id}
-                  id={`draggable-issue-${issue.issue_id}`}
-                  className={styles["draggable-issue"]}
-                  draggable
-                  onDragStart={dragStartHandler}
-                >
-                  <div className={styles["issue-header"]}>
-                    <span
-                      className={styles["issue-modal-update"]}
-                      onClick={() => {
-                        setIsIssueUpdateOpen((prev) => !prev);
-                        setIssueToUpdate(issue);
-                      }}
-                    >
-                      &#9998;
-                    </span>
-                    <span
-                      className={styles["issue-modal-close"]}
-                      onClick={() => issueRemovalHandler(issue.issue_id)}
-                    >
-                      &#x2715;
-                    </span>
-                  </div>
-                  <div>
-                    <span className={styles["issue-data"]}>
-                      {issue.issue_title}
-                    </span>
-                  </div>
-                  <div>
-                    <p className={styles["issue-data"]}>
-                      {issue.issue_description}
-                    </p>
-                  </div>
-                  <div>
-                    <p className={styles["issue-data"]}>
-                      {issue.issue_priority}
-                    </p>
-                  </div>
-                </div>
+                  issue={issue}
+                  dragStartHandler={dragStartHandler}
+                  issueRemovalHandler={issueRemovalHandler}
+                  toggleIssueModalState={toggleIssueModalState}
+                  onIssueUpdateHandler={onIssueUpdateHandler}
+                />
               ))}
           </div>
         ))}
@@ -149,6 +90,7 @@ export default function IssuesBoard({
               workspaceId={workspaceId}
               issue={issueToUpdate}
               onCancelHandler={onCancelHandler}
+              changeUpdatedIssue={changeUpdatedIssue}
             />
           </div>
         </div>
