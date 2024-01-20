@@ -27,31 +27,32 @@
 
 ```
 📦 scrumban
-├─ LICENSE
-├─ nestjs-backend
+LICENSE
+README.md
+nestjs-backend
 │  ├─ .dockerignore
-│  ├─ auth
+auth
 │  │  ├─ .eslintrc.js
 │  │  ├─ .gitignore
 │  │  ├─ .prettierrc
 │  │  ├─ Dockerfile
 │  │  ├─ README.md
-│  │  ├─ docker-compose.yaml
+docker-compose.yaml
 │  │  ├─ nest-cli.json
 │  │  ├─ package-lock.json
-│  │  ├─ package.json
-│  │  ├─ src
+package.json
+src
 │  │  │  ├─ auth.controller.ts
 │  │  │  ├─ auth.module.ts
 │  │  │  ├─ auth.service.ts
 │  │  │  ├─ dto
 │  │  │  │  ├─ createUser.dto.ts
 │  │  │  │  └─ updateUser.dto.ts
-│  │  │  ├─ mailer
+mailer
 │  │  │  │  ├─ mailer.module.ts
 │  │  │  │  └─ mailer.service.ts
-│  │  │  └─ main.ts
-│  │  ├─ tsconfig.build.json
+main.ts
+tsconfig.build.json
 │  │  └─ tsconfig.json
 │  ├─ docker-compose.yaml
 │  ├─ gateway
@@ -141,23 +142,23 @@
 │  │  ├─ package-lock.json
 │  │  ├─ package.json
 │  │  ├─ src
-│  │  │  ├─ dto
+dto
 │  │  │  │  ├─ create-issue.dto.ts
 │  │  │  │  ├─ create-label.dto.ts
-│  │  │  │  ├─ create-project.dto.ts
-│  │  │  │  ├─ create-sprint.dto.ts
-│  │  │  │  ├─ create-state.dto.ts
+create-project.dto.ts
+create-sprint.dto.ts
+create-state.dto.ts
 │  │  │  │  ├─ update-issue.dto.ts
 │  │  │  │  ├─ update-label.dto.ts
-│  │  │  │  ├─ update-project-member.dto.ts
+update-project-member.dto.ts
 │  │  │  │  ├─ update-project.dto.ts
 │  │  │  │  ├─ update-sprint.dto.ts
 │  │  │  │  └─ update-state.dto.ts
 │  │  │  ├─ entities
-│  │  │  │  ├─ issue.entity.ts
+issue.entity.ts
 │  │  │  │  ├─ label.entity.ts
 │  │  │  │  ├─ member.entity.ts
-│  │  │  │  ├─ project.entity.ts
+project.entity.ts
 │  │  │  │  ├─ sprint.entity.ts
 │  │  │  │  └─ state.entity.ts
 │  │  │  ├─ issue
@@ -177,7 +178,7 @@
 │  │  │  ├─ project.module.ts
 │  │  │  ├─ project.service.ts
 │  │  │  ├─ providers
-│  │  │  │  ├─ database.provider.ts
+database.provider.ts
 │  │  │  │  └─ project.provider.ts
 │  │  │  ├─ sprint
 │  │  │  │  ├─ sprint.controller.ts
@@ -267,6 +268,9 @@
    │     │  ├─ frame-box
    │     │  │  ├─ frame-box.component.tsx
    │     │  │  └─ frame-box.module.css
+   │     │  ├─ issue-card
+   │     │  │  ├─ issue-card.component.tsx
+   │     │  │  └─ issue-card.module.css
    │     │  ├─ issue-update-modal
    │     │  │  ├─ issue-update-modal.component.tsx
    │     │  │  └─ issue-update-modal.module.css
@@ -284,6 +288,11 @@
    │     ├─ layout.tsx
    │     ├─ page.module.css
    │     ├─ page.tsx
+   │     ├─ types
+   │     │  └─ types.ts
+   │     ├─ verify
+   │     │  └─ [token]
+   │     │     └─ page.tsx
    │     └─ workspaces
    │        ├─ [workspaceId]
    │        │  ├─ dashboard
@@ -323,9 +332,15 @@
    │        │     │     ├─ page.module.css
    │        │     │     └─ page.tsx
    │        │     ├─ _components
-   │        │     │  └─ creational-modal
-   │        │     │     ├─ creational-modal.component.tsx
-   │        │     │     └─ creational-modal.module.css
+   │        │     │  ├─ creational-modal
+   │        │     │  │  ├─ creational-modal.component.tsx
+   │        │     │  │  └─ creational-modal.module.css
+   │        │     │  ├─ project-card
+   │        │     │  │  ├─ project-card.component.tsx
+   │        │     │  │  └─ project-card.module.css
+   │        │     │  └─ project-list
+   │        │     │     ├─ project-list.component.tsx
+   │        │     │     └─ project-list.module.css
    │        │     ├─ page.module.css
    │        │     └─ page.tsx
    │        ├─ _components
@@ -355,7 +370,6 @@
    └─ tsconfig.json
 ```
 ©generated by [Project Tree Generator](https://woochanleee.github.io/project-tree-generator)
-
 ## Project Workflow
 
 <!--The project is deployed using AWS. You can check it [here](). -->
