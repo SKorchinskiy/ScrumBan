@@ -38,7 +38,7 @@ export default function CreationalModal({
 
   const createNewProject = async (event: MouseEvent<HTMLButtonElement>) => {
     const response = await fetch(
-      `http://localhost:8000/workspaces/${workspace_id}/projects`,
+      `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspace_id}/projects`,
       {
         method: "POST",
         headers: {

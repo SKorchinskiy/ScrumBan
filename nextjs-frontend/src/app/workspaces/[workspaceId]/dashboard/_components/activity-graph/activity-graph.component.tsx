@@ -18,7 +18,7 @@ export default function ActivityGraph({
     const fetchWorkspaceStats = async () => {
       const limit = 365;
       const response = await fetch(
-        `http://localhost:8000/workspaces/${workspaceId}/stats/${limit}`,
+        `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/stats/${limit}`,
         {
           method: "GET",
           headers: {

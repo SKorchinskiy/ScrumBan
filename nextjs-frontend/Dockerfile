@@ -16,4 +16,4 @@ COPY . .
 EXPOSE 3000
 
 # run frontend code inside container
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]

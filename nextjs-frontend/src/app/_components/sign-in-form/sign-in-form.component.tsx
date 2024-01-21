@@ -37,25 +37,31 @@ export default function SignInForm({ toggleIsSignInHidden }: UserSignInProps) {
   const signUserIn = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     const fetchUser = async (data: UserSignInData) => {
-      const response = await fetch("http://localhost:8000/auth/sign-in", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          ...data,
-        }),
-      });
+      const response = await fetch(
+        "http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/auth/sign-in",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            ...data,
+          }),
+        }
+      );
 
       if (response.ok) {
         const user = await response.json();
         if (user.accessToken) {
           const workspaces = await (
-            await fetch("http://localhost:8000/workspaces", {
-              method: "GET",
-              credentials: "include",
-            })
+            await fetch(
+              "http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces",
+              {
+                method: "GET",
+                credentials: "include",
+              }
+            )
           ).json();
           if (!workspaces?.length) {
             router.push("/workspaces");

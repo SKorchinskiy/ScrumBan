@@ -1,5 +1,5 @@
+import { WorkspaceProject } from "@/app/types/types";
 import styles from "./project-card.module.css";
-import { WorkspaceProject } from "../../page";
 import { useRouter } from "next/navigation";
 
 export default function ProjectCard({

@@ -39,16 +39,19 @@ export default function SignUpForm({ toggleIsSignInHidden }: SignUpFormProps) {
 
   const registerUser = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    fetch("http://localhost:8000/auth/sign-up", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        ...userInfo,
-      }),
-    });
+    fetch(
+      "http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/auth/sign-up",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          ...userInfo,
+        }),
+      }
+    );
   };
 
   return (
