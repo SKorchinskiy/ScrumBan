@@ -1,4 +1,4 @@
-import { WorkspaceProject } from "../../page";
+import { WorkspaceProject } from "@/app/types/types";
 import ProjectCard from "../project-card/project-card.component";
 import styles from "./project-list.module.css";
 
