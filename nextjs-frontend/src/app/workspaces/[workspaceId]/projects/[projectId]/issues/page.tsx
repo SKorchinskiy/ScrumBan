@@ -39,7 +39,7 @@ export default function Issues() {
   useEffect(() => {
     const getWorkspaceStates = async () => {
       const response = await fetch(
-        `http://localhost:8000/workspaces/${workspaceId}/states`,
+        `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/states`,
         {
           method: "GET",
           credentials: "include",
@@ -61,7 +61,7 @@ export default function Issues() {
   useEffect(() => {
     const fetchProjectIssues = async () => {
       const response = await fetch(
-        `http://localhost:8000/workspaces/${workspaceId}/projects/${projectId}/issues`,
+        `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/projects/${projectId}/issues`,
         {
           method: "GET",
           credentials: "include",
@@ -79,7 +79,7 @@ export default function Issues() {
 
   const issueRemovalHandler = async (issueId: number) => {
     await fetch(
-      `http://localhost:8000/workspaces/${workspaceId}/projects/${projectId}/issues/${issueId}`,
+      `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/projects/${projectId}/issues/${issueId}`,
       {
         method: "DELETE",
         credentials: "include",
@@ -105,7 +105,7 @@ export default function Issues() {
       issue_state_id: newStateColumnId,
     };
     const response = await fetch(
-      `http://localhost:8000/workspaces/${workspaceId}/projects/${projectId}/issues/${issueId}`,
+      `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/projects/${projectId}/issues/${issueId}`,
       {
         method: "PUT",
         credentials: "include",

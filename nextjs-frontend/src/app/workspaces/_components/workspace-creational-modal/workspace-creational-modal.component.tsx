@@ -31,16 +31,19 @@ export default function CreationalModal({
   };
 
   const createNewWorkspace = async (event: MouseEvent<HTMLButtonElement>) => {
-    const response = await fetch("http://localhost:8000/workspaces", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        ...workspaceInfo,
-      }),
-    });
+    const response = await fetch(
+      "http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          ...workspaceInfo,
+        }),
+      }
+    );
 
     if (response.ok) {
       const workspace = await response.json();
