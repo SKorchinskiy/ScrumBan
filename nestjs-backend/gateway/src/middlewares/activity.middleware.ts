@@ -14,7 +14,13 @@ export default class ActivityMiddleware implements NestMiddleware {
   }
 
   async use(req: Request, res: Response, next: NextFunction) {
-    if (req.method !== 'GET') {
+    if (
+      !(
+        req.method === 'GET' ||
+        (req.method === 'POST' && req.originalUrl === '/workspaces')
+      ) &&
+      req.params.workspaceId
+    ) {
       await this.recordProjectAction(+req.params.workspaceId);
     }
     next();
