@@ -17,6 +17,8 @@ services:
     # persist data in the volume
     volumes:
       - ./:/usr/src/backend-scrumban/auth
+    # restart on failure
+    restart: always
   # gateway service container setup
   gateway:
     # gateway service container name refered by other services
@@ -31,6 +33,8 @@ services:
     # persist data in the volume
     volumes:
       - ./:/usr/src/backend-scrumban/gateway
+    # restart on failure
+    restart: always
   # project service container setup
   project:
     # project container name refered by other services
@@ -49,6 +53,8 @@ services:
     # persist data in the volume
     volumes:
       - ./:/usr/src/backend-scrumban/project
+    # restart on failure
+    restart: always
   # postgres service container setup
   postgres:
     # pull postgres image
@@ -61,6 +67,8 @@ services:
     # expose port 5432 to the common network
     ports:
       - 8080:5432
+    # restart on failure
+    restart: always
   # user service container setup
   user:
     # user container name refered by other services
@@ -81,6 +89,8 @@ services:
     volumes:
       - ./:/usr/src/backend-scrumban/user
       - /usr/src/backend-scrumban/user/node_modules/
+    # restart on failure
+    restart: always
   # workspace service setup
   workspace:
     # workspace container name refered by other services
@@ -100,3 +110,5 @@ services:
     volumes:
       - ./:/usr/src/scrumban-backend/workspace
       - /usr/src/scrumban-backend/workspace/node_modules/
+    # restart on failure
+    restart: always
