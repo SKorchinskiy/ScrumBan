@@ -16,6 +16,7 @@
   justify-content: space-evenly;
   border-radius: 0px 10px 10px 0px;
   border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: scroll;
 }
 
 .general {
@@ -88,4 +89,22 @@
   left: 50%;
   translate: -50% -50%;
   z-index: 10;
+}
+
+@media screen and (max-width: 940px) {
+  .sidebar-container {
+    align-items: center;
+    height: 400px;
+    width: 80%;
+  }
+
+  .sidebar {
+    width: 95%;
+    border-radius: 10px;
+  }
+
+  .general,
+  .projects-container {
+    height: 1000px;
+  }
 }

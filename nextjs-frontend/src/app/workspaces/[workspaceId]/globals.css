@@ -31,4 +31,13 @@ body {
   width: 95%;
   height: 95%;
   border-radius: 10px;
+  overflow: scroll;
+}
+
+@media screen and (max-width: 940px) {
+  .workspace-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }
