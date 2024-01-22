@@ -37,9 +37,9 @@ export default function SignUpForm({ toggleIsSignInHidden }: SignUpFormProps) {
     }));
   };
 
-  const registerUser = (event: MouseEvent<HTMLButtonElement>) => {
+  const registerUser = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    fetch(
+    const response = await fetch(
       "http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/auth/sign-up",
       {
         method: "POST",
@@ -52,6 +52,10 @@ export default function SignUpForm({ toggleIsSignInHidden }: SignUpFormProps) {
         }),
       }
     );
+
+    if (response.ok) {
+      toggleIsSignInHidden();
+    }
   };
 
   return (
