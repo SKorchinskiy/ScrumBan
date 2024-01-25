@@ -27,9 +27,9 @@ services:
     build: ./gateway/
     # start gateway service
     command: npm run start
-    # map port 8000 of the container to the corresponding host port
+    # map port 8000 of the container to the port 8001 of the host
     ports:
-      - 8000:8000
+      - 8001:8000
     # persist data in the volume
     volumes:
       - ./:/usr/src/backend-scrumban/gateway
@@ -110,5 +110,22 @@ services:
     volumes:
       - ./:/usr/src/scrumban-backend/workspace
       - /usr/src/scrumban-backend/workspace/node_modules/
+    # restart on failure
+    restart: always
+  #nginx reverse proxy setup
+  nginx:
+    # pulling image from dockerhub
+    image: nginx
+    # load after gateway
+    depends_on:
+      - gateway
+    # listen to incoming requests on port 8000
+    ports:
+      - 8000:8000
+    # copy nginx configs from current folder +
+    # copy letsencrypt's ssl certificate
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - /etc/letsencrypt:/etc/letsencrypt
     # restart on failure
     restart: always
