@@ -36,7 +36,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchWOrkspaceProjects = async () => {
       const response = await fetch(
-        `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/projects`,
+        `https://scrumban.site:8000/workspaces/${workspaceId}/projects`,
         {
           method: "GET",
           credentials: "include",

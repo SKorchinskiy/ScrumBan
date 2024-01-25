@@ -43,7 +43,7 @@ export default function Sprint() {
   useEffect(() => {
     const getWorkspaceStates = async () => {
       const response = await fetch(
-        `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/states`,
+        `https://scrumban.site:8000/workspaces/${workspaceId}/states`,
         {
           method: "GET",
           credentials: "include",
@@ -69,7 +69,7 @@ export default function Sprint() {
   useEffect(() => {
     const fetchSprintIssues = async () => {
       const response = await fetch(
-        `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/projects/${projectId}/issues`,
+        `https://scrumban.site:8000/workspaces/${workspaceId}/projects/${projectId}/issues`,
         {
           method: "GET",
           credentials: "include",
@@ -90,7 +90,7 @@ export default function Sprint() {
 
   const issueRemovalHandler = async (issueId: number) => {
     await fetch(
-      `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/projects/${projectId}/sprints/${sprintId}/issues/${issueId}`,
+      `https://scrumban.site:8000/workspaces/${workspaceId}/projects/${projectId}/sprints/${sprintId}/issues/${issueId}`,
       {
         method: "DELETE",
         credentials: "include",
@@ -122,7 +122,7 @@ export default function Sprint() {
       issue_state_id: newStateColumnId,
     };
     const response = await fetch(
-      `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/projects/${projectId}/issues/${issueId}`,
+      `https://scrumban.site:8000/workspaces/${workspaceId}/projects/${projectId}/issues/${issueId}`,
       {
         method: "PUT",
         credentials: "include",
@@ -159,7 +159,7 @@ export default function Sprint() {
 
     for await (let issue of addIssuesToSprint) {
       await fetch(
-        `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/projects/${projectId}/sprints/${sprintId}/issues/${issue.issue_id}`,
+        `https://scrumban.site:8000/workspaces/${workspaceId}/projects/${projectId}/sprints/${sprintId}/issues/${issue.issue_id}`,
         {
           method: "POST",
           credentials: "include",
@@ -169,7 +169,7 @@ export default function Sprint() {
 
     for await (let issue of removeIssuesFromSprint) {
       await fetch(
-        `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/projects/${projectId}/sprints/${sprintId}/issues/${issue.issue_id}`,
+        `https://scrumban.site:8000/workspaces/${workspaceId}/projects/${projectId}/sprints/${sprintId}/issues/${issue.issue_id}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -178,7 +178,7 @@ export default function Sprint() {
     }
 
     const response = await fetch(
-      `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/projects/${projectId}/issues`,
+      `https://scrumban.site:8000/workspaces/${workspaceId}/projects/${projectId}/issues`,
       {
         method: "GET",
         credentials: "include",

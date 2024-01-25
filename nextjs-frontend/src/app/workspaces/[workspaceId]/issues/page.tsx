@@ -24,7 +24,7 @@ export default function Issues() {
   useEffect(() => {
     const getWorkspaceStates = async () => {
       const response = await fetch(
-        `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/states`,
+        `https://scrumban.site:8000/workspaces/${workspaceId}/states`,
         {
           method: "GET",
           credentials: "include",
@@ -46,7 +46,7 @@ export default function Issues() {
   useEffect(() => {
     const fetchWorkspaceIssues = async () => {
       const response = await fetch(
-        `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/issues`,
+        `https://scrumban.site:8000/workspaces/${workspaceId}/issues`,
         {
           method: "GET",
           credentials: "include",
@@ -64,7 +64,7 @@ export default function Issues() {
 
   const issueRemovalHandler = async (issueId: number) => {
     await fetch(
-      `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/issues/${issueId}`,
+      `https://scrumban.site:8000/workspaces/${workspaceId}/issues/${issueId}`,
       {
         method: "DELETE",
         credentials: "include",
@@ -90,7 +90,7 @@ export default function Issues() {
       issue_state_id: newStateColumnId,
     };
     const response = await fetch(
-      `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/projects/${targetIssue.project.project_id}/issues/${issueId}`,
+      `https://scrumban.site:8000/workspaces/${workspaceId}/projects/${targetIssue.project.project_id}/issues/${issueId}`,
       {
         method: "PUT",
         credentials: "include",

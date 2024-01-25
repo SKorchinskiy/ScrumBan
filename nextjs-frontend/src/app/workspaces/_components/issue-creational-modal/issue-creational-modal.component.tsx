@@ -36,7 +36,7 @@ export default function IssueCreationalModal({
   useEffect(() => {
     const fetchWorkspaceProject = async () => {
       const response = await fetch(
-        `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/projects`,
+        `https://scrumban.site:8000/workspaces/${workspaceId}/projects`,
         {
           method: "GET",
           credentials: "include",
@@ -55,7 +55,7 @@ export default function IssueCreationalModal({
   useEffect(() => {
     const fetchWorkspaceStates = async () => {
       const response = await fetch(
-        `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/states`,
+        `https://scrumban.site:8000/workspaces/${workspaceId}/states`,
         {
           method: "GET",
           credentials: "include",
@@ -84,7 +84,7 @@ export default function IssueCreationalModal({
 
   const createNewIssue = async (event: MouseEvent<HTMLButtonElement>) => {
     const response = await fetch(
-      `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/projects/${projectId}/issues`,
+      `https://scrumban.site:8000/workspaces/${workspaceId}/projects/${projectId}/issues`,
       {
         method: "POST",
         headers: {

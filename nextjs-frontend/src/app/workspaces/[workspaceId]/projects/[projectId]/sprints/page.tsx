@@ -32,7 +32,7 @@ export default function Sprints() {
   useEffect(() => {
     const fetchProjectSprints = async () => {
       const response = await fetch(
-        `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/projects/${projectId}/sprints`,
+        `https://scrumban.site:8000/workspaces/${workspaceId}/projects/${projectId}/sprints`,
         {
           method: "GET",
           credentials: "include",

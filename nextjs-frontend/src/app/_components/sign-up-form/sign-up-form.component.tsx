@@ -39,19 +39,16 @@ export default function SignUpForm({ toggleIsSignInHidden }: SignUpFormProps) {
 
   const registerUser = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    const response = await fetch(
-      "http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/auth/sign-up",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          ...userInfo,
-        }),
-      }
-    );
+    const response = await fetch("https://scrumban.site:8000/auth/sign-up", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        ...userInfo,
+      }),
+    });
 
     if (response.ok) {
       toggleIsSignInHidden();
