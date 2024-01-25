@@ -27,7 +27,7 @@ export default function IssueUpdateModal({
   useEffect(() => {
     const fetchWorkspaceStates = async () => {
       const response = await fetch(
-        `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/states`,
+        `https://scrumban.site:8000/workspaces/${workspaceId}/states`,
         {
           method: "GET",
           credentials: "include",
@@ -56,7 +56,7 @@ export default function IssueUpdateModal({
 
   const updateIssue = async (event: MouseEvent<HTMLButtonElement>) => {
     const response = await fetch(
-      `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/issues/${issueId}`,
+      `https://scrumban.site:8000/workspaces/${workspaceId}/issues/${issueId}`,
       {
         method: "PUT",
         headers: {

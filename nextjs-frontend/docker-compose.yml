@@ -1,0 +1,19 @@
+services:
+  frontend:
+    container_name: frontend-scrumban
+    ports:
+      - 3000:3000
+    build: ./
+    command: npm run start
+    restart: always
+  nginx:
+    image: nginx
+    depends_on:
+      - frontend
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - /etc/letsencrypt:/etc/letsencrypt
+    restart: always

@@ -36,7 +36,7 @@ export default function SideBar({ workspace_id }: { workspace_id: number }) {
   useEffect(() => {
     const fetchUserProjects = async () => {
       const response = await fetch(
-        `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspace_id}/projects`,
+        `https://scrumban.site:8000/workspaces/${workspace_id}/projects`,
         {
           method: "GET",
           credentials: "include",

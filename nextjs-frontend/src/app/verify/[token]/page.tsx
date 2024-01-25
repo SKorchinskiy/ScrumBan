@@ -8,7 +8,7 @@ export default function Verify({ params }: { params: { token: string } }) {
 
   useEffect(() => {
     fetch(
-      ` http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/auth/verify-account/${params.token}`
+      ` https://scrumban.site:8000/auth/verify-account/${params.token}`
     ).then(() => {
       router.push("/");
     });

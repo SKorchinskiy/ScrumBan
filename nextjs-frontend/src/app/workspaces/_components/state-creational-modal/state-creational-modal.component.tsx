@@ -33,17 +33,14 @@ export default function StateCreationalModal({
   };
 
   const createNewState = async () => {
-    await fetch(
-      `http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces/${workspaceId}/states`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ ...stateInfo }),
-      }
-    );
+    await fetch(`https://scrumban.site:8000/workspaces/${workspaceId}/states`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ ...stateInfo }),
+    });
     onCancelHandler();
   };
 

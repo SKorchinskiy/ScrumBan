@@ -28,13 +28,10 @@ export default function WorkspaceList({
 
   useEffect(() => {
     const fetchUserWorkspaces = async () => {
-      const response = await fetch(
-        "http://ec2-18-193-109-186.eu-central-1.compute.amazonaws.com:8000/workspaces",
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      );
+      const response = await fetch("https://scrumban.site:8000/workspaces", {
+        method: "GET",
+        credentials: "include",
+      });
       if (response.ok) {
         const workspaces = await response.json();
         setWorkspaceList(workspaces);
